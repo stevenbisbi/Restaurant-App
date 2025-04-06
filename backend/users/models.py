@@ -25,13 +25,16 @@ class User(AbstractUser):
 
 class Role(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50)
+    ROLE_CHOICES  = [
+        ('Admin', 'Admin'),
+        ('Waiter', 'Waiter'),
+        ('Kitchen', 'Kitchen'),
+        ('Cashier', 'Cashier'),
+    ]
+    role = models.CharField(max_length=12, choices=ROLE_CHOICES)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
 
 class Permission(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
