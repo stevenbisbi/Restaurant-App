@@ -32,7 +32,6 @@ class Payment(models.Model):
     status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE, related_name="payments")
     transaction_id = models.CharField(max_length=100, blank=True, null=True)
     payment_date = models.DateTimeField(auto_now_add=True)
-    last_four_digits = models.CharField(max_length=4, blank=True, null=True)
     receipt_url = models.URLField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

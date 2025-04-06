@@ -9,7 +9,6 @@ class Menu(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    availability_schedule = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -39,10 +38,7 @@ class MenuItem(models.Model):
     preparation_time = models.IntegerField(help_text="Time in minutes")
     calories = models.IntegerField(blank=True, null=True)
     ingredients = models.TextField(blank=True, null=True)
-    allergens = models.TextField(blank=True, null=True)
     is_vegetarian = models.BooleanField(default=False)
-    is_vegan = models.BooleanField(default=False)
-    is_gluten_free = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
