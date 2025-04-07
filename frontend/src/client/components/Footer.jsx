@@ -1,6 +1,13 @@
 export function Footer() {
   return (
-    <footer>
+    <footer
+      style={{
+        display: "grid",
+        minheight: "100dvh",
+        gridtemplaterows: "auto 1fr auto",
+        backgroundColor: "gray",
+      }}
+    >
       <div className="container">
         <h1 className="text-center">RestaurantOS</h1>
         <div className="d-flex justify-content-center">
