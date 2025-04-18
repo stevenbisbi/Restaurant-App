@@ -1,5 +1,5 @@
 # frontend/Dockerfile
-FROM node:16-alpine
+FROM node:20-alpine
 
 # Establece variables de entorno explícitamente
 ENV NODE_ENV=development

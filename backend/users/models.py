@@ -27,7 +27,7 @@ class User(AbstractUser):
 class Staff(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="staff")
-    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE, related_name="staff")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="staff")
     role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name="staff_members")
     hire_date = models.DateField()
     emergency_contact = models.CharField(max_length=100, blank=True, null=True)

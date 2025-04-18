@@ -1,6 +1,8 @@
 from django.db import models
 import uuid
 from menu.models import MenuItem, MenuItemOption
+from users.models import Customer, Staff
+from reservations.models import Table
 
 # Create your models here.
 
@@ -16,9 +18,9 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE, related_name="orders")
-    table = models.ForeignKey('Table', on_delete=models.CASCADE, related_name="orders")
-    staff = models.ForeignKey('Staff', on_delete=models.SET_NULL, related_name="orders", blank=True, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name="orders")
+    staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, related_name="orders", blank=True, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     special_instructions = models.TextField(blank=True, null=True)
     status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, related_name="orders")
