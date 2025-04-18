@@ -1,6 +1,6 @@
 from django.db import models
 import uuid
-
+from restaurant.models import Restaurant
 # Create your models here.
 
 class Menu(models.Model):

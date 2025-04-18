@@ -3,9 +3,10 @@ export function Footer() {
     <footer
       style={{
         display: "grid",
-        minheight: "100dvh",
-        gridtemplaterows: "auto 1fr auto",
-        backgroundColor: "gray",
+        minHeight: "100dvh",
+        gridTemplateRows: "auto 1fr auto",
+        padding: "20px",
+        backgroundColor: "#f8f9fa",
       }}
     >
       <div className="container">

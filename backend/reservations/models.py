@@ -1,5 +1,8 @@
 from django.db import models
 import uuid
+from users.models import Customer
+from restaurant.models import Restaurant
+from reservations.models import ReservationStatus
 # Create your models here.
 
 class Table(models.Model):

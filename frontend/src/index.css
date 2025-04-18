@@ -3,3 +3,15 @@
   min-height: 100dvh;
   grid-template-rows: auto 1fr auto;
 }
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
