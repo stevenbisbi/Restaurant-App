@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # Frontend service (React)
+  # Frontend (React)
   frontend:
     build:
       context: ./frontend
@@ -18,7 +18,7 @@ services:
     networks:
       - restaurantos-network
 
-  # Backend service (Django)
+  # Backend (Django)
   backend:
     build:
       context: ./backend
@@ -39,7 +39,7 @@ services:
     networks:
       - restaurantos-network
 
-  # Database service
+  # Database
   postgres:
     image: postgres:13
     ports:
@@ -47,13 +47,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=restaurantos
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=restaurant_db
     networks:
       - restaurantos-network
 
-  # Redis for caching and as message broker (optional)
+  # Redis for caching and as message broker
   redis:
     image: redis:6-alpine
     ports:

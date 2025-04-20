@@ -22,6 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-o3j0u8b+3qt9-+&a(e(0=f$5v@4zen@!x@=6i6bdtcy%okv1%)'
 
+#from dotenv import load_dotenv
+#import os
+
+#load_dotenv()
+#SECRET_KEY = os.getenv('SECRET_KEY')
+#DEBUG = os.getenv('DEBUG') == 'True'
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -37,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'restaurant',
     'users',
     'menu',
@@ -44,10 +53,14 @@ INSTALLED_APPS = [
     'orders',
     'payments',
     'reservations',
+    'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
     
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +69,21 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# Configuración de Simple JWT (opcional)
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+}
+
+# Permite todas las conexiones en desarrollo
+CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -75,7 +103,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+#WSGI_APPLICATION = 'backend.wsgi.application'
+# Reemplaza WSGI por ASGI
+ASGI_APPLICATION = 'backend.asgi.application'
 
 
 # Database
@@ -83,8 +113,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'restaurant_db',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'HOST': 'postgres',  # Nombre del servicio en Docker
+        'PORT': '5432',
     }
 }
 
@@ -113,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 
@@ -123,7 +157,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# Configurar archivos estáticos y medios
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -131,3 +170,22 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+# Configura Redis para Channels (requiere "channels-redis")
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],  # Si usas Docker, usa el nombre del servicio
+        },
+    },
+}
+
+
+# Configuración de correo (para notificaciones)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = 'tu_api_key_sendgrid'
