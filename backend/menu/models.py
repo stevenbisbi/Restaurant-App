@@ -5,7 +5,7 @@ import uuid
 
 class Menu(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    restaurant = models.ForeignKey('Restaurant', on_delete=models.CASCADE, related_name="menus")
+    restaurant = models.ForeignKey('users.Restaurant', on_delete=models.CASCADE, related_name="menus")
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=True)

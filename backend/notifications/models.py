@@ -5,7 +5,7 @@ import uuid
 
 class Notification(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="notifications")
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="notifications")
     title = models.CharField(max_length=100)
     message = models.TextField()
     type = models.CharField(max_length=50)
