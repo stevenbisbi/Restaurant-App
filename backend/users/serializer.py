@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Role, Permission, Staff, Customer
+from .models import User, Role, Permission, Staff, Customer, Restaurant
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,7 +51,12 @@ class CustomerSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
         read_only_fields = ('id', 'user_id', 'username', 'email', 'created_at', 'updated_at')
+        
 
+class RestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = '__all__'
 
 
 
