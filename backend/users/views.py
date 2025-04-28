@@ -1,16 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
-from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
-from .serializer import UserSerializer
-from .serializer import CustomerSerializer, LoginSerializer
+from .serializer import UserSerializer, CustomerSerializer, LoginSerializer
 from drf_yasg.utils import swagger_auto_schema # type: ignore
+from .models import Customer
 
 
 User = get_user_model()
@@ -64,19 +63,77 @@ def register(request):
 @permission_classes([IsAuthenticated])
 def profile(request):
   user = request.user
+
+  if user.is_superuser: # Lógica para determinar el rol
+    role = "admin"
+  elif user.is_staff:
+    role = "staff"
+  elif hasattr(user, 'customer'):
+    role = "customer"
+  else:
+    role = "user"  # Otro tipo si aplica
+
   return Response({
     "username": user.username,
     "email": user.email,
-    # agrega lo que necesites
+    "role": role,
   }, status=status.HTTP_200_OK)
 
-
+@swagger_auto_schema(method='post', request_body=CustomerSerializer)
 @api_view(['POST'])
 def create_customer(request):
+  """
+  Create a new customer.
+  """
   serializer =  CustomerSerializer(data=request.data)
   if serializer.is_valid():
-    serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+    customer = serializer.save()
+    token, created = Token.objects.get_or_create(user=customer.user)
+    return Response({"token": token.key, "customer": serializer.data}, status=status.HTTP_201_CREATED)
   return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
 
-# entonces debo crear un profile y un register para las demas clases
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def list_customers(request):
+  customer = Customer.objects.all()
+  serializer = CustomerSerializer(customer, many=True)
+  return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def retrieve_customer(request, pk):
+  """
+  Consulta Customer por ID de Customer.
+  """
+  customer = get_object_or_404(Customer, pk=pk)
+  serializer = CustomerSerializer(customer)
+  return Response(serializer.data, status=status.HTTP_200_OK)
+
+@swagger_auto_schema(method='put', request_body=CustomerSerializer, responses={200: CustomerSerializer})
+
+@api_view(['PUT', 'PATCH'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update_customer(request, pk):
+  """
+  Actualizar customer por ID de Customer.
+  """
+  customer = get_object_or_404(Customer, pk=pk)
+  serializer = CustomerSerializer(customer, data=request.data, partial=True)
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_customer(request, pk):
+  """
+  Eliminar Customer por ID de customer.
+  """
+  customer = get_object_or_404(Customer, pk=pk)
+  customer.delete()
+  return Response({"detaail": "customer eliminado corrrectamente"}, status=status.HTTP_204_NO_CONTENT)

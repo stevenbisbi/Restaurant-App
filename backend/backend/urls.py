@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import permissions
+from rest_framework.authentication import TokenAuthentication
 
 from drf_yasg.views import get_schema_view # type: ignore
 from drf_yasg import openapi # type: ignore
@@ -32,6 +33,7 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
+    authentication_classes=[TokenAuthentication],
 )
 
 urlpatterns = [
