@@ -14,7 +14,7 @@ class ReservationSerializer(serializers.ModelSerializer):
 class ReservationStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservationStatus
-        fields = '__all__'
+        fields = ['id', 'name', 'description']
 
 
 #toca crear un status, quede en como esta el Chatgpt
