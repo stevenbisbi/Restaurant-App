@@ -45,19 +45,29 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_yasg',
+=======
     'channels',
     'restaurant',
+>>>>>>> dfc400d6057bd966c93099f7736d4b1afa04efbe
     'users',
     'menu',
     'notifications',
     'orders',
     'payments',
     'reservations',
+<<<<<<< HEAD
+=======
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     
+>>>>>>> dfc400d6057bd966c93099f7736d4b1afa04efbe
 ]
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -148,6 +158,28 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# Django REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+}
+
 
 
 # Internationalization
