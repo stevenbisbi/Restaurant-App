@@ -45,27 +45,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
-=======
     'channels',
     'restaurant',
->>>>>>> dfc400d6057bd966c93099f7736d4b1afa04efbe
     'users',
     'menu',
     'notifications',
     'orders',
     'payments',
     'reservations',
-<<<<<<< HEAD
-=======
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     
->>>>>>> dfc400d6057bd966c93099f7736d4b1afa04efbe
 ]
 AUTH_USER_MODEL = 'users.User'
 
