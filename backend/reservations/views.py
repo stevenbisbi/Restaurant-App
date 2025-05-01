@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Reservation, Table, ReservationStatus
-from .serializers import ReservationSerializer, TableSerializer, ReservationStatusSerializer
+from .serializer import ReservationSerializer, TableSerializer, ReservationStatusSerializer
 from drf_yasg.utils import swagger_auto_schema # type: ignore
 
 @swagger_auto_schema(method='post', request_body=ReservationSerializer)

@@ -12,17 +12,6 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
-class RoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Role
-        fields = '__all__'
-
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = '__all__'
-
-
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
@@ -52,11 +41,6 @@ class CustomerSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ('id', 'user_id', 'username', 'email', 'created_at', 'updated_at')
         
-
-class RestaurantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Restaurant
-        fields = '__all__'
 
 
 
