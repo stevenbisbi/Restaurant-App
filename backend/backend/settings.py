@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'payments',
     'reservations',
     'corsheaders',
-    'rest_framework',
     'rest_framework_simplejwt',
     
 ]

@@ -6,7 +6,7 @@ from restaurant.models import Restaurant
 
 class Table(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    restaurant = models.ForeignKey('users.Restaurant', on_delete=models.CASCADE, related_name="tables")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="tables")
     number = models.IntegerField()
     capacity = models.IntegerField()
     location = models.CharField(max_length=50, blank=True, null=True)
@@ -30,7 +30,7 @@ class ReservationStatus(models.Model):
 
 class Reservation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey('users.Customer', on_delete=models.CASCADE, related_name="reservations")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="reservations")
     table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name="reservations")
     reservation_date = models.DateTimeField()
     duration = models.IntegerField(help_text="Duration in minutes")
