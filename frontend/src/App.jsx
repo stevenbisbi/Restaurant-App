@@ -1,17 +1,17 @@
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import { SignIn } from "./client/pages/SignIn";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Footer } from "./client/components/Footer";
-import { SignUp } from "./client/pages/SignUp";
-import { Home } from "./client/pages/Home";
+import { SignUpPage } from "./client/pages/SignUpPage";
+import { HomePage } from "./client/pages/HomePage";
+import { SignInPage } from "./client/pages/SignInPage";
 
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<SignInPage />} />
+        <Route path="/register" element={<SignUpPage />} />
+        <Route path="/home" element={<HomePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

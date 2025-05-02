@@ -1,42 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import fondo from "../../assets/img/hamburgesa4.jpg";
 
-export const SignIn = () => {
+const images = import.meta.glob("/src/assets/img/*.{jpg,png,jpeg}", {
+  eager: true,
+});
+const backgroundImages = Object.values(images).map((img) => img.default);
+
+export const SignInPage = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(() =>
+    Math.floor(Math.random() * backgroundImages.length)
+  );
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false); // empieza a ocultar
+
+      // Espera a que se termine de ocultar (500ms) y luego cambia imagen
+      const timeout = setTimeout(() => {
+        setCurrentImageIndex(
+          (prevIndex) => (prevIndex + 1) % backgroundImages.length
+        );
+        setFade(true); // vuelve a mostrar
+      }, 600); // un poco más largo que la animación CSS (500ms)
+
+      return () => clearTimeout(timeout);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentImage = backgroundImages[currentImageIndex];
+
   return (
     <Container fluid className="p-0 vh-100">
       <Row className="g-0 h-100">
-        {/* Columna izquierda con imagen de fondo */}
-        <Col
-          md={7} // Antes era 10, así el formulario tiene más espacio
-          className="position-relative"
-          style={{
-            backgroundImage: `url(${fondo})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50" />
+        {/* Columna izquierda */}
+        <Col md={7} className="position-relative p-0 overflow-hidden">
+          {/* Fondo con animación */}
+          <div
+            className={`background-fade ${fade ? "fade-in" : "fade-out"}`}
+            style={{ backgroundImage: `url(${currentImage})` }}
+          ></div>
 
-          <div className="position-relative h-100 d-flex flex-column justify-content-between p-5 text-white">
-            {/* Encabezado */}
+          {/* Capa de oscurecimiento */}
+          <div className="overlay"></div>
+
+          {/* Contenido por encima */}
+          <div className="position-relative h-100 d-flex flex-column justify-content-between p-5 text-white content">
             <div>
               <div className="bg-warning text-danger rounded-pill d-inline-block px-4 py-2 mb-4">
                 <strong>¡Fresco todos los días!</strong>
               </div>
-              <h1 className="display-4 fw-bold mb-3 ">Ingredientes Premium</h1>
-              <p className="fs-5 ">
+              <h1 className="display-4 fw-bold mb-3">Ingredientes Premium</h1>
+              <p className="fs-5">
                 Ingredientes frescos de granja en cada plato que servimos
               </p>
             </div>
           </div>
         </Col>
 
-        {/* Columna derecha con formulario */}
+        {/* Formulario */}
         <Col
-          md={5} // Antes era 2, así tiene más espacio
+          md={5}
           className="d-flex align-items-center justify-content-center bg-white"
         >
           <div className="w-100 p-5" style={{ maxWidth: "500px" }}>

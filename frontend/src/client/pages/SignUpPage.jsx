@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import fondo from "../../assets/img/hamburgesa7.jpg";
 
-export const SignUp = () => {
+export const SignUpPage = () => {
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Requerido"),
     email: Yup.string().email("Email inválido").required("Requerido"),
