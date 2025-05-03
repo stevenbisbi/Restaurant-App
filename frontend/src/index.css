@@ -1,17 +1,52 @@
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .footer {
   display: grid;
   min-height: 100dvh;
   grid-template-rows: auto 1fr auto;
 }
 footer {
-  position: relative;
+  position: fixed;
   bottom: 0;
   width: 100%;
+  background-color: rgb(196, 194, 194);
 }
 
-footer .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
+.background-fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.5s ease-in-out;
+  z-index: 0;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
 }

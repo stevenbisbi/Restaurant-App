@@ -7,9 +7,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 
-from .serializer import UserSerializer, CustomerSerializer, LoginSerializer, RestaurantSerializer
+from .serializer import UserSerializer, CustomerSerializer, LoginSerializer
 from drf_yasg.utils import swagger_auto_schema # type: ignore
-from .models import Customer, Restaurant
+from .models import Customer
 
 
 User = get_user_model()

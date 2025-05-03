@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Role, Permission, Staff, Customer, Restaurant
+from .models import User, Staff, Customer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
