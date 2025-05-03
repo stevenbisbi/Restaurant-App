@@ -115,7 +115,11 @@ export const SignInPage = () => {
 
               <p className="text-center mt-4 text-secondary">
                 ¿No tienes una cuenta?{" "}
-                <Button variant="link" className="text-danger p-0">
+                <Button
+                  variant="link"
+                  className="text-danger p-0"
+                  href="/register"
+                >
                   Regístrate
                 </Button>
               </p>
