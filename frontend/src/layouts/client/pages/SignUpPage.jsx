@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
-import fondo from "../../assets/img/hamburgesa7.jpg";
+import fondo from "../../../assets/img/hamburgesa7.jpg";
 
 export const SignUpPage = () => {
   const validationSchema = Yup.object().shape({

@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Footer } from "./client/components/Footer";
-import { SignUpPage } from "./client/pages/SignUpPage";
-import { HomePage } from "./client/pages/HomePage";
-import { SignInPage } from "./client/pages/SignInPage";
+import { Footer } from "./layouts/client/components/Footer";
+import { SignUpPage } from "./layouts/client/pages/SignUpPage";
+import { HomePage } from "./layouts/client/pages/HomePage";
+import { SignInPage } from "./layouts/client/pages/SignInPage";
 
 export function App() {
   return (
