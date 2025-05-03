@@ -9,7 +9,7 @@
   grid-template-rows: auto 1fr auto;
 }
 footer {
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
   background-color: rgb(196, 194, 194);

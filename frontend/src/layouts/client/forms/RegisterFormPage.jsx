@@ -39,7 +39,6 @@ export function RegisterFormPage() {
       }
       navigate("/home");
     } catch (error) {
-      console.error("Error al registrar:", error);
       if (error.response && error.response.data) {
         toast.error(`Error: ${error.response.data.message || "Algo salió mal"}`);
       } else {
