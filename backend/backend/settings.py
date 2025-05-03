@@ -85,8 +85,10 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
 }
 
-# Permite todas las conexiones en desarrollo
-CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo
+# Permitir desde localhost:5173
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 ROOT_URLCONF = 'backend.urls'
 

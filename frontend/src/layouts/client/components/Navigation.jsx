@@ -1,18 +1,18 @@
 import React from 'react';
 import { Button, Container, Nav, Navbar} from 'react-bootstrap';
+import './../../../styles/Navigation.css';
 
 export function Navigation() {
   return (
-    <Navbar expand="lg" bg="light" variant="light">
+    <Navbar expand="md" bg="light" variant="light">
       <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
-            <Nav.Link href="#" className='px-5'>Salchipapa</Nav.Link>
-            <Nav.Link href="#" className='px-5'>Hamburgesa</Nav.Link>
-            <Nav.Link href="#" className='px-5'>Emparedado</Nav.Link>
-            <Nav.Link href="#" className='px-5'>Perros</Nav.Link>
-            <Nav.Link href="#" className='px-5'>Bebidas</Nav.Link>
+            <Nav.Link href="#" className='px-5 navigation-link'>Salchipapa</Nav.Link>
+            <Nav.Link href="#" className='px-5 navigation-link'>Hamburgesa</Nav.Link>
+            <Nav.Link href="#" className='px-5 navigation-link'>Emparedado</Nav.Link>
+            <Nav.Link href="#" className='px-5 navigation-link'>Perros</Nav.Link>
+            <Nav.Link href="#" className='px-5 navigation-link'>Bebidas</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

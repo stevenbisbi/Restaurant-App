@@ -1,6 +1,7 @@
-import React from "react";
-import { Navigation } from '../components/Navigation'
+import React from 'react'
 
 export function HomePage() {
-  return(<Navigation/>);
+  return (
+    <div>HomePage</div>
+  )
 }

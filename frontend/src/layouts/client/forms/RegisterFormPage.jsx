@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { createUser, updateUser, getUser } from "../../../API/User.Api";
+import { createUser, updateUser, getUser } from "../../../API/users/user.api";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -21,31 +21,41 @@ export function RegisterFormPage() {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm();
   const navigate = useNavigate();
   const params = useParams();
 
   const onSubmit = handleSubmit(async (data) => {
-    if (params.id) {
-      await updateUser(params.id, data);
-      toast.success("Usuario actualizado");
-    } else {
-      await createUser(data);
-      toast.success("Usuario creado");
+    const { username, email, password } = data;
+  
+    try {
+      if (params.id) {
+        await updateUser(params.id, { username, email, password });
+        toast.success("Usuario actualizado");
+      } else {
+        await createUser({ username, email, password });
+        toast.success("Usuario creado");
+      }
+      navigate("/home");
+    } catch (error) {
+      console.error("Error al registrar:", error);
+      if (error.response && error.response.data) {
+        toast.error(`Error: ${error.response.data.message || "Algo salió mal"}`);
+      } else {
+        toast.error("Error en el registro");
+      }
     }
-    navigate("/users");
   });
+  
 
   useEffect(() => {
     async function loadUser() {
       if (params.id) {
         const res = await getUser(params.id);
-        setValue("username", res.data.name);
+        setValue("username", res.data.username);
         setValue("email", res.data.email);
         setValue("password", res.data.password);
-        setValue("first_name", res.data.first_name);
-        setValue("last_name", res.data.last_name);
-        setValue("phone_number", res.data.phone_number);
       }
     }
     loadUser();
@@ -99,7 +109,7 @@ export function RegisterFormPage() {
                     name="username"
                     type="text"
                     isInvalid={!!errors.username}
-                    {...register("email", { required: true })}
+                    {...register("username", { required: true })}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.username}
@@ -126,57 +136,29 @@ export function RegisterFormPage() {
                     type="password"
                     isInvalid={!!errors.password}
                     {...register("password", { required: true })}
+
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.password}
                   </Form.Control.Feedback>
                 </Form.Group>
-              </div>
-
-              {/* Sección de Información Personal */}
-              <div className="mb-4">
-                <h5 className="text-secondary mb-3">Información Personal</h5>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Nombre*</Form.Label>
+                 <Form.Group className="mb-3">
+                  <Form.Label>Confirmar Contraseña*</Form.Label>
                   <Form.Control
-                    name="first_name"
-                    type="text"
-                    isInvalid={!!errors.first_name}
-                    {...register("first_name", { required: true })}
+                    type="password"
+                    isInvalid={!!errors.confirmPassword}
+                    {...register("confirmPassword", {
+                      required: "Confirma la contraseña",
+                      validate: (value) =>
+                        value === watch("password") || "Las contraseñas no coinciden",
+                    })}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.first_name}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Apellido*</Form.Label>
-                  <Form.Control
-                    name="last_name"
-                    type="text"
-                    isInvalid={!!errors.username}
-                    {...register("last_name", { required: true })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.last_name}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Teléfono</Form.Label>
-                  <Form.Control
-                    name="phone_number"
-                    type="tel"
-                    placeholder="+34 123 456 789"
-                    isInvalid={!!errors.username}
-                    {...register("phone_number", { required: true })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.phone_number}
+                    {errors.confirmPassword?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
+
 
               <Button
                 variant="danger"
