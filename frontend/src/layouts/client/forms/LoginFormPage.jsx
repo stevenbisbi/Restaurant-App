@@ -32,8 +32,10 @@ export const LoginFormPage = () => {
         // Si está marcado el "Recuérdame", guarda en localStorage
         if (data.rememberMe) {
           localStorage.setItem("token", token);
+          localStorage.setItem("username", username);
         } else {
           sessionStorage.setItem("token", token);
+          sessionStorage.setItem("username", username);
         }
       } else {
         toast.error("Error en el inicio de sesión");
