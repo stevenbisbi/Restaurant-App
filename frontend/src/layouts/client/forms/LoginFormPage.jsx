@@ -1,101 +1,191 @@
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { createAuthor, updateAuthor, getAuthor } from "../api/Author.api";
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { getAllGroups } from "../api/Group.api";
+import { loginUser } from "../../../API/users/user.api";
 
-export function AuthorFormPage() {
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const images = import.meta.glob("/src/assets/img/*.{jpg,png,jpeg}", {
+  eager: true,
+});
+const backgroundImages = Object.values(images).map((img) => img.default);
+
+export const LoginFormPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm();
   const navigate = useNavigate();
-  const params = useParams();
-  const [groups, setGroups] = useState([]);
 
   const onSubmit = handleSubmit(async (data) => {
-    if (params.id) {
-      await updateAuthor(params.id, data);
-      toast.success("Autor actualizado");
-    } else {
-      await createAuthor(data);
-      toast.success("Autor creado");
-    }
-    navigate("/authors");
-  });
+    const { username, password } = data;
 
-  useEffect(() => {
-    async function loadAuthor() {
-      if (params.id) {
-        const res = await getAuthor(params.id);
-        setValue("name", res.data.name);
-        setValue("last_name", res.data.last_name);
-        setValue("email", res.data.email);
-        setValue("nationality", res.data.nationality);
-        setValue("group_name", res.data.group_name);
+    try {
+      const response = await loginUser({ username, password });
+      if (response.status === 200) {
+        const { token } = response.data;
+        toast.success(`¡Bienvenido ${username}!`);
+
+        // Si está marcado el "Recuérdame", guarda en localStorage
+        if (data.rememberMe) {
+          localStorage.setItem("token", token);
+        } else {
+          sessionStorage.setItem("token", token);
+        }
+      } else {
+        toast.error("Error en el inicio de sesión");
+      }
+      // Redirigir a la página de inicio después de iniciar sesión
+      navigate("/home");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(
+          `${error.response.data.message || "Usuario o contraseña incorrectos"}`
+        );
+      } else {
+        toast.error("Error en el registro");
       }
     }
-    async function loadGroups() {
-      const res = await getAllGroups();
-      setGroups(res.data);
-    }
-    loadAuthor();
-    loadGroups();
+  });
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(() =>
+    Math.floor(Math.random() * backgroundImages.length)
+  );
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false); // empieza a ocultar
+
+      // Espera a que se termine de ocultar (500ms) y luego cambia imagen
+      const timeout = setTimeout(() => {
+        setCurrentImageIndex(
+          (prevIndex) => (prevIndex + 1) % backgroundImages.length
+        );
+        setFade(true); // vuelve a mostrar
+      }, 600); // un poco más largo que la animación CSS (500ms)
+
+      return () => clearTimeout(timeout);
+    }, 6000);
+
+    return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (token) {
+      navigate("/home"); // o la ruta que corresponda a sesión iniciada
+    }
+  }, []);
+
+  const currentImage = backgroundImages[currentImageIndex];
+
   return (
-    <div className="container">
-      <div className="col-md-4 offset-md-4">
-        <form onSubmit={onSubmit} className="card card-body mt-5">
-          <h2 className="text-center mb-4">Autor</h2>
-          <input
-            className="form-control mb-3"
-            type="text"
-            placeholder="Nombre"
-            {...register("name", { required: true })}
-          />
-          {errors.name && <span>Este campo es requerido</span>}
-          <input
-            className="form-control mb-3"
-            type="text"
-            placeholder="Apellido"
-            {...register("last_name", { required: true })}
-          />
-          <input
-            className="form-control mb-3"
-            type="email"
-            placeholder="Email"
-            {...register("email", { required: true })}
-          />
-          <input
-            className="form-control mb-3"
-            type="text"
-            placeholder="Nacionalidad"
-            {...register("nationality", { required: true })}
-          />
-          <select
-            {...register("id_group", { required: true })}
-            className="form-control mb-3"
-            defaultValue=""
-          >
-            <option value="" disabled>
-              Seleccione el grupo de investigación
-            </option>
-            {groups.map((group) => (
-              <option key={group.id} value={group.id}>
-                {group.name + " - " + group.line}
-              </option>
-            ))}
-          </select>
-          {errors.id_group && <span>Este campo es requerido</span>}
-          <button type="submit" className="btn btn-primary">
-            Guardar
-          </button>
-        </form>
-      </div>
-    </div>
+    <Container fluid className="p-0 vh-100">
+      <Row className="g-0 h-100">
+        {/* Columna izquierda */}
+        <Col md={7} className="position-relative p-0 overflow-hidden">
+          {/* Fondo con animación */}
+          <div
+            className={`background-fade ${fade ? "fade-in" : "fade-out"}`}
+            style={{ backgroundImage: `url(${currentImage})` }}
+          ></div>
+
+          {/* Capa de oscurecimiento */}
+          <div className="overlay"></div>
+
+          {/* Contenido por encima */}
+          <div className="position-relative h-100 d-flex flex-column justify-content-between p-5 text-white content">
+            <div>
+              <div className="bg-warning text-danger rounded-pill d-inline-block px-4 py-2 mb-4">
+                <strong>¡Fresco todos los días!</strong>
+              </div>
+              <h1 className="display-4 fw-bold mb-3">Ingredientes Premium</h1>
+              <p className="fs-5">
+                Ingredientes frescos de granja en cada plato que servimos
+              </p>
+            </div>
+          </div>
+        </Col>
+
+        {/* Formulario */}
+        <Col
+          md={5}
+          className="d-flex align-items-center justify-content-center bg-white"
+        >
+          <div className="w-100 p-5" style={{ maxWidth: "500px" }}>
+            <div className="text-end mb-5">
+              <h2 className="text-danger fw-bold text-center">Parcha2</h2>
+            </div>
+
+            <h1 className="display-6 fw-bold mb-3">¡Bienvenido de nuevo!</h1>
+            <p className="text-secondary mb-4">Por favor ingresa tus datos</p>
+
+            <Form onSubmit={onSubmit}>
+              <Form.Group className="mb-4" controlId="formUsername">
+                <Form.Label>Usuario:</Form.Label>
+                <Form.Control
+                  name="username"
+                  className="py-2 px-3 border-2"
+                  type="username"
+                  placeholder="Ingresa tu usuario"
+                  isInvalid={!!errors.username}
+                  {...register("username", { required: true })}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-4" controlId="formPassword">
+                <Form.Label>Contraseña:</Form.Label>
+                <Form.Control
+                  name="password"
+                  className="py-2 px-3 border-2"
+                  type="password"
+                  placeholder="Ingresa tu contraseña"
+                  isInvalid={!!errors.password}
+                  {...register("password", { required: true })}
+                />
+              </Form.Group>
+
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <Form.Check
+                  type="checkbox"
+                  id="rememberMe"
+                  label="Recordarme"
+                  className="text-secondary"
+                  {...register("rememberMe")}
+                />
+                <Button variant="link" className="text-danger p-0">
+                  ¿Olvidaste tu contraseña?
+                </Button>
+              </div>
+
+              <Button
+                variant="danger"
+                type="submit"
+                size="lg"
+                className="w-100 py-2 fw-bold text-white"
+              >
+                Iniciar sesión
+              </Button>
+
+              <p className="text-center mt-4 text-secondary">
+                ¿No tienes una cuenta?{" "}
+                <Button
+                  variant="link"
+                  className="text-danger p-0"
+                  href="/register"
+                >
+                  Regístrate
+                </Button>
+              </p>
+            </Form>
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
-}
+};

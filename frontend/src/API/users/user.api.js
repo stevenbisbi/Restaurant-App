@@ -8,10 +8,10 @@ export const getAllUsers = () => userApi.get("/");
 
 export const getUser = (id) => userApi.get(`/${id}/`);
 
-export const createUser = (user) =>
-  userApi.post("/register/", user);
+export const createUser = (user) => userApi.post("/register/", user);
+
+export const loginUser = (user) => userApi.post("/login/", user);
 
 export const deleteUser = (id) => userApi.delete(`/${id}/`);
 
-export const updateUser = (id, user) =>
-  userApi.put(`/${id}/`, user);
+export const updateUser = (id, user) => userApi.put(`/${id}/`, user);

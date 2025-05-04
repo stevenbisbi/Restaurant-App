@@ -1,10 +1,17 @@
-import { BrowserRouter, Route, Routes, useLocation, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Footer } from "./layouts/client/components/Footer";
 import { RegisterFormPage } from "./layouts/client/forms/RegisterFormPage";
 import { HomePage } from "./layouts/client/pages/HomePage";
-import { SignInPage } from "./layouts/client/pages/SignInPage";
+import { LoginFormPage } from "./layouts/client/forms/LoginFormPage";
 import { Navigation } from "./layouts/client/components/Navigation";
+import { Toaster } from "react-hot-toast";
 
 function AppContent() {
   const { pathname } = useLocation();
@@ -17,7 +24,7 @@ function AppContent() {
       {showNav && <Navigation />}
 
       <Routes>
-        <Route path="/" element={<SignInPage />} />
+        <Route path="/" element={<LoginFormPage />} />
         <Route path="/register" element={<RegisterFormPage />} />
         <Route path="/home" element={<HomePage />} />
         {/* Si intentas acceder a cualquier otra ruta, redirige */}
@@ -25,6 +32,7 @@ function AppContent() {
       </Routes>
 
       <Footer />
+      <Toaster />
     </>
   );
 }

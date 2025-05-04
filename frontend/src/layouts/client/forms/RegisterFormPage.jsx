@@ -26,27 +26,39 @@ export function RegisterFormPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const onSubmit = handleSubmit(async (data) => {
-    const { username, email, password } = data;
-  
-    try {
-      if (params.id) {
-        await updateUser(params.id, { username, email, password });
-        toast.success("Usuario actualizado");
-      } else {
-        await createUser({ username, email, password });
-        toast.success("Usuario creado");
+  const onSubmit = handleSubmit(
+    async (data) => {
+      const { username, email, password } = data;
+
+      try {
+        if (params.id) {
+          await updateUser(params.id, { username, email, password });
+          toast.success("Usuario actualizado exitosamente");
+        } else {
+          await createUser({ username, email, password });
+          toast.success("Usuario registrado exitosamente");
+        }
+        navigate("/home");
+      } catch (error) {
+        if (error.response && error.response.data) {
+          toast.error(
+            `Error: ${error.response.data.message || "Algo salió mal"}`
+          );
+        } else {
+          toast.error("Error en el registro");
+        }
       }
-      navigate("/home");
-    } catch (error) {
-      if (error.response && error.response.data) {
-        toast.error(`Error: ${error.response.data.message || "Algo salió mal"}`);
+    },
+    (formErrors) => {
+      // Este callback se ejecuta si hay errores de validación
+      const firstError = Object.values(formErrors)[0];
+      if (firstError?.message) {
+        toast.error(firstError.message);
       } else {
-        toast.error("Error en el registro");
+        toast.error("Por favor completa todos los campos requeridos.");
       }
     }
-  });
-  
+  );
 
   useEffect(() => {
     async function loadUser() {
@@ -103,53 +115,59 @@ export function RegisterFormPage() {
                 <h5 className="text-secondary mb-3">Información de Cuenta</h5>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Nombre de usuario*</Form.Label>
+                  <Form.Label>Nombre de usuario:</Form.Label>
                   <Form.Control
                     name="username"
                     type="text"
-                    isInvalid={!!errors.username}
+                    isInvalid={!!errors.username?.message}
                     {...register("username", { required: true })}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.username}
+                    {errors.username?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Email*</Form.Label>
+                  <Form.Label>Email:</Form.Label>
                   <Form.Control
                     name="email"
                     type="email"
-                    isInvalid={!!errors.email}
-                    {...register("email", { required: true })}
+                    isInvalid={!!errors.email?.message}
+                    {...register("email", {
+                      required: "El correo es obligatorio",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Ingresa un correo válido con punto (.)",
+                      },
+                    })}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.email}
+                    {errors.email?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Contraseña*</Form.Label>
+                  <Form.Label>Contraseña:</Form.Label>
                   <Form.Control
                     name="password"
                     type="password"
-                    isInvalid={!!errors.password}
+                    isInvalid={!!errors.password?.message}
                     {...register("password", { required: true })}
-
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.password}
+                    {errors.password?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
-                 <Form.Group className="mb-3">
-                  <Form.Label>Confirmar Contraseña*</Form.Label>
+                <Form.Group className="mb-3">
+                  <Form.Label>Confirmar Contraseña:</Form.Label>
                   <Form.Control
                     type="password"
-                    isInvalid={!!errors.confirmPassword}
+                    isInvalid={!!errors.confirmPassword?.message}
                     {...register("confirmPassword", {
                       required: "Confirma la contraseña",
                       validate: (value) =>
-                        value === watch("password") || "Las contraseñas no coinciden",
+                        value === watch("password") ||
+                        "Las contraseñas no coinciden",
                     })}
                   />
                   <Form.Control.Feedback type="invalid">
@@ -157,7 +175,6 @@ export function RegisterFormPage() {
                   </Form.Control.Feedback>
                 </Form.Group>
               </div>
-
 
               <Button
                 variant="danger"
