@@ -1,19 +1,46 @@
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import { SignIn } from "./client/pages/SignIn";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Footer } from "./client/components/Footer";
-import { SignUp } from "./client/pages/SignUp";
-import { Home } from "./client/pages/Home";
+import { Footer } from "./layouts/client/components/Footer";
+import { RegisterFormPage } from "./layouts/client/forms/RegisterFormPage";
+import { HomePage } from "./layouts/client/pages/HomePage";
+import { LoginFormPage } from "./layouts/client/forms/LoginFormPage";
+import { Navigation } from "./layouts/client/components/Navigation";
+import { Toaster } from "react-hot-toast";
+
+function AppContent() {
+  const { pathname } = useLocation();
+  // Rutas en las que NO quieres la navbar
+  const noNav = ["/", "/register"];
+  const showNav = !noNav.includes(pathname);
+
+  return (
+    <>
+      {showNav && <Navigation />}
+
+      <Routes>
+        <Route path="/" element={<LoginFormPage />} />
+        <Route path="/register" element={<RegisterFormPage />} />
+        <Route path="/home" element={<HomePage />} />
+        {/* Si intentas acceder a cualquier otra ruta, redirige */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      <Footer />
+      <Toaster />
+    </>
+  );
+}
 
 export function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-      <Footer />
+      <AppContent />
     </BrowserRouter>
   );
 }

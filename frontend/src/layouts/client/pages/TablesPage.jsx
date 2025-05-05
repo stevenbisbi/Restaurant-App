@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-export const Tables = () => {
+export const TablesPage = () => {
   return (
     <Container fluid className="p-0 vh-100">
       <Row className="g-0 h-100">
