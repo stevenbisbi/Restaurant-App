@@ -28,11 +28,11 @@ export const LoginFormPage = () => {
       if (response.status === 200) {
         const { token } = response.data;
         toast.success(`¡Bienvenido ${username}!`);
-
+        
         // Si está marcado el "Recuérdame", guarda en localStorage
+        localStorage.setItem("username", username);
         if (data.rememberMe) {
           localStorage.setItem("token", token);
-          localStorage.setItem("username", username);
         } else {
           sessionStorage.setItem("token", token);
           sessionStorage.setItem("username", username);
