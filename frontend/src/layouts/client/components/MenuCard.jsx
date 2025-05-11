@@ -1,26 +1,18 @@
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 
-export function MenuCard({ meal, setSelectedMeal }) {
+export function MenuCard({ meal, onSelect }) {
   return (
     <Card
-      className="h-100"
-      onClick={() => setSelectedMeal(meal)}
-      style={{ cursor: "pointer" }}
+      className="px-2 mx-2"
+      style={{ cursor: "pointer", width: "16rem" }}
+      onClick={() => onSelect(meal)}
     >
-      <Card.Img
-        variant="top"
-        src={meal.strMealThumb}
-        alt={meal.strMeal}
-        style={{ height: "200px", objectFit: "cover" }}
-      />
+      <Card.Img variant="top" src={meal.strMealThumb} />
       <Card.Body>
         <Card.Title>{meal.strMeal}</Card.Title>
-        <Card.Text className="text-muted">
-          {meal.strCategory} - {meal.strArea}
-        </Card.Text>
-        <Card.Text>{meal.strInstructions.substring(0, 100)}...</Card.Text>
-        <Card.Text className="text-muted">
-          Precio: ${Math.floor(Math.random() * (100 - 10 + 1)) * 1000}
+        <Card.Text>
+          <strong>Precio:</strong> {Math.floor(Math.random() * 10000)}$
+          <br />
         </Card.Text>
       </Card.Body>
     </Card>
