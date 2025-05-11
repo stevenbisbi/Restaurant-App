@@ -3,20 +3,15 @@ import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { useState } from "react";
 import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
+import { OffCanvas } from "./OffCanvas";
 
 export function Navigation() {
   const username =
     localStorage.getItem("username") ||
     sessionStorage.getItem("username") ||
     "Usuario";
-
-  // Estado para manejar la visibilidad del aside
-  const [isAsideVisible, setIsAsideVisible] = useState(false);
-
-  // Función para alternar la visibilidad del aside
-  const toggleAside = () => {
-    setIsAsideVisible(!isAsideVisible);
-  };
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   return (
     <Navbar expand="md" bg="light" variant="light">
       <Container>
@@ -40,27 +35,13 @@ export function Navigation() {
           </Nav>
         </Navbar.Collapse>
       </Container>
-      <div
-        className="user-info d-flex align-items-center px-5"
-        onClick={toggleAside}
-      >
+      <div className="user-info d-flex align-items-center px-5">
         <Avatar username={username} />
         <div className="user-info-body px-4">
-          <div className="user-info-name">{username}</div>
+          <div className="user-info-name">{username || "Usuario"}</div>
           <div className="user-info-avatar font-size">Cliente</div>
         </div>
       </div>
-
-      {/* Aside que se despliega */}
-      {isAsideVisible && (
-        <aside className="user-info-aside">
-          <div className="aside-content">
-            <h3>Información del Usuario</h3>
-            <p>Más detalles del usuario...</p>
-            <Button onClick={toggleAside}>Cerrar</Button>
-          </div>
-        </aside>
-      )}
     </Navbar>
   );
 }
