@@ -1,0 +1,45 @@
+/* Estilos del aside */
+.user-info-aside {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background-color: #f8f9fa;
+  box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: translateX(100%); /* Inicialmente oculto */
+  transition: transform 0.3s ease-in-out;
+}
+
+.user-info-aside:hover {
+  background: #000;
+}
+
+/* Cuando el aside se debe mostrar */
+.user-info-aside.show {
+  transform: translateX(0);
+}
+
+/* Estilo de los contenidos dentro del aside */
+.aside-content {
+  padding: 20px;
+}
+
+/* Botón para cerrar el aside */
+button {
+  margin-top: 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #c82333;
+}
