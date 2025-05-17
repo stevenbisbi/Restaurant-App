@@ -9,12 +9,47 @@ from django.contrib.auth import get_user_model
 
 from .serializer import UserSerializer, CustomerSerializer, LoginSerializer
 from drf_yasg.utils import swagger_auto_schema # type: ignore
-from .models import Customer
+from .models import Customer, User
 
 
 User = get_user_model()
-@swagger_auto_schema(method='post', request_body=LoginSerializer)
 
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_list(request):
+  """
+  Lista de todos los usuarios"""
+  user = User.objects.all()
+  serializer = UserSerializer(user, many=True)
+  return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def retrieve_user(request, pk):
+  """
+  Consulta ususarios por ID
+  """
+  user = get_object_or_404(User, pk=pk)
+  serializer = UserSerializer(user)
+  return Response(serializer.data, status=status.HTTP_200_OK)
+
+@swagger_auto_schema(method='patch', request_body=UserSerializer, responses={200: UserSerializer})
+@api_view(['PATCH'])
+def user_update(request, pk):
+  try:
+    user = User.objects.get(pk=pk)
+  except User.DoesNotExist:
+    return Response(status=status.HTTP_404_NOT_FOUND)
+  
+  serializer = UserSerializer(user, data=request.data, partial=True)
+  if serializer.is_valid():
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@swagger_auto_schema(method='post', request_body=LoginSerializer)
 @api_view(['POST'])
 def login(request): # request es un objeto que contiene toda la información sobre la solicitud HTTP entrante
   """
@@ -62,6 +97,8 @@ def register(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def profile(request):
+
+
   user = request.user
 
   if user.is_superuser: # Lógica para determinar el rol
@@ -78,6 +115,8 @@ def profile(request):
     "email": user.email,
     "role": role,
   }, status=status.HTTP_200_OK)
+
+
 
 @swagger_auto_schema(method='post', request_body=CustomerSerializer)
 @api_view(['POST'])
@@ -137,3 +176,5 @@ def delete_customer(request, pk):
   customer = get_object_or_404(Customer, pk=pk)
   customer.delete()
   return Response({"detaail": "customer eliminado corrrectamente"}, status=status.HTTP_204_NO_CONTENT)
+
+#Get user Falta
