@@ -27,6 +27,7 @@ export const LoginFormPage = () => {
       const response = await loginUser({ username, password });
       if (response.status === 200) {
         const { token } = response.data;
+        sessionStorage.setItem("username", username);
         toast.success(`¡Bienvenido ${username}!`);
         
         // Si está marcado el "Recuérdame", guarda en localStorage
@@ -35,7 +36,6 @@ export const LoginFormPage = () => {
           localStorage.setItem("token", token);
         } else {
           sessionStorage.setItem("token", token);
-          sessionStorage.setItem("username", username);
         }
       } else {
         toast.error("Error en el inicio de sesión");

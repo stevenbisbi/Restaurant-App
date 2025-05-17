@@ -1,53 +1,79 @@
-import React from "react";
+import { Modal, Button, Row } from "react-bootstrap";
+import { useState } from "react";
 
-export function ModalMenuCard({ selectedObject }) {
+export function ModalMenuCard({ meal, show, onHide }) {
+  const [quantity, setQuantity] = useState(1);
+
+  const handleIncrement = () => setQuantity((prev) => prev + 1);
+  const handleDecrement = () =>
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+
   return (
-    // This is the modal that will be displayed when a card is clicked
-    <div
-      className="modal fade border-warning"
-      id="modalMenuCard"
-      tabIndex="-1"
-      aria-labelledby="modalMenuCardLabel"
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      size="lg"
+      dialogClassName="modal-horizontal"
     >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h1 className="modal-title fs-5" id="modalMenuCardLabel">
-              {selectedObject?.name}
-            </h1>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="">
-            <div className="modal-body">
-              <div className="d-flex justify-content-center">
-                <img
-                  src={selectedObject?.image}
-                  className="img-fluid rounded-start"
-                  alt="..."
-                />
-              </div>
-              <div className="d-flex justify-content-center mt-3">
-                <p>{selectedObject?.description}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-warning "
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
+      <Modal.Header closeButton>
+        <Modal.Title>{meal?.strMeal}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="d-flex flex-row p-1">
+        <div className="d-flex justify-content-center">
+          <img
+            src={meal?.strMealThumb}
+            className="img-fluid rounded-start"
+            style={{ maxWidth: "300px", maxHeight: "300px" }}
+            alt={meal?.strMeal}
+          />
         </div>
-      </div>
-    </div>
+        <div
+          className="col-md-6 p-4 overflow-y-auto text-center"
+          style={{ maxHeight: "70vh" }}
+        >
+          <p>ingredientes</p>
+          <Row className="d-flex justify-content-center">
+            {" "}
+            <Button variant="danger" className="col-5 m-1">
+              $1000 Personal
+            </Button>
+            <Button variant="danger" className="col-5 m-1">
+              $1000 Pareja
+            </Button>
+          </Row>
+          <Row className="d-flex justify-content-center">
+            <Button variant="danger" className="col-5 m-1">
+              $1000 Mediana
+            </Button>
+            <Button variant="danger" className="col-5 m-1">
+              $1000 Familar
+            </Button>{" "}
+          </Row>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button
+          onClick={handleDecrement}
+          variant="light"
+          className="rounded-circle shadow-sm"
+          style={{ width: "40px", height: "40px" }}
+        >
+          <strong>-</strong>
+        </Button>
+        <span className="fs-5">{quantity}</span>
+        <Button
+          onClick={handleIncrement}
+          variant="light"
+          className="rounded-circle shadow-sm"
+          style={{ width: "40px", height: "40px" }}
+        >
+          <strong>+</strong>
+        </Button>
+        <Button variant="warning" onClick={onHide}>
+          agregar al carrito
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
