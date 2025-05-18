@@ -17,11 +17,14 @@ class StaffSerializer(serializers.ModelSerializer):
         model = Staff
         fields = '__all__'
 
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from .models import Customer
+
+User = get_user_model()
+
 class CustomerSerializer(serializers.ModelSerializer):
-    user_id = serializers.UUIDField(
-        source='user',
-        help_text="User ID (UUID)"
-    )
+    user_id = serializers.UUIDField(write_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
 
@@ -39,8 +42,18 @@ class CustomerSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         ]
-        read_only_fields = ('id', 'user_id', 'username', 'email', 'created_at', 'updated_at')
-        
+        read_only_fields = (
+            'id', 'username', 'email', 'created_at', 'updated_at'
+        )
+
+    def create(self, validated_data):
+        user_id = validated_data.pop('user_id')
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"user_id": "User does not exist."})
+        return Customer.objects.create(user=user, **validated_data)
+
 
 
 

@@ -20,4 +20,31 @@ def restaurant_list_create(request):
       restaurant = serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@swagger_auto_schema(method='post', request_body=RoleSerializer)
+@api_view(['GET', 'Post'])
+def rol_list_create(request):
+  if request.method == 'GET':
+    role = Role.objects.all()
+    serializer = RoleSerializer(role, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  elif request.method == 'POST':
+    serializer = RoleSerializer(data=request.data)
+    if serializer.is_valid():
+      role = serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
+@swagger_auto_schema(method='post', request_body=PermissionSerializer)
+@api_view(['GET', 'Post'])
+def permission_list_create(request):
+  if request.method == 'GET':
+    permission = Permission.objects.all()
+    serializer = PermissionSerializer(permission, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  elif request.method == 'POST':
+    serializer = PermissionSerializer(data=request.data)
+    if serializer.is_valid():
+      permission = serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
