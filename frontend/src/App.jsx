@@ -12,6 +12,7 @@ import { HomePage } from "./layouts/client/pages/HomePage";
 import { LoginFormPage } from "./layouts/client/forms/LoginFormPage";
 import { Navigation } from "./layouts/client/components/Navigation";
 import { Toaster } from "react-hot-toast";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 function AppContent() {
   const { pathname } = useLocation();
