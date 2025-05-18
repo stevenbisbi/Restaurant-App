@@ -1,12 +1,15 @@
-import { Card, Button } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 
 export function MenuCard({ meal, onSelect }) {
   return (
     <Card
-      className="px-2 mx-2"
+      className="p-2 mx-2 position-relative"
       style={{ cursor: "pointer", width: "16rem" }}
       onClick={() => onSelect(meal)}
     >
+      {comida.promocion && (
+        <span className="badge">¡Promoción!</span>
+      )}
       <Card.Img variant="top" src={meal.strMealThumb} />
       <Card.Body>
         <Card.Title>{meal.strMeal}</Card.Title>
