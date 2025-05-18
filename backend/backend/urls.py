@@ -43,6 +43,7 @@ urlpatterns = [
     path('api/restaurants/', include('restaurant.urls')),
     path('api/payments/', include('payments.urls')),
     path('api/menu/', include('menu.urls')),
+    path('api/notifications', include('notifications.urls')),
 
     # Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
