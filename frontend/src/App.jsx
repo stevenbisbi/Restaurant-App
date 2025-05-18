@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Footer } from "./layouts/client/components/Footer";
 import { RegisterFormPage } from "./layouts/client/forms/RegisterFormPage";
 import { HomePage } from "./layouts/client/pages/HomePage";
-import { LoginFormPage } from "./layouts/client/forms/LoginFormPage";
+import { LoginFormPage } from "./layouts/auth/LoginFormPage";
 import { Navigation } from "./layouts/client/components/Navigation";
 
 import { LoginAdmin } from "./layouts/admin/forms/LoginAdmin";
