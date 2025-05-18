@@ -8,7 +8,7 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=100, unique=True)
-    password = models.CharField(max_length=255)
+    #No decalaramos "password" porque AbstractUser ya lo tiene por defecto
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=20, blank=True, null=True)

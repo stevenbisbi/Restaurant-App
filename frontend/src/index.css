@@ -2,6 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: rgb(235, 235, 221);
 }
 .footer {
   display: grid;
