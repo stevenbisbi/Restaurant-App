@@ -29,6 +29,7 @@ export function RegisterFormPage() {
   const onSubmit = handleSubmit(
     async (data) => {
       const { username, email, password } = data;
+      sessionStorage.setItem("username", username);
 
       try {
         if (params.id) {

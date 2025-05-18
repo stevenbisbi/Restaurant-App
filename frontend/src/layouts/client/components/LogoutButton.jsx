@@ -15,7 +15,11 @@ export const LogoutButton = () => {
   };
 
   return (
-    <Button variant="outline-danger" onClick={handleLogout}>
+    <Button
+      variant="outline-danger"
+      onClick={handleLogout}
+      className="logout-button"
+    >
       Cerrar sesión
     </Button>
   );

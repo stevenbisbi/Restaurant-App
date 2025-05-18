@@ -1,13 +1,18 @@
-import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from "react-bootstrap";
 
-export function MenuCard({object, setSelectedObject}) {
+export function MenuCard({ meal, onSelect }) {
   return (
-    <Card onClick={()=> setSelectedObject(object)}>
-      <Card.Img variant="top" src={object.image} alt="..." />
+    <Card
+      className="px-2 mx-2"
+      style={{ cursor: "pointer", width: "16rem" }}
+      onClick={() => onSelect(meal)}
+    >
+      <Card.Img variant="top" src={meal.strMealThumb} />
       <Card.Body>
+        <Card.Title>{meal.strMeal}</Card.Title>
         <Card.Text>
-          Some quick example text to build on the card title and make up the bulk of the card's content.
+          <strong>Precio:</strong> {Math.floor(Math.random() * 10000)}$
+          <br />
         </Card.Text>
       </Card.Body>
     </Card>
