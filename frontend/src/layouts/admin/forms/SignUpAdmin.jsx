@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { createUser, updateUser, getUser } from "../../../api/users/user.api";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import {
   Button,
@@ -13,7 +13,7 @@ import {
   Form,
 } from "react-bootstrap";
 
-import fondo from "../../../assets/img/signupbg.jpg";
+import fondo from "../../../assets/img/img-bg/signupbg.jpg";
 
 export function SignUpAdmin() {
   const {
