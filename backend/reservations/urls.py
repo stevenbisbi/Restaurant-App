@@ -1,11 +1,13 @@
-from django.urls import path
-from . import views
+# urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import TableViewSet, ReservationViewSet, ReservationStatusViewSet
+
+router = DefaultRouter()
+router.register(r'table', TableViewSet)
+router.register(r'', ReservationViewSet)
+router.register(r'status', ReservationStatusViewSet)
 
 urlpatterns = [
-    path('', views.reservation_list_create, name='reservation_list_create'),
-    path('reservations/<uuid:pk>/', views.reservation_detail, name='reservation_detail'),
-    path('tables/', views.table_list_create, name='table_list_create'),
-    path('tables/<uuid:pk>/', views.table_detail, name='table_detail'),
-    path('statuses/', views.reservation_status_list_create, name='reservation_status_list_create'),
-    path('statuses/<uuid:pk>/', views.reservatuion_status_detail, name='reservatuion_status_detail'),
+    path('', include(router.urls)),
 ]
