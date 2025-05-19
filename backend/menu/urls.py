@@ -1,15 +1,14 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import MenuViewSet, MenuCategoryViewSet, MenuItemViewSet, MenuItemVariantViewSet, MenuItemOptionViewSet
+
+router = DefaultRouter()
+router.register(r'', MenuViewSet)
+router.register(r'category', MenuCategoryViewSet)
+router.register(r'item', MenuItemViewSet)
+router.register(r'item_variant', MenuItemVariantViewSet)
+router.register(r'item_option', MenuItemOptionViewSet)
 
 urlpatterns = [
-    path('', views.menu_list_create, name='menu_list_create'),
-    path('menu/<uuid:pk>/', views.menu_detail, name='menu_detail'),
-    path('category/', views.menu_category_list_create, name='menu_category_list_create'),
-    path('category/<uuid:pk>/', views.menu_category_detail, name='menu_category_detail'),
-    path('item/', views.menu_item_list_create, name='menu_item_list_create'),
-    path('item/<uuid:pk>/', views.menu_item_detail, name='menu_item_detail'),
-    path('item_variant/', views.menu_item_variant_list_create, name='menu_item_variant_list_create'),
-    path('item_variant/<uuid:pk>/', views.menu_item_variant_detail, name='menu_item_variant_detail'),
-    path('item_option/', views.menu_item_option_list_create, name='menu_item_option_list_create'),
-    path('item_option/<uuid:pk>/', views.menu_item_option_detail, name='menu_item_option_detail'),
+    path('', include(router.urls)),
 ]

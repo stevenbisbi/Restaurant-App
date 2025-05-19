@@ -5,25 +5,25 @@ from .models import User, Staff, Customer
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password']
+        fields = ['id', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    email = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, data):
-        username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
 
-        if username and password:
-            user = authenticate(username=username, password=password)
+        if email and password:
+            user = authenticate(email=email, password=password)
             if not user:
                 raise serializers.ValidationError("Invalid credentials.")
             if not user.is_active:
                 raise serializers.ValidationError("User is inactive.")
         else:
-            raise serializers.ValidationError("Must include both username and password.")
+            raise serializers.ValidationError("Must include both email and password.")
 
         data['user'] = user
         return data
@@ -41,7 +41,6 @@ User = get_user_model()
 
 class CustomerSerializer(serializers.ModelSerializer):
     user_id = serializers.UUIDField(write_only=True)
-    username = serializers.CharField(source='user.username', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
 
     class Meta:
@@ -49,17 +48,13 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'user_id',
-            'username',
             'email',
             'preferences',
-            'dietary_restrictions',
-            'allergies',
-            'loyalty_points',
             'created_at',
             'updated_at'
         ]
         read_only_fields = (
-            'id', 'username', 'email', 'created_at', 'updated_at'
+            'id', 'email', 'created_at', 'updated_at'
         )
 
     def create(self, validated_data):
