@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { loginUser } from "../../API/users/user.api";
+import { loginUser } from "../API/users/user.api";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { createUser, updateUser, getUser } from "../../../API/users/user.api";
+import { createUser, updateUser, getUser } from "../../../api/users/user.api";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
