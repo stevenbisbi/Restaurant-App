@@ -1,16 +1,12 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserViewSet, CustomerViewSet, LoginView
+
+router = DefaultRouter()
+router.register(r'', UserViewSet, basename='user')
+router.register(r'customers', CustomerViewSet, basename='customer')
 
 urlpatterns = [
-    path('login/', views.login, name='login'),
-    path('register/', views.register, name='register'),
-    path('profile/', views.profile, name='profile'),
-    path('customers/', views.list_customers, name='list_customers'),
-    path('customers/<uuid:pk>/', views.retrieve_customer, name='retrieve_customer'),
-    path('customers/create/', views.create_customer, name='create_customer'),
-    path('customers/<uuid:pk>/update/', views.update_customer, name='update_customer'),
-    path('customers/<uuid:pk>/delete/', views.delete_customer, name='delete_customer'),
-    path('', views.user_list, name='user_list'),
-    path('/<uuid:pk>/', views.retrieve_user, name='retrieve_user'),
-    path('/<uuid:pk>/update/', views.user_update, name='user_update'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('', include(router.urls)),
 ]
