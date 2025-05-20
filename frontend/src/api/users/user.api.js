@@ -1,17 +1,13 @@
-import axios from "axios";
+import axiosClient from "../axiosClient";
 
-const userApi = axios.create({
-  baseURL: "http://localhost:8000/api/users",
-});
+export const getAllUsers = () => axiosClient.get("/users/");
 
-export const getAllUsers = () => userApi.get("/");
+export const getUser = (id) => axiosClient.get(`/users/${id}/`);
 
-export const getUser = (id) => userApi.get(`/${id}/`);
+export const createUser = (user) => axiosClient.post("/users/", user);
 
-export const createUser = (user) => userApi.post("/register/", user);
+export const loginUser = (data) => axiosClient.post("/login/", data);
 
-export const loginUser = (user) => userApi.post("/login/", user);
+export const deleteUser = (id) => axiosClient.delete(`/users/${id}/`);
 
-export const deleteUser = (id) => userApi.delete(`/${id}/`);
-
-export const updateUser = (id, user) => userApi.put(`/${id}/`, user);
+export const updateUser = (id, user) => axiosClient.put(`/users/${id}/`, user);
