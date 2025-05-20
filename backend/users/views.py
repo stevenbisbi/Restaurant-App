@@ -55,13 +55,13 @@ def login(request): # request es un objeto que contiene toda la información sob
   """
   Inicia sesión.
   """
-  username = request.data.get('username') # Obtención de los datos enviados
+  email = request.data.get('email') # Obtención de los datos enviados
   password = request.data.get('password')
 
-  if not username or not password: # Validación de campos obligatorios
-    return Response({"error": "Debe proporcionar username y password"}, status=status.HTTP_400_BAD_REQUEST)
+  if not email or not password: # Validación de campos obligatorios
+    return Response({"error": "Debe proporcionar email y password"}, status=status.HTTP_400_BAD_REQUEST)
 
-  user = get_object_or_404(User, username=username)
+  user = get_object_or_404(User, email=email)
 
   if not user.check_password(password): #Buscar el usuario
     return Response({"error": "Invalid password"}, status=status.HTTP_400_BAD_REQUEST)
@@ -75,8 +75,7 @@ def login(request): # request es un objeto que contiene toda la información sob
 @api_view(['POST'])
 def register(request):
   """
-  Registra un nuevo usuario.
-  Requiere los campos: username, email, password.
+  Requiere los campos: email, password.
 
   """
 
@@ -111,7 +110,8 @@ def profile(request):
     role = "user"  # Otro tipo si aplica
 
   return Response({
-    "username": user.username,
+    "fist_name": user.first_name,
+    "last_name": user.last_name,
     "email": user.email,
     "role": role,
   }, status=status.HTTP_200_OK)

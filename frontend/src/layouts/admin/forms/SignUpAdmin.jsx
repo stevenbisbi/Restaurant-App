@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { createUser, updateUser, getUser } from "../../../api/users/user.api";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import {
   Button,
@@ -13,9 +13,9 @@ import {
   Form,
 } from "react-bootstrap";
 
-import fondo from "../../../assets/img/hamburgesa7.jpg";
+import fondo from "../../../assets/img/img-bg/signupbg.jpg";
 
-export function RegisterFormPage() {
+export function SignUpAdmin() {
   const {
     register,
     handleSubmit,
@@ -92,12 +92,9 @@ export function RegisterFormPage() {
           <div className="position-relative h-100 d-flex flex-column justify-content-between p-5 text-white">
             {/* Encabezado */}
             <div>
-              <div className="bg-warning text-danger rounded-pill d-inline-block px-4 py-2 mb-4">
-                <strong>¡Fresco todos los días!</strong>
-              </div>
               <h1 className="display-4 fw-bold mb-3 ">Trato Especial</h1>
               <p className="fs-5 ">
-                Pide y paga en el restaurante, ¡sin esperas!<br></br>
+                Toda una experiencia te espera, ¡vamos!<br></br>
                 <strong>¡Parcha2!</strong>
               </p>
             </div>
@@ -109,7 +106,7 @@ export function RegisterFormPage() {
           className="d-flex align-items-center justify-content-center bg-light"
         >
           <div className="w-100 p-4" style={{ maxWidth: "500px" }}>
-            <h2 className="text-danger mb-4">Registro en Parcha2</h2>
+            <h2 className="text-primary mb-4">Registro en Parcha2</h2>
             <Form onSubmit={onSubmit}>
               {/* Sección de Información de Cuenta */}
               <div className="mb-4">
@@ -178,24 +175,13 @@ export function RegisterFormPage() {
               </div>
 
               <Button
-                variant="danger"
+                variant="primary"
                 type="submit"
                 className="w-100 py-2 fw-bold text-white"
               >
                 Registrarse
               </Button>
 
-              <div className="text-center mt-3">
-                <p className="text-secondary">
-                  ¿Ya tienes cuenta?{" "}
-                  <Link
-                    to="/login"
-                    className="text-danger text-decoration-none"
-                  >
-                    Inicia sesión
-                  </Link>
-                </p>
-              </div>
             </Form>
           </div>
         </Col>

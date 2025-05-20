@@ -1,9 +1,13 @@
-from django.urls import path
-from . import views
+# urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import RestaurantViewSet, RoleViewSet, PermissionViewSet
+
+router = DefaultRouter()
+router.register(r'', RestaurantViewSet)
+router.register(r'role', RoleViewSet)
+router.register(r'permission', PermissionViewSet)
 
 urlpatterns = [
-    path('restaurants/', views.restaurant_list_create, name='restaurant_list_create'),
-    path('roles/', views.rol_list_create, name='role_list_create'),
-    path('permissions/', views.permission_list_create, name='permission_list_create'),
+    path('', include(router.urls)),
 ]
-

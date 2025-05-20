@@ -11,7 +11,7 @@ export const LogoutButton = () => {
     sessionStorage.removeItem("token");
 
     toast.success("Sesión cerrada con éxito");
-    navigate("/login"); // Redirige al login
+    navigate("/"); // Redirige al login
   };
 
   return (
