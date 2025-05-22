@@ -18,9 +18,9 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey('users.Customer', on_delete=models.CASCADE, related_name="orders")
-    table = models.ForeignKey('reservations.Table', on_delete=models.CASCADE, related_name="orders")
-    staff = models.ForeignKey('users.Staff', on_delete=models.SET_NULL, related_name="orders", blank=True, null=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name="orders")
+    staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, related_name="orders", blank=True, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     special_instructions = models.TextField(blank=True, null=True)
     status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, related_name="orders")

@@ -1,71 +1,86 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
 from .models import User, Staff, Customer
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, min_length=3)
+
     class Meta:
         model = User
-        fields = ['id', 'email', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'password']
+        read_only_fields = ['id', 'date_joined', 'created_at', 'updated_at']
 
-class LoginSerializer(serializers.Serializer):
-    email = serializers.CharField()
-    password = serializers.CharField()
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
-    def validate(self, data):
-        email = data.get('email')
-        password = data.get('password')
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
-        if email and password:
-            user = authenticate(email=email, password=password)
-            if not user:
-                raise serializers.ValidationError("Invalid credentials.")
-            if not user.is_active:
-                raise serializers.ValidationError("User is inactive.")
-        else:
-            raise serializers.ValidationError("Must include both email and password.")
-
-        data['user'] = user
-        return data
 
 class StaffSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Staff
-        fields = '__all__'
+        fields = ['id', 'user', 'restaurant', 'role', 'hire_date', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
 
-from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from .models import Customer
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')
+        user_serializer = UserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        staff = Staff.objects.create(user=user, **validated_data)
+        return staff
 
-User = get_user_model()
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            user_serializer = UserSerializer(instance=instance.user, data=user_data, partial=True)
+            user_serializer.is_valid(raise_exception=True)
+            user_serializer.save()
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 
 class CustomerSerializer(serializers.ModelSerializer):
-    user_id = serializers.UUIDField(write_only=True)
-    email = serializers.EmailField(source='user.email', read_only=True)
+    user = UserSerializer()
 
     class Meta:
         model = Customer
-        fields = [
-            'id',
-            'user_id',
-            'email',
-            'preferences',
-            'created_at',
-            'updated_at'
-        ]
-        read_only_fields = (
-            'id', 'email', 'created_at', 'updated_at'
-        )
+        fields = ['id', 'user', 'preferences', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
 
     def create(self, validated_data):
-        user_id = validated_data.pop('user_id')
-        try:
-            user = User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            raise serializers.ValidationError({"user_id": "User does not exist."})
-        return Customer.objects.create(user=user, **validated_data)
+        user_data = validated_data.pop('user')
+        user_serializer = UserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()
+        customer = Customer.objects.create(user=user, **validated_data)
+        return customer
 
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', None)
+        if user_data:
+            user_serializer = UserSerializer(instance=instance.user, data=user_data, partial=True)
+            user_serializer.is_valid(raise_exception=True)
+            user_serializer.save()
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
-
-
-
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, write_only=True, min_length=8)

@@ -5,7 +5,6 @@ import { Footer } from "../../common/Footer";
 
 const ClientLayout = () => (
   <>
-    <Navigation />
     <Outlet />
     <Footer />
   </>

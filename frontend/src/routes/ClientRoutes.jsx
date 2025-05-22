@@ -8,10 +8,10 @@ import ClientLayout from "../layouts/client/ClientLayout";
 const ClientRoutes = () => {
   return (
     <Routes>
-      <Route element={<ClientLayout />}>
-        <Route path="/" element={<LoginFormPage />} />
         <Route path="/register" element={<RegisterFormPage />} />
-        <Route path="/home" element={<HomePage />} />
+      <Route element={<ClientLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginFormPage />} />
       </Route>
       <Route path="*" element={<NotFound />} /> {/* Este va fuera del layout */}
     </Routes>

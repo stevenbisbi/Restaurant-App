@@ -4,10 +4,14 @@ import ClientRoutes from "./ClientRoutes";
 import AdminRoutes from "./AdminRoutes";
 import StaffRoutes from "./StaffRoutes";
 import NotFound from "../common/Nofound";
+import { HomePage } from "../layouts/client/pages/HomePage";
+import { LoginFormPage } from "../auth/LoginFormPage";
+
 
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="/home" element={<HomePage />} />
       <Route path="/admin/*" element={<AdminRoutes />} />
       <Route path="/staff/*" element={<StaffRoutes />} />
       <Route path="/*" element={<ClientRoutes />} />

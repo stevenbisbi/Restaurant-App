@@ -3,6 +3,7 @@ import axios from "axios";
 import { Spinner, Alert } from "react-bootstrap";
 import { MenuCard } from "../components/MenuCard";
 import { ModalMenuCard } from "../components/ModalMenuCard";
+import { Navigation} from  "../components/Navigation";
 
 export function MenuPage() {
   const [meals, setMeals] = useState([]);
@@ -36,7 +37,8 @@ export function MenuPage() {
   }
 
   return (
-    <div className="container mt-4">
+    <>
+      <Navigation />    <div className="container mt-4">
       <h1 className="text-center mb-4">
         <i>Lo Mejor Aquí</i>
       </h1>
@@ -52,5 +54,6 @@ export function MenuPage() {
         onHide={() => setSelectedMeal(null)}
       />
     </div>
+    </>
   );
 }

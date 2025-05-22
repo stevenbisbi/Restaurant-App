@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { loginUser } from "../api/users/user.api";
 
+// Redux
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../store/authSlice';
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const images = import.meta.glob("/src/assets/img/*.{jpg,png,jpeg}", {
@@ -13,6 +17,7 @@ const images = import.meta.glob("/src/assets/img/*.{jpg,png,jpeg}", {
 const backgroundImages = Object.values(images).map((img) => img.default);
 
 export const LoginFormPage = () => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -20,39 +25,50 @@ export const LoginFormPage = () => {
   } = useForm();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = handleSubmit(async (data) => {
-    const { username, password } = data;
+    setLoading(true);
+    const { email, password } = data;
 
     try {
-      const response = await loginUser({ username, password });
+      const response = await loginUser({ email, password });
       if (response.status === 200) {
-        const { token } = response.data;
-        sessionStorage.setItem("username", username);
-        toast.success(`¡Bienvenido ${username}!`);
-        
-        // Si está marcado el "Recuérdame", guarda en localStorage
-        localStorage.setItem("username", username);
+        const { token, user } = response.data;
+
+        // Guardar token y nombre en Redux
+        dispatch(setCredentials({
+          token,
+          firstName: user.first_name,
+          rememberMe: data.rememberMe,
+        }));
+
+        toast.success(`¡Bienvenido ${user.first_name}!`);
+
         if (data.rememberMe) {
           localStorage.setItem("token", token);
         } else {
           sessionStorage.setItem("token", token);
         }
+
+        navigate("/home");
       } else {
         toast.error("Error en el inicio de sesión");
       }
-      // Redirigir a la página de inicio después de iniciar sesión
-      navigate("/home");
     } catch (error) {
       if (error.response && error.response.data) {
         toast.error(
-          `${error.response.data.message || "Usuario o contraseña incorrectos"}`
+          error.response.data.detail || "Usuario o contraseña incorrectos"
         );
       } else {
-        toast.error("Error en el registro");
+        toast.error("Error en el inicio de sesión");
       }
+    }finally {
+      setLoading(false);
     }
-  });
+});
 
+  // Cambia la imagen de fondo cada 6 segundos
   const [currentImageIndex, setCurrentImageIndex] = useState(() =>
     Math.floor(Math.random() * backgroundImages.length)
   );
@@ -128,15 +144,15 @@ export const LoginFormPage = () => {
             <p className="text-secondary mb-4">Por favor ingresa tus datos</p>
 
             <Form onSubmit={onSubmit}>
-              <Form.Group className="mb-4" controlId="formUsername">
-                <Form.Label>Usuario:</Form.Label>
+              <Form.Group className="mb-4" controlId="formEmail">
+                <Form.Label>Correo:</Form.Label>
                 <Form.Control
-                  name="username"
+                  name="email"
                   className="py-2 px-3 border-2"
-                  type="username"
+                  type="email"
                   placeholder="Ingresa tu usuario"
-                  isInvalid={!!errors.username}
-                  {...register("username", { required: true })}
+                  isInvalid={!!errors.email}
+                  {...register("email", { required: true })}
                 />
               </Form.Group>
 
@@ -170,8 +186,9 @@ export const LoginFormPage = () => {
                 type="submit"
                 size="lg"
                 className="w-100 py-2 fw-bold text-white"
+                disabled={loading}
               >
-                Iniciar sesión
+                {loading ? "Cargando..." : "Iniciar sesión"}
               </Button>
 
               <p className="text-center mt-4 text-secondary">

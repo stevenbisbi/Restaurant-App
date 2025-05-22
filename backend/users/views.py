@@ -1,180 +1,71 @@
-from django.shortcuts import render, get_object_or_404
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, permissions, status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import action
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 from .serializer import UserSerializer, CustomerSerializer, LoginSerializer
-from drf_yasg.utils import swagger_auto_schema # type: ignore
-from .models import Customer, User
-
+from .models import Customer
 
 User = get_user_model()
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def user_list(request):
-  """
-  Lista de todos los usuarios"""
-  user = User.objects.all()
-  serializer = UserSerializer(user, many=True)
-  return Response(serializer.data, status=status.HTTP_200_OK)
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.action == 'create':  # Permitir crear usuario sin autenticación
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
+    # Opcional: acción personalizada para perfil del usuario autenticado
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def profile(self, request):
+        user = request.user
+        role = "admin" if user.is_superuser else ("staff" if user.is_staff else ("customer" if hasattr(user, 'customer') else "user"))
+        serializer = UserSerializer(user)
+        data = serializer.data
+        data['role'] = role
+        return Response(data)
+
+class CustomerViewSet(viewsets.ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
 
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def retrieve_user(request, pk):
-  """
-  Consulta ususarios por ID
-  """
-  user = get_object_or_404(User, pk=pk)
-  serializer = UserSerializer(user)
-  return Response(serializer.data, status=status.HTTP_200_OK)
+class LoginView(APIView):
+    permission_classes = []
+    authentication_classes = []
 
-@swagger_auto_schema(method='patch', request_body=UserSerializer, responses={200: UserSerializer})
-@api_view(['PATCH'])
-def user_update(request, pk):
-  try:
-    user = User.objects.get(pk=pk)
-  except User.DoesNotExist:
-    return Response(status=status.HTTP_404_NOT_FOUND)
-  
-  serializer = UserSerializer(user, data=request.data, partial=True)
-  if serializer.is_valid():
-    serializer.save()
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
 
-@swagger_auto_schema(method='post', request_body=LoginSerializer)
-@api_view(['POST'])
-def login(request): # request es un objeto que contiene toda la información sobre la solicitud HTTP entrante
-  """
-  Inicia sesión.
-  """
-  email = request.data.get('email') # Obtención de los datos enviados
-  password = request.data.get('password')
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-  if not email or not password: # Validación de campos obligatorios
-    return Response({"error": "Debe proporcionar email y password"}, status=status.HTTP_400_BAD_REQUEST)
+        if not user.check_password(password):
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
-  user = get_object_or_404(User, email=email)
+        token, _ = Token.objects.get_or_create(user=user)
+        user_serializer = UserSerializer(user)
 
-  if not user.check_password(password): #Buscar el usuario
-    return Response({"error": "Invalid password"}, status=status.HTTP_400_BAD_REQUEST)
-  
-  token, created = Token.objects.get_or_create(user=user)
-  serializer = UserSerializer(instance=user) #convierte el usuario a un formato JSON amigable.
-
-  return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_200_OK)
-
-@swagger_auto_schema(method='post', request_body=UserSerializer)
-@api_view(['POST'])
-def register(request):
-  """
-  Requiere los campos: email, password.
-
-  """
-
-  serializer = UserSerializer(data=request.data)
-
-  if serializer.is_valid():
-    user = serializer.save()
-
-    user.set_password(request.data['password'])
-    user.save()
-
-    token = Token.objects.create(user=user)
-    return Response({'token': token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
-  
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def profile(request):
-
-
-  user = request.user
-
-  if user.is_superuser: # Lógica para determinar el rol
-    role = "admin"
-  elif user.is_staff:
-    role = "staff"
-  elif hasattr(user, 'customer'):
-    role = "customer"
-  else:
-    role = "user"  # Otro tipo si aplica
-
-  return Response({
-    "fist_name": user.first_name,
-    "last_name": user.last_name,
-    "email": user.email,
-    "role": role,
-  }, status=status.HTTP_200_OK)
-
-
-
-@swagger_auto_schema(method='post', request_body=CustomerSerializer)
-@api_view(['POST'])
-def create_customer(request):
-  """
-  Create a new customer.
-  """
-  serializer =  CustomerSerializer(data=request.data)
-  if serializer.is_valid():
-    customer = serializer.save()
-    token, created = Token.objects.get_or_create(user=customer.user)
-    return Response({"token": token.key, "customer": serializer.data}, status=status.HTTP_201_CREATED)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
-
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def list_customers(request):
-  customer = Customer.objects.all()
-  serializer = CustomerSerializer(customer, many=True)
-  return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def retrieve_customer(request, pk):
-  """
-  Consulta Customer por ID de Customer.
-  """
-  customer = get_object_or_404(Customer, pk=pk)
-  serializer = CustomerSerializer(customer)
-  return Response(serializer.data, status=status.HTTP_200_OK)
-
-@swagger_auto_schema(method='put', request_body=CustomerSerializer, responses={200: CustomerSerializer})
-
-@api_view(['PUT', 'PATCH'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def update_customer(request, pk):
-  """
-  Actualizar customer por ID de Customer.
-  """
-  customer = get_object_or_404(Customer, pk=pk)
-  serializer = CustomerSerializer(customer, data=request.data, partial=True)
-  if serializer.is_valid():
-    serializer.save()
-    return Response(serializer.data, status=status.HTTP_200_OK)
-  return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['DELETE'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
-def delete_customer(request, pk):
-  """
-  Eliminar Customer por ID de customer.
-  """
-  customer = get_object_or_404(Customer, pk=pk)
-  customer.delete()
-  return Response({"detaail": "customer eliminado corrrectamente"}, status=status.HTTP_204_NO_CONTENT)
-
-#Get user Falta
+        return Response({
+            "token": token.key,
+            "user": user_serializer.data,
+        })

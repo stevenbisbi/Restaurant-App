@@ -26,20 +26,18 @@ export function RegisterFormPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const onSubmit = handleSubmit(
-    async (data) => {
-      const { username, email, password } = data;
-      sessionStorage.setItem("username", username);
-
-      try {
-        if (params.id) {
-          await updateUser(params.id, { username, email, password });
-          toast.success("Usuario actualizado exitosamente");
-        } else {
-          await createUser({ username, email, password });
-          toast.success("Usuario registrado exitosamente");
-        }
-        navigate("/home");
+  const onSubmit = handleSubmit(async (data) => {
+  setLoading(true);
+  try {
+    const { email, password, first_name, last_name } = data;
+    if (params.id) {
+      await updateUser(params.id, { email, first_name, last_name }); // No envíes password sin control
+      toast.success("Usuario actualizado exitosamente");
+    } else {
+      await createUser({ email, password, first_name, last_name });
+      toast.success("Usuario registrado exitosamente");
+    }
+    navigate("/home");
       } catch (error) {
         if (error.response && error.response.data) {
           toast.error(
@@ -48,7 +46,9 @@ export function RegisterFormPage() {
         } else {
           toast.error("Error en el registro");
         }
-      }
+      }finally {
+    setLoading(false);
+  }
     },
     (formErrors) => {
       // Este callback se ejecuta si hay errores de validación
@@ -65,14 +65,15 @@ export function RegisterFormPage() {
     async function loadUser() {
       if (params.id) {
         const res = await getUser(params.id);
-        setValue("username", res.data.username);
+        setValue("first_name", res.data.first_name);
+        setValue("last_name", res.data.last_name);
         setValue("email", res.data.email);
-        setValue("password", res.data.password);
       }
     }
     loadUser();
-  }, []);
+  }, [params.id, setValue]);
 
+  const [loading, setLoading] = useState(false);
   return (
     <Container fluid className="p-0 vh-100">
       <Row className="g-0 h-100">
@@ -116,17 +117,31 @@ export function RegisterFormPage() {
                 <h5 className="text-secondary mb-3">Información de Cuenta</h5>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Nombre de usuario:</Form.Label>
+                  <Form.Label>Nombre:</Form.Label>
                   <Form.Control
-                    name="username"
+                    name="first_name"
                     type="text"
-                    isInvalid={!!errors.username?.message}
-                    {...register("username", { required: true })}
+                    isInvalid={!!errors.first_name?.message}
+                    {...register("first_name", { required: true })}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {errors.username?.message}
+                    {errors.first_name?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
+
+                <Form.Group className="mb-3">
+  <Form.Label>Apellido:</Form.Label>
+  <Form.Control
+    name="last_name"
+    type="text"
+    isInvalid={!!errors.last_name?.message}
+    {...register("last_name", { required: "El apellido es obligatorio" })}
+  />
+  <Form.Control.Feedback type="invalid">
+    {errors.last_name?.message}
+  </Form.Control.Feedback>
+</Form.Group>
+
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email:</Form.Label>
@@ -181,8 +196,8 @@ export function RegisterFormPage() {
                 variant="danger"
                 type="submit"
                 className="w-100 py-2 fw-bold text-white"
-              >
-                Registrarse
+              disabled={loading}
+              > {loading ? "Procesando..." : "Registrarse"}
               </Button>
 
               <div className="text-center mt-3">
