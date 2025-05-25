@@ -1,7 +1,7 @@
-import {  BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import  AppRoutes  from "./routes/AppRoutes";
+import AppRoutes from "./routes/App.Routes";
 import { Toaster } from "react-hot-toast";
 
 function AppContent() {
@@ -12,7 +12,6 @@ function AppContent() {
     </>
   );
 }
-
 
 export function App() {
   return (

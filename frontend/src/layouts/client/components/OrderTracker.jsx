@@ -1,5 +1,5 @@
 // OrderTracker.jsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
 const OrderTracker = ({ orderId, token }) => {

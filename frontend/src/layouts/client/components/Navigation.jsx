@@ -1,11 +1,10 @@
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
 import { OffCanvas } from "./OffCanvas";
 import fondo from "../../../assets/img/fondo-comida.avif";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 
 export function Navigation() {
   const token = useSelector((state) => state.auth.token);
@@ -57,13 +56,14 @@ export function Navigation() {
               <Avatar name={name} />
             </button>
           </div>
-        ): (
+        ) : (
           <Link
             to="/login"
             className="text-danger text-decoration-none user-info d-flex align-items-center px-5"
           >
             Inicia sesión
-          </Link>)}
+          </Link>
+        )}
       </Navbar>
 
       {/* Renderiza el OffCanvas solo si hay token */}

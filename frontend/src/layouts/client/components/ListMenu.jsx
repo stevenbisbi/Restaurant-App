@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MenuCard } from "../components/MenuCard";
 import { ModalMenuCard } from "../components/ModalMenuCard";
 

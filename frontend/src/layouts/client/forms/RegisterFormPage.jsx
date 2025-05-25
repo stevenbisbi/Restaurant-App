@@ -3,19 +3,16 @@ import { createUser, updateUser, getUser } from "../../../api/users/user.api";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import {
-  Button,
-  Container,
-  Nav,
-  Navbar,
-  Row,
-  Col,
-  Form,
-} from "react-bootstrap";
+import { Button, Container, Spinner, Row, Col, Form } from "react-bootstrap";
+
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../../store/authSlice";
+import { loginUser } from "../../../api/users/user.api";
 
 import fondo from "../../../assets/img/hamburgesa7.jpg";
 
 export function RegisterFormPage() {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -27,39 +24,51 @@ export function RegisterFormPage() {
   const params = useParams();
 
   const onSubmit = handleSubmit(async (data) => {
-  setLoading(true);
-  try {
-    const { email, first_name, last_name, password } = data;
-    if (params.id) {
-      await updateUser(params.id, { email, first_name, last_name }); // No envíes password sin control
-      toast.success("Usuario actualizado exitosamente");
-    } else {
-      await createUser({ email, first_name, last_name, password, });
-      toast.success("Usuario registrado exitosamente");
-    }
-    navigate("/home");
-      } catch (error) {
-        if (error.response && error.response.data) {
-          toast.error(
-            `Error: ${error.response.data.message || "Algo salió mal"}`
-          );
-        } else {
-          toast.error("Error en el registro");
-        }
-      }finally {
-    setLoading(false);
-  }
-    },
-    (formErrors) => {
-      // Este callback se ejecuta si hay errores de validación
-      const firstError = Object.values(formErrors)[0];
-      if (firstError?.message) {
-        toast.error(firstError.message);
+    setLoading(true);
+    try {
+      const { email, first_name, last_name, password = "" } = data;
+
+      if (params.id) {
+        await updateUser(params.id, { email, first_name, last_name });
+        toast.success("Usuario actualizado exitosamente");
       } else {
-        toast.error("Por favor completa todos los campos requeridos.");
+        const {
+          data: { token, user },
+        } = await createUser({
+          email,
+          first_name,
+          last_name,
+          password,
+        });
+        toast.success("Usuario registrado exitosamente");
+
+        // Hacer login automático después de crear usuario:
+        const response = await loginUser({ email, password });
+        if (response.status === 200) {
+          const { token, user } = response.data;
+          dispatch(
+            setCredentials({
+              token,
+              firstName: user.first_name,
+              // otros campos si quieres
+            })
+          );
+
+          if (data.rememberMe) {
+            localStorage.setItem("token", token);
+          } else {
+            sessionStorage.setItem("token", token);
+          }
+        }
       }
+      navigate("/home");
+    } catch (error) {
+      const msg = error.response?.data?.message || "Algo salió mal";
+      toast.error(`Error: ${msg}`);
+    } finally {
+      setLoading(false);
     }
-  );
+  });
 
   useEffect(() => {
     async function loadUser() {
@@ -119,10 +128,11 @@ export function RegisterFormPage() {
                 <Form.Group className="mb-3">
                   <Form.Label>Nombre:</Form.Label>
                   <Form.Control
-                    name="first_name"
                     type="text"
                     isInvalid={!!errors.first_name?.message}
-                    {...register("first_name", { required: true })}
+                    {...register("first_name", {
+                      required: "El nombre es obligatorio",
+                    })}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.first_name?.message}
@@ -130,27 +140,26 @@ export function RegisterFormPage() {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-  <Form.Label>Apellido:</Form.Label>
-  <Form.Control
-    name="last_name"
-    type="text"
-    isInvalid={!!errors.last_name?.message}
-    {...register("last_name", { required: "El apellido es obligatorio" })}
-  />
-  <Form.Control.Feedback type="invalid">
-    {errors.last_name?.message}
-  </Form.Control.Feedback>
-</Form.Group>
-
+                  <Form.Label>Apellido:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    isInvalid={!!errors.last_name?.message}
+                    {...register("last_name", {
+                      required: "El apellido es obligatorio",
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.last_name?.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email:</Form.Label>
                   <Form.Control
-                    name="email"
                     type="email"
                     isInvalid={!!errors.email?.message}
                     {...register("email", {
-                      required: "El correo es obligatorio",
+                      required: "El email es obligatorio",
                       pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                         message: "Ingresa un correo válido con punto (.)",
@@ -165,39 +174,54 @@ export function RegisterFormPage() {
                 <Form.Group className="mb-3">
                   <Form.Label>Contraseña:</Form.Label>
                   <Form.Control
-                    name="password"
                     type="password"
+                    autoComplete="new-password"
                     isInvalid={!!errors.password?.message}
-                    {...register("password", { required: true })}
+                    {...register("password", {
+                      required: !params.id && "La contraseña es obligatoria",
+                    })}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.password?.message}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Confirmar Contraseña:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    isInvalid={!!errors.confirmPassword?.message}
-                    {...register("confirmPassword", {
-                      required: "Confirma la contraseña",
-                      validate: (value) =>
-                        value === watch("password") ||
-                        "Las contraseñas no coinciden",
-                    })}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.confirmPassword?.message}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                {!params.id && (
+                  <>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Confirmar Contraseña:</Form.Label>
+                      <Form.Control
+                        type="password"
+                        autoComplete="new-password"
+                        isInvalid={!!errors.confirmPassword?.message}
+                        {...register("confirmPassword", {
+                          required: "Confirma la contraseña",
+                          validate: (value) =>
+                            value === watch("password") ||
+                            "Las contraseñas no coinciden",
+                        })}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        {errors.confirmPassword?.message}
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </>
+                )}
               </div>
 
               <Button
                 variant="danger"
                 type="submit"
                 className="w-100 py-2 fw-bold text-white"
-              disabled={loading}
-              > {loading ? "Procesando..." : "Registrarse"}
+                disabled={loading}
+              >
+                {" "}
+                {loading ? (
+                  <Spinner animation="border" />
+                ) : params.id ? (
+                  "Actualizar"
+                ) : (
+                  "Registrarse"
+                )}
               </Button>
 
               <div className="text-center mt-3">
