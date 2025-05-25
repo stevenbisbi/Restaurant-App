@@ -5,7 +5,7 @@ import {
   createTable,
   deleteTable,
   updateTable,
-} from "../../../api/tables.api";
+} from "../../../api/tablesApi";
 
 export function TablesAdminPage() {
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllMenus } from "../api/Menu.api";
+import { getAllMenus } from "../api/menuApi";
 
 export function useMenus() {
   const [menus, setMenus] = useState([]);
@@ -11,6 +11,7 @@ export function useMenus() {
       try {
         setLoading(true);
         const response = await getAllMenus();
+        console.log("Respuesta de la API:", response); // <-- Agrega esto
         setMenus(response.data);
       } catch (err) {
         setError(err);
