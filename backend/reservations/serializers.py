@@ -1,10 +1,5 @@
 from rest_framework import serializers
-from .models import Table, Reservation, ReservationStatus
-
-class TableSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Table
-        fields = '__all__'
+from .models import Reservation, ReservationStatus
 
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:

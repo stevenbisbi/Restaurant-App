@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'channels',
     'restaurant',
+    'tables',
     'users',
     'menu',
     'notifications',

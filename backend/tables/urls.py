@@ -1,11 +1,10 @@
 # urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ReservationViewSet, ReservationStatusViewSet
+from .views import TableViewSet
 
 router = DefaultRouter()
-router.register(r'', ReservationViewSet)
-router.register(r'status', ReservationStatusViewSet)
+router.register(r'', TableViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -2,7 +2,7 @@ from django.db import models
 import uuid
 from menu.models import MenuItem, MenuItemOption
 from users.models import Customer, Staff
-from reservations.models import Table
+from tables.models import Table
 
 # Create your models here.
 
