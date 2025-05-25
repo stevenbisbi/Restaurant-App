@@ -4,7 +4,7 @@ from .models import Menu, MenuCategory, MenuItem, MenuItemVariant, MenuItemOptio
 from .serializers import MenuSerializer, MenuCategorySerializer, MenuItemSerializer, MenuItemVariantSerializer, MenuItemOptionSerializer
 
 class MenuViewSet(viewsets.ModelViewSet):
-    queryset = Menu.objects.all()
+    queryset = Menu.objects.select_related('restaurant').all()
     serializer_class = MenuSerializer
 
 class MenuCategoryViewSet(viewsets.ModelViewSet):

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createMenu, updateMenu, getMenu } from "../../../api/menuApi";
+import { getAllRestaurants } from "../../../api/restaurantsApi";
 import { useNavigate, useParams } from "react-router-dom";
 
 export function MenuAdminForm() {
@@ -10,11 +11,15 @@ export function MenuAdminForm() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    is_active: true,
+    is_active: false,
     restaurant: "", // Ajusta esto según cómo asignes restaurantes
   });
 
+  const [restaurants, setRestaurants] = useState([]);
+
   useEffect(() => {
+    getAllRestaurants().then((res) => setRestaurants(res.data));
+    console.log("Restaurants:", restaurants);
     if (isEdit) {
       getMenu(id).then((res) => setFormData(res.data));
     }
@@ -56,7 +61,22 @@ export function MenuAdminForm() {
         onChange={handleChange}
         placeholder="Descripción"
       />
-
+      <label>
+        Restaurante:
+        <select
+          name="restaurant"
+          value={formData.restaurant}
+          onChange={handleChange}
+          required
+        >
+          <option value="">-- Restaurante --</option>
+          {restaurants.map((rest) => (
+            <option key={rest.id} value={rest.id}>
+              {rest.name}
+            </option>
+          ))}
+        </select>
+      </label>
       <label>
         Activo:
         <input

@@ -5,7 +5,7 @@ import {
   createTable,
   deleteTable,
   updateTable,
-} from "../../../api/tablesApi";
+} from "../../../api/tables.api";
 
 export function TablesAdminPage() {
   useEffect(() => {
@@ -20,5 +20,5 @@ export function TablesAdminPage() {
     };
   }, []);
 
-  return <div></div>;
+  return <div> Mesas</div>;
 }

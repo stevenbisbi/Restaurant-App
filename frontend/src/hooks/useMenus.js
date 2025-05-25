@@ -11,7 +11,6 @@ export function useMenus() {
       try {
         setLoading(true);
         const response = await getAllMenus();
-        console.log("Respuesta de la API:", response); // <-- Agrega esto
         setMenus(response.data);
       } catch (err) {
         setError(err);
