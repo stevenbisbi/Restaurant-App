@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllMenus } from "../api/Menu.api";
+import { getAllMenus } from "../api/menuApi";
 
 export function useMenus() {
   const [menus, setMenus] = useState([]);

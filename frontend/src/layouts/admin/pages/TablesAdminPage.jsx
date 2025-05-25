@@ -20,5 +20,5 @@ export function TablesAdminPage() {
     };
   }, []);
 
-  return <div></div>;
+  return <div> Mesas</div>;
 }
