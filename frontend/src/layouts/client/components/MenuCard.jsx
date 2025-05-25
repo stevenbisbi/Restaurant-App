@@ -1,11 +1,16 @@
 import { Card } from "react-bootstrap";
+import { useMenus } from "../../../hooks/useMenus";
 
 export function MenuCard({ meal, onSelect }) {
+  const { menus, loading, error } = useMenus();
+
+  if (loading) return <p>Cargando menús...</p>;
+  if (error) return <p>Error cargando menús 😢</p>;
   return (
     <Card
-    className="p-2 mx-2 position-relative"
-    style={{ cursor: "pointer", width: "16rem" }}
-    onClick={() => onSelect(meal)}
+      className="p-2 mx-2 position-relative"
+      style={{ cursor: "pointer", width: "16rem" }}
+      onClick={() => onSelect(meal)}
     >
       {/* { menuItem.is_promotion ? (
         <span style={{ height: "2rem"}} className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-danger d-flex align-items-center"><span className="bg-light rounded-circle py-1 me-1">💯 </span>¡Promoción!</span>

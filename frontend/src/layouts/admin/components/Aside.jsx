@@ -11,7 +11,7 @@ export function Aside() {
     <>
       <div className="aside">
         <a
-          href="/"
+          href="/admin"
           className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
         >
           <span className="fs-4 text-dark">Admin Panel</span>
@@ -21,7 +21,7 @@ export function Aside() {
           <li className="nav-item ">
             <a
               href="/admin/categories"
-              className="nav-link active text-dark"
+              className="nav-link text-dark"
               aria-current="page"
             >
               <CategoryIcon /> Categorias

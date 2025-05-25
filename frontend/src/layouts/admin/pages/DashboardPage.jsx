@@ -1,3 +1,3 @@
 export function DashboardPage() {
-  return (document.title = "Dashboard"), (<div>DashboardPage</div>);
+  return (document.title = "Dashboard"), (<div></div>);
 }

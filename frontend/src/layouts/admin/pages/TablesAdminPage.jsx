@@ -20,5 +20,5 @@ export function TablesAdminPage() {
     };
   }, []);
 
-  return <div>TablesPage</div>;
+  return <div></div>;
 }

@@ -4,9 +4,10 @@ import { Aside } from "./components/Aside";
 
 const AdminLayout = () => (
   <>
-    <Outlet />
     <Aside />
-    {/* Aquí puedes agregar más componentes comunes como el Header si es necesario */}
+    <main className="container py-4">
+      <Outlet />
+    </main>
     <Footer />
   </>
 );

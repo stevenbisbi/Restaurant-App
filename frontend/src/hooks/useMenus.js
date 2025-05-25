@@ -1,0 +1,26 @@
+import { useState, useEffect } from "react";
+import { getAllMenus } from "../api/Menu.api";
+
+export function useMenus() {
+  const [menus, setMenus] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchMenus() {
+      try {
+        setLoading(true);
+        const response = await getAllMenus();
+        setMenus(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMenus();
+  }, []);
+
+  return { menus, loading, error };
+}
