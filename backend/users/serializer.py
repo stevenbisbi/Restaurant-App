@@ -83,4 +83,4 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
-    password = serializers.CharField(required=True, write_only=True, min_length=8)
+    password = serializers.CharField(required=True, write_only=True, min_length=3)
