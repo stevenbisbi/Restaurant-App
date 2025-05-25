@@ -1,11 +1,11 @@
 import { MenuPage } from "../../client/pages/MenuPage";
+import { Navigation} from  "../components/Navigation";
 
-import { useSelector } from 'react-redux';
 
 export function HomePage() {
-  const { token, username } = useSelector(state => state.auth);
   return (
     <>
+    <Navigation />
       <MenuPage />
     </>
   );

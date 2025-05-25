@@ -65,13 +65,13 @@ export function SignUpAdmin() {
     async function loadUser() {
       if (params.id) {
         const res = await getUser(params.id);
-        setValue("username", res.data.username);
+        setValue("first_name", res.data.first_name);
         setValue("email", res.data.email);
         setValue("password", res.data.password);
       }
     }
     loadUser();
-  }, []);
+  }, [params.id, setValue]);
 
   return (
     <Container fluid className="p-0 vh-100">

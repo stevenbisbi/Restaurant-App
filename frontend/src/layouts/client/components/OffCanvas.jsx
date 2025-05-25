@@ -1,7 +1,7 @@
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
 
-export function OffCanvas({ username }) {
+export function OffCanvas({ name }) {
   return (
     <>
       <div
@@ -14,11 +14,11 @@ export function OffCanvas({ username }) {
         <div className="offcanvas-header">
           {/* Contenedor principal del avatar y nombre */}
           <div className="d-flex align-items-center gap-3">
-            <Avatar username={username} />
+            <Avatar name={name} />
 
             {/* Información del usuario */}
             <div>
-              <h4 className="mb-0 fw-normal">{username || "Usuario"}</h4>
+              <h4 className="mb-0 fw-normal">{name || "Usuario"}</h4>
               <small className="text-muted">Cliente</small>
             </div>
           </div>

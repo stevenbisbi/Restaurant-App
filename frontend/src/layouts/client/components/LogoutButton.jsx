@@ -1,17 +1,17 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../store/authSlice"; // Asegúrate de que esta ruta sea correcta
 
 export const LogoutButton = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // Borra los tokens de ambas opciones
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-
+    dispatch(logout()); // ✅ Limpia Redux y el almacenamiento
     toast.success("Sesión cerrada con éxito");
-    navigate("/"); // Redirige al login
+    navigate("/"); // Redirige al home o login
   };
 
   return (

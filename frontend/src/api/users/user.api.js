@@ -6,7 +6,7 @@ export const getUser = (id) => axiosClient.get(`/users/${id}/`);
 
 export const createUser = (user) => axiosClient.post("/users/", user);
 
-export const loginUser = (data) => axiosClient.post("/login/", data);
+export const loginUser = (data) => axiosClient.post("/users/login/", data);
 
 export const deleteUser = (id) => axiosClient.delete(`/users/${id}/`);
 

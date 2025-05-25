@@ -29,12 +29,12 @@ export function RegisterFormPage() {
   const onSubmit = handleSubmit(async (data) => {
   setLoading(true);
   try {
-    const { email, password, first_name, last_name } = data;
+    const { email, first_name, last_name, password } = data;
     if (params.id) {
       await updateUser(params.id, { email, first_name, last_name }); // No envíes password sin control
       toast.success("Usuario actualizado exitosamente");
     } else {
-      await createUser({ email, password, first_name, last_name });
+      await createUser({ email, first_name, last_name, password, });
       toast.success("Usuario registrado exitosamente");
     }
     navigate("/home");
@@ -65,9 +65,9 @@ export function RegisterFormPage() {
     async function loadUser() {
       if (params.id) {
         const res = await getUser(params.id);
+        setValue("email", res.data.email);
         setValue("first_name", res.data.first_name);
         setValue("last_name", res.data.last_name);
-        setValue("email", res.data.email);
       }
     }
     loadUser();

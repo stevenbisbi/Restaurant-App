@@ -3,11 +3,15 @@ import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
 import { OffCanvas } from "./OffCanvas";
 import fondo from "../../../assets/img/fondo-comida.avif";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+
 
 export function Navigation() {
-  const username =
-    localStorage.getItem("username") ||
-    sessionStorage.getItem("username") ||
+  const token = useSelector((state) => state.auth.token);
+  const name =
+    localStorage.getItem("firstName") ||
+    sessionStorage.getItem("firstName") ||
     "Usuario";
 
   return (
@@ -40,25 +44,35 @@ export function Navigation() {
             </Nav>
           </Navbar.Collapse>
         </Container>
-        <div className="user-info d-flex align-items-center px-5">
-          <button
-            className="btn btn-light d-flex align-items-center"
-            type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasScrolling"
-            aria-controls="offcanvasScrolling"
+
+        {token ? (
+          <div className="user-info d-flex align-items-center px-5">
+            <button
+              className="btn btn-light d-flex align-items-center"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasScrolling"
+              aria-controls="offcanvasScrolling"
+            >
+              <Avatar name={name} />
+            </button>
+          </div>
+        ): (
+          <Link
+            to="/login"
+            className="text-danger text-decoration-none user-info d-flex align-items-center px-5"
           >
-            <Avatar username={username} />
-          </button>
-        </div>
+            Inicia sesión
+          </Link>)}
       </Navbar>
 
-      <OffCanvas username={username} />
+      {/* Renderiza el OffCanvas solo si hay token */}
+      {token && <OffCanvas name={name} />}
 
       <img
         src={fondo}
         alt="Logo del restaurante"
-        className="d-inline-block align-top"
+        className="d-inline-block align-toa"
         style={{ height: "400px", width: "auto", objectFit: "cover" }}
       />
     </>
