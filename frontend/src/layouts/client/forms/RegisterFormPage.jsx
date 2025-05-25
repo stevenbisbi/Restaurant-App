@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import { Button, Container, Spinner, Row, Col, Form } from "react-bootstrap";
 
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../../store/authSlice";
+import { setCredentials } from "../../../redux/authSlice";
 import { loginUser } from "../../../api/users/user.api";
 
 import fondo from "../../../assets/img/hamburgesa7.jpg";

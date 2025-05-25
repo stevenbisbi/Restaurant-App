@@ -1,8 +1,8 @@
 // src/routes/AppRoutes.jsx
 import { Routes, Route } from "react-router-dom";
-import ClientRoutes from "./Client.Routes";
-import AdminRoutes from "./Admin.Routes";
-import StaffRoutes from "./Staff.Routes";
+import ClientRoutes from "./ClientRoutes";
+import AdminRoutes from "./AdminRoutes";
+import StaffRoutes from "./StaffRoutes";
 import NotFound from "../common/Nofound";
 import { HomePage } from "../layouts/client/pages/HomePage";
 

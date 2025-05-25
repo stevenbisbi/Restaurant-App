@@ -6,8 +6,8 @@ import { toast } from "react-hot-toast";
 import { loginUser } from "../api/users/user.api";
 
 // Redux
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../store/authSlice';
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../redux/authSlice";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -37,11 +37,13 @@ export const LoginFormPage = () => {
         const { token, user } = response.data;
 
         // Guardar token y nombre en Redux
-        dispatch(setCredentials({
-          token,
-          firstName: user.first_name,
-          rememberMe: data.rememberMe,
-        }));
+        dispatch(
+          setCredentials({
+            token,
+            firstName: user.first_name,
+            rememberMe: data.rememberMe,
+          })
+        );
 
         toast.success(`¡Bienvenido ${user.first_name}!`);
 
@@ -63,10 +65,10 @@ export const LoginFormPage = () => {
       } else {
         toast.error("Error en el inicio de sesión");
       }
-    }finally {
+    } finally {
       setLoading(false);
     }
-});
+  });
 
   // Cambia la imagen de fondo cada 6 segundos
   const [currentImageIndex, setCurrentImageIndex] = useState(() =>

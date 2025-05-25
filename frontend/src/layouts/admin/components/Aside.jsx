@@ -1,25 +1,64 @@
-export  function Aside() {
+import { OrderIcon } from "./icons/OrderIcon";
+import { TableIcon } from "./icons/TableIcon";
+import { CategoryIcon } from "./icons/CategoryIcon";
+import { PaymentIcon } from "./icons/PaymentIcon";
+import { MenuIcon } from "./icons/MenuIcon";
+import { UserIcon } from "./icons/UserIcon";
+import "../../../styles/AdminAside.css";
+
+export function Aside() {
   return (
     <>
-        <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-light mx-2 rounded-5" style={{ width: "75px" }}>
-            <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span className="fs-4 text-dark">Admin Panel</span>
+      <div className="aside">
+        <a
+          href="/"
+          className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+        >
+          <span className="fs-4 text-dark">Admin Panel</span>
+        </a>
+        <hr />
+        <ul className="nav nav-pills flex-column mb-auto">
+          <li className="nav-item ">
+            <a
+              href="/admin/categories"
+              className="nav-link active text-dark"
+              aria-current="page"
+            >
+              <CategoryIcon /> Categorias
             </a>
-            <hr />
-            <ul className="nav nav-pills flex-column mb-auto">
-            <li className="nav-item ">
-                <a href="/admin/users" className="nav-link active text-dark" aria-current="page">
-                Users
-                </a>
-            </li>
-            <li>
-                <a href="/admin/settings" className="nav-link text-dark">
-                Settings
-                </a>
-            </li>
-            </ul>
-        </div>
-
+          </li>
+          <li>
+            <a href="/admin/tables" className="nav-link text-dark">
+              <TableIcon className="me-2" />
+              Mesas
+            </a>
+          </li>
+          <li>
+            <a href="/admin/orders" className="nav-link text-dark">
+              <OrderIcon className="me-2" />
+              Pedidos
+            </a>
+          </li>
+          <li>
+            <a href="/admin/settings" className="nav-link text-dark">
+              <PaymentIcon className="me-2" />
+              Historial de pagos
+            </a>
+          </li>
+          <li>
+            <a href="/admin/menu" className="nav-link text-dark">
+              <MenuIcon className="me-2" />
+              Menu
+            </a>
+          </li>
+          <li>
+            <a href="/admin/users" className="nav-link text-dark">
+              <UserIcon className="me-2" />
+              Usuarios
+            </a>
+          </li>
+        </ul>
+      </div>
     </>
-  )
+  );
 }
