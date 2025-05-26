@@ -5,7 +5,6 @@ from .views import ReservationViewSet, ReservationStatusViewSet
 
 router = DefaultRouter()
 router.register(r'', ReservationViewSet)
-router.register(r'table', TableViewSet)
 router.register(r'status', ReservationStatusViewSet)
 
 urlpatterns = [
