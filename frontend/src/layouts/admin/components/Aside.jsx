@@ -1,6 +1,6 @@
 import { OrderIcon } from "./icons/OrderIcon";
 import { TableIcon } from "./icons/TableIcon";
-import { CategoryIcon } from "./icons/CategoryIcon";
+import { ProductIcon } from "./icons/ProductIcon";
 import { PaymentIcon } from "./icons/PaymentIcon";
 import { MenuIcon } from "./icons/MenuIcon";
 import { UserIcon } from "./icons/UserIcon";
@@ -24,7 +24,7 @@ export function Aside() {
               className="nav-link text-dark"
               aria-current="page"
             >
-              <CategoryIcon /> Categorias
+              <ProductIcon /> Productos
             </a>
           </li>
           <li>

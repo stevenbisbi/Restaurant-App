@@ -1,18 +1,23 @@
 from rest_framework import serializers
-from .models import Menu, MenuCategory, MenuItem, MenuItemVariant, MenuItemOption
+from .models import Menu, MenuItem, MenuItemVariant, MenuItemOption
 from restaurant.serializers import RestaurantSerializer
+from restaurant.models import Restaurant
 
 class MenuSerializer(serializers.ModelSerializer):
-  restaurant = RestaurantSerializer(read_only=True)
-  
-  class Meta:
-    model = Menu
-    fields = '__all__'
+    # Campo para escritura: acepta el UUID del restaurante
+    restaurant = serializers.SlugRelatedField(
+        slug_field='id',  # Usa el UUID como identificador
+        queryset=Restaurant.objects.all()  # Valida que exista el restaurante
+    )
+    
+    # Campo para lectura: muestra los detalles del restaurante
+    restaurant_details = RestaurantSerializer(source='restaurant', read_only=True)
 
-class MenuCategorySerializer(serializers.ModelSerializer):
-  class Meta:
-    model = MenuCategory
-    fields = '__all__'
+    class Meta:
+        model = Menu
+        fields = '__all__'
+        extra_fields = ['restaurant_details']  # Campo adicional para la respuesta
+
 
 class MenuItemSerializer(serializers.ModelSerializer):
   class Meta:
