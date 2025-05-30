@@ -3,13 +3,12 @@ import { MenuCard } from "../components/MenuCard";
 import { ModalMenuCard } from "../components/ModalMenuCard";
 import { useState } from "react";
 import { useFetch } from "../../../hooks/useFetch";
+import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuPage() {
-  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  const url = "https://www.themealdb.com/api/json/v1/1/search.php?f=a";
-
-  const { data, loading, error } = useFetch(url);
+  const { data, loading, error } = useFetch(getAllMenuItems);
   if (loading) {
     return (
       <div className="text-center  m-5">
@@ -38,19 +37,19 @@ export function MenuPage() {
           <i>Lo Mejor Aquí</i>
         </h1>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-          {data.map((meal) => (
+          {data.map((item) => (
             <MenuCard
-              key={meal.idMeal}
-              meal={meal}
-              onSelect={setSelectedMeal}
+              key={item.iditem}
+              item={item}
+              onSelect={setSelectedItem}
             />
           ))}
         </div>
 
         <ModalMenuCard
-          meal={selectedMeal}
-          show={!!selectedMeal}
-          onHide={() => setSelectedMeal(null)}
+          item={selectedItem}
+          show={!!selectedItem}
+          onHide={() => setSelectedItem(null)}
         />
       </div>
     </>

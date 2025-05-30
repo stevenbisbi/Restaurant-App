@@ -1,13 +1,13 @@
 import axiosClient from "../axiosClient";
 
-export const getAllmenuItems = () => axiosClient.get("/menu_items/");
+export const getAllMenuItems = () => axiosClient.get("/menu/items/");
 
-export const getmenu_item = (id) => axiosClient.get(`/menu_item/${id}/`);
+export const getMenuItem = (id) => axiosClient.get(`/menu/item/${id}/`);
 
-export const createmenu_item = (menu_item) =>
-  axiosClient.post("/menu_item/", menu_item);
+export const createMenuItem = (menuitem) =>
+  axiosClient.post("/menuitem/", menuitem);
 
-export const deletemenu_item = (id) => axiosClient.delete(`/menu_item/${id}/`);
+export const deleteMenuItem = (id) => axiosClient.delete(`/menu/item/${id}/`);
 
-export const updatemenu_item = (id, menu_item) =>
-  axiosClient.put(`/menu_item/${id}/`, menu_item);
+export const updateMenuItem = (id, menuitem) =>
+  axiosClient.put(`/menu/item/${id}/`, menuitem);

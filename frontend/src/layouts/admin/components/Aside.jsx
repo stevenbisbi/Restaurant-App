@@ -20,7 +20,7 @@ export function Aside() {
         <ul className="nav nav-pills flex-column mb-auto">
           <li className="nav-item ">
             <a
-              href="/admin/categories"
+              href="/admin/items"
               className="nav-link text-dark"
               aria-current="page"
             >
