@@ -2,11 +2,11 @@ import { useMenus } from "../../../hooks/useMenus";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { HeaderAdmin } from "./HeaderAdmin";
-import { deleteMenu } from "../../../api/menuApi";
+import { deleteMenu } from "../../../api/menu/menuApi";
 import { ModalDelete } from "../components/ModalDelete";
 
 export function MenuAdminPage() {
-  const { menus, loading, error } = useMenus();
+  const { menus, loading, error, triggerReload } = useMenus();
   const navigate = useNavigate();
   const [selectedMenuId, setSelectedMenuId] = useState(null);
 
@@ -21,16 +21,19 @@ export function MenuAdminPage() {
     if (selectedMenuId) {
       await deleteMenu(selectedMenuId);
       setSelectedMenuId(null);
+      triggerReload();
       navigate("/admin/menu");
     }
   };
 
   return (
     <div>
-      <HeaderAdmin title="Menús" btnTitle="Crear Menú" />
-      <Link to="/admin/menu/create" className="btn btn-primary mb-3">
-        Crear nuevo menú
-      </Link>
+      <HeaderAdmin title="Menús" />
+      <div className="d-flex justify-content-end">
+        <Link to="/admin/menu/create" className="btn btn-primary mb-3">
+          Crear nuevo menú
+        </Link>
+      </div>
 
       <div className="table-responsive">
         <table className="table table-bordered table-striped">
@@ -48,7 +51,7 @@ export function MenuAdminPage() {
               <tr key={menu.id}>
                 <td className="text-center">{menu.is_active ? "✅" : "❌"}</td>
                 <td>{menu.name}</td>
-                <td>{menu.restaurant?.name || "Sin asignar"}</td>
+                <td>{menu.restaurant_details?.name || "Sin asignar"}</td>
                 <td>{new Date(menu.created_at).toLocaleDateString()}</td>
                 <td>
                   <Link

@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import { createMenu, updateMenu, getMenu } from "../../../api/menu/menuApi";
-import { getAllRestaurants } from "../../../api/restaurantsApi";
+import {
+  createItemMenu,
+  updateItemMenu,
+  getItemMenu,
+} from "../../../api/menu/menuItemApi";
 import { useNavigate, useParams } from "react-router-dom";
 
-export function MenuAdminForm() {
+export function ItemAdminForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = Boolean(id);
@@ -11,17 +14,17 @@ export function MenuAdminForm() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    category: "",
+    price: "",
+    is_promoted: false,
+    is_featured: false,
+    is_vegetarian: false,
     is_active: false,
-    restaurant: "", // Ajusta esto según cómo asignes restaurantes
   });
 
-  const [restaurants, setRestaurants] = useState([]);
-
   useEffect(() => {
-    getAllRestaurants().then((res) => setRestaurants(res.data));
-    console.log("Restaurants:", restaurants);
     if (isEdit) {
-      getMenu(id).then((res) => setFormData(res.data));
+      getItemMenu(id).then((res) => setFormData(res.data));
     }
   }, [id]);
 
@@ -37,11 +40,11 @@ export function MenuAdminForm() {
     console.log("Form Data:", formData);
     e.preventDefault();
     if (isEdit) {
-      await updateMenu(id, formData);
+      await updateItemMenu(id, formData);
     } else {
-      await createMenu(formData);
+      await createItemMenu(formData);
     }
-    navigate("/admin/menu");
+    navigate("/admin/item_menu");
   };
 
   return (
@@ -54,7 +57,7 @@ export function MenuAdminForm() {
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
-                Nombre del menú:
+                Nombre Producto:
               </label>
               <input
                 id="name"
@@ -63,7 +66,7 @@ export function MenuAdminForm() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Ej. Menú desayuno"
+                placeholder="Ej. Sandwich de pollo"
                 required
               />
             </div>
@@ -75,26 +78,6 @@ export function MenuAdminForm() {
               onChange={handleChange}
               placeholder="Descripción"
             />
-            <div className="mb-3">
-              <label htmlFor="restaurant" className="form-label">
-                Restaurante:
-              </label>
-              <select
-                id="restaurant"
-                className="form-select"
-                name="restaurant"
-                value={formData.restaurant}
-                onChange={handleChange}
-                required
-              >
-                <option value="">-- Selecciona un restaurante --</option>
-                {restaurants.map((rest) => (
-                  <option key={rest.id} value={rest.id}>
-                    {rest.name}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             <div className="form-check mb-3">
               <input
@@ -107,6 +90,45 @@ export function MenuAdminForm() {
               />
               <label className="form-check-label" htmlFor="is_active">
                 Activo
+              </label>
+            </div>
+            <div className="form-check mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                name="is_featured"
+                id="is_featured"
+                checked={formData.is_featured}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="is_featured">
+                Destacado
+              </label>
+            </div>
+            <div className="form-check mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                name="is_promoted"
+                id="is_promoted"
+                checked={formData.is_promoted}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="is_promoted">
+                Promocionado
+              </label>
+            </div>
+            <div className="form-check mb-3">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                name="is_vegatarian"
+                id="is_vegatarian"
+                checked={formData.is_vegatarian}
+                onChange={handleChange}
+              />
+              <label className="form-check-label" htmlFor="is_vegatarian">
+                Vegetariano
               </label>
             </div>
 

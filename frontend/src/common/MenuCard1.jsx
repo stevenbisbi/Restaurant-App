@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
-import { useMenus } from "../../../hooks/useMenus";
+import { useMenus } from "../hooks/useMenus";
 
-export function MenuCard({ item, onSelect }) {
+export function MenuCard1({ item, onSelect }) {
   const { menus, loading, error } = useMenus();
 
   if (loading) return <p>Cargando menús...</p>;
@@ -12,7 +12,7 @@ export function MenuCard({ item, onSelect }) {
       style={{ cursor: "pointer", width: "16rem" }}
       onClick={() => onSelect(item)}
     >
-      {item.is_promotion ? (
+      {menuItem.is_promotion ? (
         <span
           style={{ height: "2rem" }}
           className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-danger d-flex align-items-center"
@@ -21,7 +21,7 @@ export function MenuCard({ item, onSelect }) {
           ¡Promoción!
         </span>
       ) : (
-        item.is_featured && (
+        menuItem.is_featured && (
           <span
             style={{ height: "2rem" }}
             className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-warning text-dark d-flex align-items-center"
@@ -31,12 +31,21 @@ export function MenuCard({ item, onSelect }) {
           </span>
         )
       )}
-      <Card.Img alt={item.img} variant="top" src={item.image_url} />
+      <Card.Img alt={item.image_url} variant="top" src={item.image_url} />
       <Card.Body>
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>
-          <strong>Precio:</strong> $ {item.price}
-          <br />
+          <strong>Precio: </strong> $ {item.price}
+          <strong>Descripción: </strong> {item.description || "Sin descripción"}
+          <strong>Restaurante: </strong>{" "}
+          {item.restaurant?.name || "Sin asignar"}
+          <strong>Categoria: </strong> {item.category || "Sin asignar"}
+          <strong>Creado: </strong> <p>vegatarian: </p>{" "}
+          {item.is_vegetarian ? "✅" : "❌"}
+          <p>Promocionado: </p> {item.is_promotion ? "✅" : "❌"}
+          <p>Destacado: </p> {item.is_featured ? "✅" : "❌"}
+          {new Date(item.created_at).toLocaleDateString()}
+          <strong>Activo:</strong> {item.is_active ? "✅" : "❌"}
         </Card.Text>
       </Card.Body>
     </Card>

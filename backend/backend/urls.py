@@ -45,7 +45,7 @@ urlpatterns = [
     path('restaurants/', include('restaurant.urls')),
     path('payments/', include('payments.urls')),
     path('menu/', include('menu.urls')),
-    path('notifications', include('notifications.urls')),
+    path('notifications/', include('notifications.urls')),
     path('orders/', include('orders.urls')),
     path('tables/', include('tables.urls')),
     ])),
