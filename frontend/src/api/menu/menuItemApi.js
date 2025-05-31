@@ -2,12 +2,16 @@ import axiosClient from "../axiosClient";
 
 export const getAllMenuItems = () => axiosClient.get("/menu/items/");
 
-export const getMenuItem = (id) => axiosClient.get(`/menu/item/${id}/`);
+export const getMenuItem = (id) => axiosClient.get(`/menu/items/${id}/`);
 
-export const createMenuItem = (menuitem) =>
-  axiosClient.post("/menu/items/", menuitem);
+export const createMenuItem = (formData) =>
+  axiosClient.post("/menu/items/", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
-export const deleteMenuItem = (id) => axiosClient.delete(`/menu/item/${id}/`);
+export const updateMenuItem = (id, formData) =>
+  axiosClient.put(`/menu/items/${id}/`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
-export const updateMenuItem = (id, menuitem) =>
-  axiosClient.put(`/menu/item/${id}/`, menuitem);
+export const deleteMenuItem = (id) => axiosClient.delete(`/menu/items/${id}/`);

@@ -31,7 +31,7 @@ export function MenuCard({ item, onSelect }) {
           </span>
         )
       )}
-      <Card.Img alt={item.img} variant="top" src={item.image_url} />
+      <Card.Img alt={item.image} variant="top" src={item.image} />
       <Card.Body>
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>

@@ -31,14 +31,12 @@ export function MenuCard1({ item, onSelect }) {
           </span>
         )
       )}
-      <Card.Img alt={item.image_url} variant="top" src={item.image_url} />
+      <Card.Img alt={item.image} variant="top" src={item.image} />
       <Card.Body>
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>
           <strong>Precio: </strong> $ {item.price}
           <strong>Descripción: </strong> {item.description || "Sin descripción"}
-          <strong>Restaurante: </strong>{" "}
-          {item.restaurant?.name || "Sin asignar"}
           <strong>Categoria: </strong> {item.category || "Sin asignar"}
           <strong>Creado: </strong> <p>vegatarian: </p>{" "}
           {item.is_vegetarian ? "✅" : "❌"}

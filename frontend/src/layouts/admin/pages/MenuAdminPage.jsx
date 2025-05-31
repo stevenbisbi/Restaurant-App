@@ -63,7 +63,7 @@ export function MenuAdminPage() {
                   <button
                     className="btn btn-sm btn-outline-danger mx-1"
                     data-bs-toggle="modal"
-                    data-bs-target="#menuDeleteModal"
+                    data-bs-target="#DeleteModal"
                     onClick={() => handleDeleteClick(menu.id)}
                   >
                     Eliminar
