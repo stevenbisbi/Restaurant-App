@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import {
-  createItemMenu,
-  updateItemMenu,
-  getItemMenu,
+  createMenuItem,
+  updateMenuItem,
+  getMenuItem,
 } from "../../../api/menu/menuItemApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { useCategories } from "../../../hooks/useCategories";
 
 export function ItemAdminForm() {
+  const categories = useCategories();
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = Boolean(id);
@@ -23,8 +25,10 @@ export function ItemAdminForm() {
   });
 
   useEffect(() => {
+    console.log("Categorías:", categories);
+
     if (isEdit) {
-      getItemMenu(id).then((res) => setFormData(res.data));
+      getMenuItem(id).then((res) => setFormData(res.data));
     }
   }, [id]);
 
@@ -37,23 +41,49 @@ export function ItemAdminForm() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("Form Data:", formData);
     e.preventDefault();
     if (isEdit) {
-      await updateItemMenu(id, formData);
+      await updateMenuItem(id, formData);
     } else {
-      await createItemMenu(formData);
+      await createMenuItem(formData);
     }
-    navigate("/admin/item_menu");
+    navigate("/admin/items");
   };
+
+  if (categories.length === 1) {
+    return (
+      <div className="text-center m-5">
+        <div className="spinner-border text-warning" role="status">
+          <span className="visually-hidden">Cargando categorías...</span>
+        </div>
+        <p>Cargando categorías, por favor espera...</p>
+      </div>
+    );
+  }
+
+  if (categories.length === 0) {
+    return (
+      <div className="text-center m-5">
+        <div className="alert alert-warning" role="alert">
+          No hay categorías disponibles. Por favor, crea una categoría antes de
+          agregar un item al menú.
+        </div>
+      </div>
+    );
+  }
+
+  const displayCategories = [
+    { name: "-- Selecciona una Categoría --", id: "" },
+    ...categories,
+  ];
 
   return (
     <div className="container py-4">
       <div className="card shadow">
         <div className="card-body">
-          <h2 className="card-title mb-4">
-            {isEdit ? "Editar Menú" : "Crear Menú"}
-          </h2>{" "}
+          <h2 className="card-title mb-4 text-center">
+            {isEdit ? "Editar Item" : "Crear Item"}
+          </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
@@ -69,6 +99,45 @@ export function ItemAdminForm() {
                 placeholder="Ej. Sandwich de pollo"
                 required
               />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="price" className="form-label">
+                Precio:
+              </label>
+              <input
+                id="price"
+                className="form-control"
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Ej. 9000"
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="category" className="form-label">
+                Categoría:
+              </label>
+              <select
+                id="category"
+                className="form-select"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+              >
+                {displayCategories.map((category, index) => (
+                  <option
+                    key={category.id || `default-${index}`}
+                    value={category.id}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <textarea
@@ -122,12 +191,12 @@ export function ItemAdminForm() {
               <input
                 className="form-check-input"
                 type="checkbox"
-                name="is_vegatarian"
-                id="is_vegatarian"
-                checked={formData.is_vegatarian}
+                name="is_vegetarian"
+                id="is_vegetarian"
+                checked={formData.is_vegetarian}
                 onChange={handleChange}
               />
-              <label className="form-check-label" htmlFor="is_vegatarian">
+              <label className="form-check-label" htmlFor="is_vegetarian">
                 Vegetariano
               </label>
             </div>

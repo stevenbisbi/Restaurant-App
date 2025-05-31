@@ -9,8 +9,7 @@ export function useFetch(fetchFunction) {
     const fetchData = async () => {
       try {
         const response = await fetchFunction();
-        setData(response.data); // meals porque la API devuelve un objeto con una propiedad meals, pero cuando este todo creado en el backend, se puede cambiar a un array directamente
-        // setData(response.data); // si la API devuelve un array directamente
+        setData(response.data);
         setLoading(false);
       } catch (err) {
         setError(err.message);

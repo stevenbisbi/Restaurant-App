@@ -5,7 +5,7 @@ export const getAllMenuItems = () => axiosClient.get("/menu/items/");
 export const getMenuItem = (id) => axiosClient.get(`/menu/item/${id}/`);
 
 export const createMenuItem = (menuitem) =>
-  axiosClient.post("/menuitem/", menuitem);
+  axiosClient.post("/menu/items/", menuitem);
 
 export const deleteMenuItem = (id) => axiosClient.delete(`/menu/item/${id}/`);
 

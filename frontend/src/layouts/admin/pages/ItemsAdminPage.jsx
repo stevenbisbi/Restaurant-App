@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Card, Button, Spinner, Alert, Modal } from "react-bootstrap";
+import { HeaderAdmin } from "./HeaderAdmin";
 import { getAllMenuItems, deleteMenuItem } from "../../../api/menu/menuItemApi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export function ItemsAdminPage() {
   const [items, setItems] = useState([]);
@@ -53,7 +54,12 @@ export function ItemsAdminPage() {
 
   return (
     <div className="container mt-4">
-      <h2 className="text-center mb-4">Administrar Menú</h2>
+      <HeaderAdmin title="Productos" />
+      <div className="d-flex justify-content-end">
+        <Link to="/admin/item/create" className="btn btn-primary mb-3">
+          Crear nuevo producto
+        </Link>
+      </div>
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {items.map((item) => (
