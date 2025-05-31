@@ -28,12 +28,11 @@ export function MenuAdminPage() {
 
   return (
     <div>
-      <HeaderAdmin title="Menús" />
-      <div className="d-flex justify-content-end">
-        <Link to="/admin/menu/create" className="btn btn-primary mb-3">
-          Crear nuevo menú
-        </Link>
-      </div>
+      <HeaderAdmin
+        title="Menús"
+        btnTitle="Crear nuevo Menú"
+        endPoint="/admin/menu/create"
+      />
 
       <div className="table-responsive">
         <table className="table table-bordered table-striped">

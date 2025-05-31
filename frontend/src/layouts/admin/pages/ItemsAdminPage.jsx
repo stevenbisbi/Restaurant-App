@@ -41,13 +41,11 @@ export function ItemsAdminPage() {
 
   return (
     <div className="container mt-4">
-      <HeaderAdmin title="Productos" />
-
-      <div className="d-flex justify-content-end">
-        <Link to="/admin/item/create" className="btn btn-primary mb-3">
-          Crear nuevo producto
-        </Link>
-      </div>
+      <HeaderAdmin
+        title="Productos"
+        btnTitle="Crear nuevo Producto"
+        endPoint="/admin/items/create"
+      />
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {MenuItems.map((item) => (
@@ -88,7 +86,7 @@ export function ItemsAdminPage() {
                 <div className="d-flex justify-content-between">
                   <Button
                     variant="outline-secondary"
-                    onClick={() => navigate(`/admin/menu/edit/${item.id}`)}
+                    onClick={() => navigate(`/admin/items/edit/${item.id}`)}
                   >
                     Editar
                   </Button>
