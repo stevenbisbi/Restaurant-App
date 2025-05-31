@@ -1,11 +1,14 @@
 import { HeaderAdmin } from "./HeaderAdmin";
+import { Link } from "react-router-dom";
+import { Spinner, Alert } from "react-bootstrap";
 import { useFetch } from "../../../hooks/useFetch";
 import { getAllOrders } from "../../../api/orderApi";
 import { deleteOrder } from "../../../api/orderApi";
 import { ModalDelete } from "../components/ModalDelete";
 
 export function OrderAdminPage() {
-  const { data, orders, loading, error } = useFetch(getAllOrders);
+  const { data, loading, error, triggerReload } = useFetch(getAllOrders);
+  console.log("data?", data);
 
   const handleConfirmDelete = async () => {
     if (selectedItemId) {
@@ -15,6 +18,22 @@ export function OrderAdminPage() {
       navigate("/admin/items");
     }
   };
+
+  if (loading)
+    return (
+      <div className="text-center m-5">
+        <Spinner animation="border" role="status">
+          Cargando...{" "}
+        </Spinner>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-center m-5">
+        <Alert variant="danger">{error}</Alert>
+      </div>
+    );
+
   return (
     <div>
       <HeaderAdmin title="Order Management" />
@@ -23,25 +42,27 @@ export function OrderAdminPage() {
           <table className="table table-bordered table-striped">
             <thead className="table-dark">
               <tr>
-                <th>Activo</th>
-                <th>Nombre</th>
-                <th>Restaurante</th>
-                <th>Creado</th>
+                <th>Cliente</th>
+                <th>Mesa</th>
+                <th>Mesero</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Fecha</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((menu) => (
-                <tr key={menu.id}>
+              {/* {data.map((order) => (
+                <tr key={order.id}>
                   <td className="text-center">
-                    {menu.is_active ? "✅" : "❌"}
+                    {order.customer ? "✅" : "❌"}
                   </td>
-                  <td>{menu.name}</td>
-                  <td>{menu.restaurant_details?.name || "Sin asignar"}</td>
-                  <td>{new Date(menu.created_at).toLocaleDateString()}</td>
+                  <td>{order.table}</td>
+                  <td>{order.status}</td>
+                  <td>{new Date(order.created_at).toLocaleDateString()}</td>
                   <td>
                     <Link
-                      to={`/admin/menu/edit/${menu.id}`}
+                      to={`/admin/order/edit/${order.id}`}
                       className="btn btn-sm btn-outline-secondary mx-1"
                     >
                       Editar
@@ -50,13 +71,13 @@ export function OrderAdminPage() {
                       className="btn btn-sm btn-outline-danger mx-1"
                       data-bs-toggle="modal"
                       data-bs-target="#DeleteModal"
-                      onClick={() => handleDeleteClick(menu.id)}
+                      onClick={() => handleDeleteClick(order.id)}
                     >
                       Eliminar
                     </button>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
         </div>

@@ -51,7 +51,6 @@ export function TablesAdminPage() {
         <table className="table table-bordered table-striped">
           <thead className="table-dark">
             <tr>
-              <th>Activo</th>
               <th>Numero</th>
               <th>Ubicacion</th>
               <th>Capacidad</th>
@@ -61,10 +60,9 @@ export function TablesAdminPage() {
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-center">
             {data.map((table) => (
               <tr key={table.id}>
-                <td className="text-center">{table.is_active ? "✅" : "❌"}</td>
                 <td>{table.number}</td>
                 <td>{table.capacity}</td>
                 <td>{table.location}</td>

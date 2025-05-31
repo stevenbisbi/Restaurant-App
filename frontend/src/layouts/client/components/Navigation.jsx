@@ -25,7 +25,10 @@ export function Navigation() {
         <Container>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto d-flex justify-content-center align-items-center">
-              <Nav.Link href="#" className="px-5 navigation-link fs-5">
+              <Nav.Link
+                href="/salchipapa"
+                className="px-5 navigation-link fs-5"
+              >
                 Salchipapa
               </Nav.Link>
               <Nav.Link href="#" className="px-5 navigation-link fs-5">
