@@ -47,6 +47,7 @@ urlpatterns = [
     path('menu/', include('menu.urls')),
     path('notifications/', include('notifications.urls')),
     path('orders/', include('orders.urls')),
+    path('tables/', include('tables.urls')),
     ])),
     # Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
