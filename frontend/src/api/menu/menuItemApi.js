@@ -10,7 +10,7 @@ export const createMenuItem = (formData) =>
   });
 
 export const updateMenuItem = (id, formData) =>
-  axiosClient.put(`/menu/items/${id}/`, formData, {
+  axiosClient.patch(`/menu/items/${id}/`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 

@@ -4,8 +4,9 @@ import { ModalMenuCard } from "../components/ModalMenuCard";
 import { useState } from "react";
 import { useFetch } from "../../../hooks/useFetch";
 import { getAllMenuItems } from "../../../api/menu/menuItemApi";
+import { Navigation } from "../components/Navigation";
 
-export function MenuPage() {
+export function SalchipapaPage() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const { data, loading, error } = useFetch(getAllMenuItems);
@@ -32,6 +33,7 @@ export function MenuPage() {
 
   return (
     <>
+      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>Lo Mejor Aquí</i>
@@ -39,6 +41,7 @@ export function MenuPage() {
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           {data.map((item) => {
             if (!item.is_available) return null;
+            if (item.category !== "plato_fuerte") return null; // Filter for Salchipapa category
             return (
               <MenuCard
                 key={item.iditem}

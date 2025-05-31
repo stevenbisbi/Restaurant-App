@@ -40,7 +40,7 @@ export function Aside() {
             </a>
           </li>
           <li>
-            <a href="/admin/settings" className="nav-link text-dark">
+            <a href="/admin/history-payments" className="nav-link text-dark">
               <PaymentIcon className="me-2" />
               Historial de pagos
             </a>

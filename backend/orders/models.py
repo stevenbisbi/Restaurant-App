@@ -25,8 +25,6 @@ class Order(models.Model):
     special_instructions = models.TextField(blank=True, null=True)
     status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, related_name="orders")
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
-    tax = models.DecimalField(max_digits=10, decimal_places=2)
-    tip = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     estimated_preparation_time = models.DateTimeField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

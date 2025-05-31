@@ -4,14 +4,18 @@ import { HomePage } from "../layouts/client/pages/HomePage";
 import { LoginFormPage } from "../auth/LoginFormPage";
 import NotFound from "../common/Nofound";
 import ClientLayout from "../layouts/client/ClientLayout";
+import { SalchipapaPage } from "../layouts/client/pages/SalchipapaPage";
+import { BebidasPage } from "../layouts/client/pages/BebidasPage";
 
 const ClientRoutes = () => {
   return (
     <Routes>
-        <Route path="/register" element={<RegisterFormPage />} />
+      <Route path="/register" element={<RegisterFormPage />} />
       <Route element={<ClientLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginFormPage />} />
+        <Route path="/salchipapa" element={<SalchipapaPage />} />
+        <Route path="/salchipapa" element={<BebidasPage />} />
       </Route>
       <Route path="*" element={<NotFound />} /> {/* Este va fuera del layout */}
     </Routes>

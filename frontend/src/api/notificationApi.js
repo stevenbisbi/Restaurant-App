@@ -1,8 +1,4 @@
-import axios from "axios";
-
-const notificationApi = axios.create({
-  baseURL: "/api/notifications/",
-});
+import axiosClient from "./axiosClient";
 
 export const getAllNotifications = () => notificationApi.get("/");
 
