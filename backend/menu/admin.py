@@ -1,9 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Menu, MenuCategory, MenuItem, MenuItemVariant, MenuItemOption
+from .models import Menu, MenuItem, MenuItemVariant, MenuItemOption
 
 admin.site.register(Menu)
-admin.site.register(MenuCategory)
 admin.site.register(MenuItem)
 admin.site.register(MenuItemVariant)
 
@@ -16,3 +15,5 @@ class MenuItemOptionAdmin(admin.ModelAdmin):
       return format_html(f'<img src="{obj.image_url}" style="height:30px;" />')
     return "No image"
   image_preview.short_description = "Icon"
+  
+  

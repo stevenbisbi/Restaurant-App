@@ -1,15 +1,13 @@
 # views.py
 from rest_framework import viewsets
-from .models import Menu, MenuCategory, MenuItem, MenuItemVariant, MenuItemOption
-from .serializers import MenuSerializer, MenuCategorySerializer, MenuItemSerializer, MenuItemVariantSerializer, MenuItemOptionSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import Menu, MenuItem, MenuItemVariant, MenuItemOption
+from .serializers import MenuSerializer, MenuItemSerializer, MenuItemVariantSerializer, MenuItemOptionSerializer
 
 class MenuViewSet(viewsets.ModelViewSet):
     queryset = Menu.objects.select_related('restaurant').all()
     serializer_class = MenuSerializer
-
-class MenuCategoryViewSet(viewsets.ModelViewSet):
-    queryset = MenuCategory.objects.all()
-    serializer_class = MenuCategorySerializer
 
 class MenuItemViewSet(viewsets.ModelViewSet):
     queryset = MenuItem.objects.all()
@@ -22,3 +20,8 @@ class MenuItemVariantViewSet(viewsets.ModelViewSet):
 class MenuItemOptionViewSet(viewsets.ModelViewSet):
     queryset = MenuItemOption.objects.all()
     serializer_class = MenuItemOptionSerializer
+
+@api_view(['GET'])
+def get_category_choices(request):
+    choices = MenuItem.CATEGORY_CHOICES
+    return Response(choices)

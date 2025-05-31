@@ -6,6 +6,8 @@ import { DashboardPage } from "../layouts/admin/pages/DashboardPage";
 import { TablesAdminPage } from "../layouts/admin/pages/TablesAdminPage";
 import { MenuAdminPage } from "../layouts/admin/pages/MenuAdminPage";
 import { MenuAdminForm } from "../layouts/admin/forms/MenuAdminForm";
+import { ItemAdminForm } from "../layouts/admin/forms/ItemAdminForm";
+import { ItemsAdminPage } from "../layouts/admin/pages/ItemsAdminPage";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import NotFound from "../common/Nofound";
 
@@ -19,6 +21,8 @@ const AdminRoutes = () => {
         <Route path="menu" element={<MenuAdminPage />} />
         <Route path="menu/create" element={<MenuAdminForm />} />
         <Route path="menu/edit/:id" element={<MenuAdminForm />} />
+        <Route path="items" element={<ItemsAdminPage />} />
+        <Route path="item/create" element={<ItemAdminForm />} />
         <Route path="tables" element={<TablesAdminPage />} />
       </Route>
       <Route path="*" element={<NotFound />} /> {/* Este va fuera del layout */}
