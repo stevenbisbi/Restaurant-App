@@ -1,12 +1,13 @@
-import { useMenus } from "../../../hooks/useMenus";
+import { useFetch } from "../../../hooks/useFetch";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { HeaderAdmin } from "./HeaderAdmin";
 import { deleteMenu } from "../../../api/menu/menuApi";
 import { ModalDelete } from "../components/ModalDelete";
+import { getAllMenus } from "../../../api/menu/menuApi";
 
 export function MenuAdminPage() {
-  const { menus, loading, error, triggerReload } = useMenus();
+  const { data, loading, error, triggerReload } = useFetch(getAllMenus);
   const navigate = useNavigate();
   const [selectedMenuId, setSelectedMenuId] = useState(null);
 
@@ -46,7 +47,7 @@ export function MenuAdminPage() {
             </tr>
           </thead>
           <tbody>
-            {menus.map((menu) => (
+            {data.map((menu) => (
               <tr key={menu.id}>
                 <td className="text-center">{menu.is_active ? "✅" : "❌"}</td>
                 <td>{menu.name}</td>

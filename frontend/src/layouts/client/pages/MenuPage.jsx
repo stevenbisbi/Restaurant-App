@@ -37,13 +37,16 @@ export function MenuPage() {
           <i>Lo Mejor Aquí</i>
         </h1>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-          {data.map((item) => (
-            <MenuCard
-              key={item.iditem}
-              item={item}
-              onSelect={setSelectedItem}
-            />
-          ))}
+          {data.map((item) => {
+            if (!item.is_available) return null; // Skip inavalaible items
+            return (
+              <MenuCard
+                key={item.iditem}
+                item={item}
+                onSelect={setSelectedItem}
+              />
+            );
+          })}
         </div>
 
         <ModalMenuCard

@@ -21,7 +21,7 @@ export function ItemAdminForm() {
     is_promotion: false,
     is_featured: false,
     is_vegetarian: false,
-    is_active: false,
+    is_available: false,
     image: null,
   });
 
@@ -52,7 +52,7 @@ export function ItemAdminForm() {
     data.append("is_promotion", formData.is_promotion);
     data.append("is_featured", formData.is_featured);
     data.append("is_vegetarian", formData.is_vegetarian);
-    data.append("is_active", formData.is_active);
+    data.append("is_available", formData.is_available);
 
     if (formData.image) {
       data.append("image", formData.image); // Archivo image
@@ -174,6 +174,17 @@ export function ItemAdminForm() {
                 }}
               />
             </div>
+            {isEdit && formData.image && typeof formData.image === "string" && (
+              <div className="mb-3 text-center">
+                <label className="form-label">Imagen actual: </label> <br />
+                <img
+                  src={formData.image}
+                  alt="Item"
+                  className="img-thumbnail"
+                  style={{ maxHeight: "200px" }}
+                />
+              </div>
+            )}
 
             <textarea
               className="form-control mb-3"
@@ -187,12 +198,12 @@ export function ItemAdminForm() {
               <input
                 className="form-check-input"
                 type="checkbox"
-                name="is_active"
-                id="is_active"
-                checked={formData.is_active}
+                name="is_available"
+                id="is_available"
+                checked={formData.is_available}
                 onChange={handleChange}
               />
-              <label className="form-check-label" htmlFor="is_active">
+              <label className="form-check-label" htmlFor="is_available">
                 Activo
               </label>
             </div>
@@ -213,9 +224,8 @@ export function ItemAdminForm() {
               <input
                 className="form-check-input"
                 type="checkbox"
-                name="is_promotion
-"
-                id="is_promoted"
+                name="is_promotion"
+                id="is_promotion"
                 checked={formData.is_promotion}
                 onChange={handleChange}
               />

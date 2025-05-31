@@ -1,8 +1,4 @@
-import axios from "axios";
-
-const reservationApi = axios.create({
-  baseURL: "/api/reservations/",
-});
+import axiosClient from "./axiosClient";
 
 export const getAllReservations = () => reservationApi.get("/");
 

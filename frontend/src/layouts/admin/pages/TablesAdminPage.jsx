@@ -2,12 +2,13 @@ import { useState } from "react";
 import { Spinner, Alert } from "react-bootstrap";
 import { deleteTable } from "../../../api/tablesApi";
 import { HeaderAdmin } from "./HeaderAdmin";
-import { useTables } from "../../../hooks/useTables";
+import { useFetch } from "../../../hooks/useFetch";
 import { useNavigate, Link } from "react-router-dom";
 import { ModalDelete } from "../components/ModalDelete";
+import { getAllTables } from "../../../api/tablesApi";
 
 export function TablesAdminPage() {
-  const { tables, loading, error, triggerReload } = useTables();
+  const { data, loading, error, triggerReload } = useFetch(getAllTables);
   const navigate = useNavigate();
   const [selectedTableId, setSelectedTableId] = useState(null);
 
@@ -61,7 +62,7 @@ export function TablesAdminPage() {
             </tr>
           </thead>
           <tbody>
-            {tables.map((table) => (
+            {data.map((table) => (
               <tr key={table.id}>
                 <td className="text-center">{table.is_active ? "✅" : "❌"}</td>
                 <td>{table.number}</td>

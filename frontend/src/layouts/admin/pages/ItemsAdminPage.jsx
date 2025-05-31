@@ -4,10 +4,11 @@ import { HeaderAdmin } from "./HeaderAdmin";
 import { useNavigate, Link } from "react-router-dom";
 import { ModalDelete } from "../components/ModalDelete";
 import { deleteMenuItem } from "../../../api/menu/menuItemApi";
-import { useMenuItem } from "../../../hooks/useMenuItem";
+import { getAllMenuItems } from "../../../api/menu/menuItemApi";
+import { useFetch } from "../../../hooks/useFetch";
 
 export function ItemsAdminPage() {
-  const { MenuItems, loading, error, triggerReload } = useMenuItem();
+  const { data, loading, error, triggerReload } = useFetch(getAllMenuItems);
   const navigate = useNavigate();
   const [selectedItemId, setSelectedItemId] = useState(null);
 
@@ -48,7 +49,7 @@ export function ItemsAdminPage() {
       />
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {MenuItems.map((item) => (
+        {data.map((item) => (
           <div className="col" key={item.id}>
             <Card className="h-100 shadow-sm">
               {item.image && (
@@ -92,9 +93,7 @@ export function ItemsAdminPage() {
                   </Button>
                   <Button
                     variant="danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#DeleteModal"
-                    onClick={() => handleDeleteClick(item.id)}
+                    onClick={() => setSelectedItemId(item.id)}
                   >
                     Eliminar
                   </Button>
@@ -104,7 +103,11 @@ export function ItemsAdminPage() {
           </div>
         ))}
       </div>
-      <ModalDelete onConfirm={handleConfirmDelete} />
+      <ModalDelete
+        show={selectedItemId !== null}
+        onHide={() => setSelectedItemId(null)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { Card } from "react-bootstrap";
-import { useMenus } from "../../../hooks/useMenus";
+import { useFetch } from "../../../hooks/useFetch";
+import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuCard({ item, onSelect }) {
-  const { menus, loading, error } = useMenus();
+  const { data, loading, error } = useFetch(getAllMenuItems);
 
   if (loading) return <p>Cargando menús...</p>;
   if (error) return <p>Error cargando menús 😢</p>;

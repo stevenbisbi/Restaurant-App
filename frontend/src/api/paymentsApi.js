@@ -1,8 +1,4 @@
-import axios from "axios";
-
-const paymentApi = axios.create({
-  baseURL: "/api/payments/",
-});
+import axiosClient from "./axiosClient";
 
 export const getAllPayments = () => paymentApi.get("/");
 

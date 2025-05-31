@@ -1,43 +1,22 @@
-import { Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 
-export function ModalDelete({ onConfirm }) {
+export function ModalDelete({ show, onHide, onConfirm }) {
   return (
-    <div
-      className="modal fade"
-      id="DeleteModal"
-      tabIndex="-1"
-      aria-labelledby="DeleteModalLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="modal-body text-center">¿ Deseas eliminar ?</div>
-          <div className="modal-footer justify-content-center">
-            <Button
-              variant="outline-danger"
-              data-bs-dismiss="modal"
-              onClick={onConfirm}
-            >
-              Sí
-            </Button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              data-bs-dismiss="modal"
-            >
-              No
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Modal show={show} onHide={onHide} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Confirmar eliminación</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="text-center">
+        ¿Deseas eliminar este elemento?
+      </Modal.Body>
+      <Modal.Footer className="justify-content-center">
+        <Button variant="danger" onClick={onConfirm}>
+          Sí
+        </Button>
+        <Button variant="secondary" onClick={onHide}>
+          No
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
