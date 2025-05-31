@@ -28,12 +28,11 @@ export function MenuAdminPage() {
 
   return (
     <div>
-      <HeaderAdmin title="Menús" />
-      <div className="d-flex justify-content-end">
-        <Link to="/admin/menu/create" className="btn btn-primary mb-3">
-          Crear nuevo menú
-        </Link>
-      </div>
+      <HeaderAdmin
+        title="Menús"
+        btnTitle="Crear nuevo Menú"
+        endPoint="/admin/menu/create"
+      />
 
       <div className="table-responsive">
         <table className="table table-bordered table-striped">
@@ -63,7 +62,7 @@ export function MenuAdminPage() {
                   <button
                     className="btn btn-sm btn-outline-danger mx-1"
                     data-bs-toggle="modal"
-                    data-bs-target="#menuDeleteModal"
+                    data-bs-target="#DeleteModal"
                     onClick={() => handleDeleteClick(menu.id)}
                   >
                     Eliminar

@@ -18,10 +18,11 @@ export function ItemAdminForm() {
     description: "",
     category: "",
     price: "",
-    is_promoted: false,
+    is_promotion: false,
     is_featured: false,
     is_vegetarian: false,
     is_active: false,
+    image: null,
   });
 
   useEffect(() => {
@@ -42,10 +43,25 @@ export function ItemAdminForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("description", formData.description);
+    data.append("category", formData.category);
+    data.append("price", formData.price);
+    data.append("is_promotion", formData.is_promotion);
+    data.append("is_featured", formData.is_featured);
+    data.append("is_vegetarian", formData.is_vegetarian);
+    data.append("is_active", formData.is_active);
+
+    if (formData.image) {
+      data.append("image", formData.image); // Archivo image
+    }
+
     if (isEdit) {
-      await updateMenuItem(id, formData);
+      await updateMenuItem(id, data);
     } else {
-      await createMenuItem(formData);
+      await createMenuItem(data);
     }
     navigate("/admin/items");
   };
@@ -140,6 +156,25 @@ export function ItemAdminForm() {
               </select>
             </div>
 
+            <div className="mb-3">
+              <label htmlFor="image" className="form-label">
+                Imagen:
+              </label>
+              <input
+                id="image"
+                className="form-control"
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    image: e.target.files[0], // Guardamos el archivo en el estado
+                  });
+                }}
+              />
+            </div>
+
             <textarea
               className="form-control mb-3"
               name="description"
@@ -178,12 +213,13 @@ export function ItemAdminForm() {
               <input
                 className="form-check-input"
                 type="checkbox"
-                name="is_promoted"
+                name="is_promotion
+"
                 id="is_promoted"
-                checked={formData.is_promoted}
+                checked={formData.is_promotion}
                 onChange={handleChange}
               />
-              <label className="form-check-label" htmlFor="is_promoted">
+              <label className="form-check-label" htmlFor="is_promotion">
                 Promocionado
               </label>
             </div>

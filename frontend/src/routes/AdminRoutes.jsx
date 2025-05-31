@@ -22,7 +22,8 @@ const AdminRoutes = () => {
         <Route path="menu/create" element={<MenuAdminForm />} />
         <Route path="menu/edit/:id" element={<MenuAdminForm />} />
         <Route path="items" element={<ItemsAdminPage />} />
-        <Route path="item/create" element={<ItemAdminForm />} />
+        <Route path="items/create" element={<ItemAdminForm />} />
+        <Route path="items/edit/:id" element={<ItemAdminForm />} />
         <Route path="tables" element={<TablesAdminPage />} />
       </Route>
       <Route path="*" element={<NotFound />} /> {/* Este va fuera del layout */}
