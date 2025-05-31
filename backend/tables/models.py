@@ -6,7 +6,7 @@ from restaurant.models import Restaurant
 class Table(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="tables")
-    number = models.IntegerField()
+    number = models.IntegerField(unique=True)
     capacity = models.IntegerField()
     location = models.CharField(max_length=50, blank=True, null=True)
     status = models.CharField(max_length=20)  # Could be 'Available', 'Occupied', 'Reserved'
