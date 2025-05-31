@@ -89,7 +89,7 @@ class Staff(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.first_name + self.user.last_name} - {self.role.name}"
+        return f"{self.user.first_name + self.user.last_name} - {self.get_role_display()}"
 
 class Customer(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -11,8 +11,8 @@ from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema  # type: ignore
 from drf_yasg import openapi # type: ignore
 
-from .serializer import UserSerializer, CustomerSerializer, LoginSerializer
-from .models import Customer
+from .serializer import UserSerializer, CustomerSerializer, LoginSerializer, StaffSerializer
+from .models import Customer, Staff
 
 User = get_user_model()
 
@@ -82,3 +82,10 @@ class LoginView(APIView):
       "token": token.key,
       "user": user_serializer.data,
     })
+
+class StaffViewSet(viewsets.ModelViewSet):
+  queryset = Staff.objects.all()
+  serializer_class =  StaffSerializer
+  authentication_classes = [TokenAuthentication]
+  permission_classes = [permissions.IsAuthenticated]
+
