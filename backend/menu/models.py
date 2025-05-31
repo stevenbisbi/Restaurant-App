@@ -29,7 +29,7 @@ class MenuItem(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.IntegerField()
     image_url = models.URLField(max_length=255, blank=True, null=True)
     is_vegetarian = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
