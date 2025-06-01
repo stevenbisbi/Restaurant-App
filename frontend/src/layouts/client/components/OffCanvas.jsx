@@ -2,7 +2,7 @@ import { Offcanvas, Button, ListGroup } from "react-bootstrap";
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
 
-export function OffCanvas({ show, handleClose, cart = [], name }) {
+export function OffCanvas({ show, handleClose, cart, name }) {
   return (
     <Offcanvas
       show={show}
@@ -27,8 +27,23 @@ export function OffCanvas({ show, handleClose, cart = [], name }) {
           <ListGroup>
             {cart.map((item, index) => (
               <ListGroup.Item key={index}>
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="img-thumbnail me-2"
+                    style={{ width: "50px", height: "50px" }}
+                  />
+                )}
                 {item.name} x {item.quantity || 1} - $
-                {item.price * (item.quantity || 1)}
+                {item.price * (item.quantity || 1)} <br />
+                {item.selectedOptions?.length > 0 && (
+                  <span className="text-muted">
+                    {" "}
+                    (Adiciones:{" "}
+                    {item.selectedOptions.map((opt) => opt.name).join(", ")})
+                  </span>
+                )}
               </ListGroup.Item>
             ))}
           </ListGroup>

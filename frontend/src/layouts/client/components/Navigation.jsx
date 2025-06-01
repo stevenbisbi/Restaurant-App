@@ -1,16 +1,17 @@
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
-import React, { useState } from "react";
+import { useState } from "react";
 import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
 import { OffCanvas } from "./OffCanvas";
 import fondo from "../../../assets/img/fondo-comida.avif";
 import { useSelector } from "react-redux";
+import { selectCartItems } from "../../../redux/cartSlice";
 import { Link } from "react-router-dom";
 
-export function Navigation({ cart }) {
+export function Navigation() {
   const token = useSelector((state) => state.auth.token);
   const name = useSelector((state) => state.auth.firstName); // Obtén del estado
-
+  const cart = useSelector(selectCartItems);
   const [showCart, setShowCart] = useState(false);
 
   const handleClose = () => setShowCart(false);
@@ -59,10 +60,6 @@ export function Navigation({ cart }) {
               className="d-flex align-items-center"
             >
               <Avatar name={name || "Usuario"} />
-              {/* Puedes mostrar un badge con cantidad de items */}
-              {cart.length > 0 && (
-                <span className="badge bg-danger ms-2">{cart.length}</span>
-              )}
             </Button>
           </div>
         ) : (

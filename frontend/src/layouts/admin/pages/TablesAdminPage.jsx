@@ -11,6 +11,7 @@ export function TablesAdminPage() {
   const { data, loading, error, triggerReload } = useFetch(getAllTables);
   const navigate = useNavigate();
   const [selectedTableId, setSelectedTableId] = useState(null);
+  console.log("TablesAdminPage data:", data);
 
   if (loading)
     return (
@@ -47,13 +48,15 @@ export function TablesAdminPage() {
         btnTitle="Crear nueva Mesa"
         endPoint="/admin/tables/create"
       />
+
+      <h5 className="text-center">🟢Disponible 🟠Reservado 🔴Ocupado</h5>
       <div className="table-responsive">
         <table className="table table-bordered table-striped">
           <thead className="table-dark">
             <tr>
               <th>Numero</th>
-              <th>Ubicacion</th>
               <th>Capacidad</th>
+              <th>Ubicacion</th>
               <th>Estado</th>
               <th>Restaurante</th>
               <th>Creado</th>
@@ -66,7 +69,13 @@ export function TablesAdminPage() {
                 <td>{table.number}</td>
                 <td>{table.capacity}</td>
                 <td>{table.location}</td>
-                <td>{table.status}</td>
+                <td>
+                  {table.status === "Reserved"
+                    ? "🟠"
+                    : table.status === "Available"
+                    ? "🟢"
+                    : "🔴"}
+                </td>
                 <td>{table.restaurant || "Sin asignar"}</td>
                 <td>{new Date(table.created_at).toLocaleDateString()}</td>
                 <td>

@@ -14,7 +14,6 @@ export function HomePage() {
   return (
     <>
       <Navigation
-        cart={cart}
         show={showCart}
         handleShow={() => setShowCart(true)}
         handleClose={() => setShowCart(false)}

@@ -1,8 +1,11 @@
 import { Modal, Button, Row } from "react-bootstrap";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "../../../redux/cartSlice";
 
 export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
   console.log("item", item);
+  const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -11,13 +14,19 @@ export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
   const handleDecrement = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
-  const toggleOption = (id) => {
-    setSelectedOptions(
-      (prevSelected) =>
-        prevSelected.includes(id)
-          ? prevSelected.filter((optId) => optId !== id) // si ya está, lo quita
-          : [...prevSelected, id] // si no está, lo agrega
-    );
+  const handleClose = () => {
+    setSelectedOptions([]);
+  };
+
+  const toggleOption = (option) => {
+    setSelectedOptions((prevSelected) => {
+      const exists = prevSelected.find((opt) => opt.id === option.id);
+      if (exists) {
+        return prevSelected.filter((opt) => opt.id !== option.id);
+      } else {
+        return [...prevSelected, option];
+      }
+    });
   };
 
   return (
@@ -57,9 +66,9 @@ export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
               {item.options.map((opt) => (
                 <Button
                   key={opt.id}
-                  onClick={() => toggleOption(opt.id)}
+                  onClick={() => toggleOption(opt)}
                   variant={
-                    selectedOptions.includes(opt.id)
+                    selectedOptions.some((o) => o.id === opt.id)
                       ? "primary"
                       : "outline-secondary"
                   }
@@ -72,6 +81,7 @@ export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
                       style={{ width: "30px" }}
                     />
                   )}
+                  {opt.name}
                 </Button>
               ))}
             </div>
@@ -123,15 +133,14 @@ export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
           <Button
             variant="warning"
             onClick={() => {
-              const itemToAdd = {
-                iditem: item.iditem,
-                name: item.name,
-                price: item.price,
-                quantity,
-                selectedOptions,
-              };
-              onAddToCart(itemToAdd); // lo envía a MenuPage
-              onHide(); // cierra el modal
+              if (quantity <= 0) return;
+
+              dispatch(
+                addItemToCart({ item: { ...item, selectedOptions }, quantity })
+              );
+
+              handleClose();
+              onHide();
             }}
           >
             Agregar al carrito

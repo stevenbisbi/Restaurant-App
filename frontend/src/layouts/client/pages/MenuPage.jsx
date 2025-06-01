@@ -8,6 +8,7 @@ import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 export function MenuPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [cart, setCart] = useState([]);
+  console.log("MenuPage cart:", cart);
 
   const addToCart = (item) => {
     setCart((prevCart) => [...prevCart, item]);
@@ -56,28 +57,6 @@ export function MenuPage() {
           onHide={() => setSelectedItem(null)}
           onAddToCart={addToCart}
         />
-      </div>
-      <div className="mt-4">
-        <h3>Carrito</h3>
-        {cart.length === 0 ? (
-          <p className="text-muted">Carrito vacío</p>
-        ) : (
-          <ul className="list-group">
-            {cart.map((item, index) => (
-              <li
-                key={index}
-                className="list-group-item d-flex justify-content-between"
-              >
-                <div>
-                  <strong>{item.name}</strong> x{item.quantity}
-                  <br />
-                  Opciones: {item.selectedOptions?.join(", ") || "Ninguna"}
-                </div>
-                <span>${item.price * item.quantity}</span>
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
     </>
   );
