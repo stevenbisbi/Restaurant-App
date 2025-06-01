@@ -2,12 +2,24 @@ from rest_framework import serializers
 from .models import User, Staff, Customer
 
 class UserSerializer(serializers.ModelSerializer):
-  password = serializers.CharField(write_only=True, required=True, min_length=3)
-
   class Meta:
-    model = User
-    fields = ['id', 'email', 'first_name', 'last_name', 'phone_number', 'password']
-    read_only_fields = ['id', 'date_joined', 'created_at', 'updated_at']
+        model = User
+        fields = [
+            'id', 'email', 'first_name', 'last_name', 
+            'phone_number', 'password', 'role'
+        ]
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'role': {'read_only': True}  # El rol no debería ser asignable en registro
+        }
+    
+  def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User.objects.create_user(
+            password=password,
+            **validated_data
+        )
+        return user
 
   def create(self, validated_data):
     password = validated_data.pop('password')

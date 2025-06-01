@@ -1,44 +1,49 @@
+import { Offcanvas, Button, ListGroup } from "react-bootstrap";
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
 
-export function OffCanvas({ name }) {
+export function OffCanvas({ show, handleClose, cart = [], name }) {
   return (
-    <>
-      <div
-        className="offcanvas offcanvas-end"
-        tabIndex="-1"
-        id="offcanvasScrolling"
-        aria-labelledby="offcanvasScrollingLabel"
-      >
-        {/* Encabezado del Offcanvas */}
-        <div className="offcanvas-header">
-          {/* Contenedor principal del avatar y nombre */}
-          <div className="d-flex align-items-center gap-3">
-            <Avatar name={name} />
-
-            {/* Información del usuario */}
-            <div>
-              <h4 className="mb-0 fw-normal">{name || "Usuario"}</h4>
-              <small className="text-muted">Cliente</small>
-            </div>
+    <Offcanvas
+      show={show}
+      onHide={handleClose}
+      placement="end"
+      scroll={true}
+      backdrop={true}
+    >
+      <Offcanvas.Header closeButton>
+        <div className="d-flex align-items-center gap-3">
+          <Avatar name={name} />
+          <div>
+            <h4 className="mb-0 fw-normal">{name || "Usuario"}</h4>
+            <small className="text-muted">Cliente</small>
           </div>
-
-          {/* Botón de cierre */}
-          <button
-            type="button"
-            className="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Cerrar"
-          ></button>
         </div>
+      </Offcanvas.Header>
+      <Offcanvas.Body>
+        {cart.length === 0 ? (
+          <p className="text-muted">Tu carrito está vacío.</p>
+        ) : (
+          <ListGroup>
+            {cart.map((item, index) => (
+              <ListGroup.Item key={index}>
+                {item.name} x {item.quantity || 1} - $
+                {item.price * (item.quantity || 1)}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+        )}
+        <Button
+          variant="primary"
+          className="mt-3"
+          onClick={() => alert("Proceder al pago")}
+        >
+          Ir a pagar
+        </Button>
 
-        {/* Cuerpo del Offcanvas */}
-        <div className="offcanvas-body">
-          {/* Contenido principal aquí */}
-          <p className="text-muted">Coloca tu contenido aquí</p>
-          <LogoutButton />
-        </div>
-      </div>
-    </>
+        <hr />
+        <LogoutButton />
+      </Offcanvas.Body>
+    </Offcanvas>
   );
 }

@@ -62,7 +62,7 @@ class MenuItemOption(models.Model):
     price_adjustment = models.IntegerField(default=2000)
     allows_multiple = models.BooleanField(default=True)
     max_selections = models.IntegerField(default=5)
-    image_url = models.URLField(max_length=255, blank=True, null=True)
+    image_url = models.CharField(max_length=255, blank=True, null=True)
     is_available = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

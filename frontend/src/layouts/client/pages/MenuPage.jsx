@@ -7,6 +7,11 @@ import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuPage() {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (item) => {
+    setCart((prevCart) => [...prevCart, item]);
+  };
 
   const { data, loading, error } = useFetch(getAllMenuItems);
   if (loading) {
@@ -40,11 +45,7 @@ export function MenuPage() {
           {data.map((item) => {
             if (!item.is_available) return null;
             return (
-              <MenuCard
-                key={item.iditem}
-                item={item}
-                onSelect={setSelectedItem}
-              />
+              <MenuCard key={item.id} item={item} onSelect={setSelectedItem} />
             );
           })}
         </div>
@@ -53,7 +54,30 @@ export function MenuPage() {
           item={selectedItem}
           show={!!selectedItem}
           onHide={() => setSelectedItem(null)}
+          onAddToCart={addToCart}
         />
+      </div>
+      <div className="mt-4">
+        <h3>Carrito</h3>
+        {cart.length === 0 ? (
+          <p className="text-muted">Carrito vacío</p>
+        ) : (
+          <ul className="list-group">
+            {cart.map((item, index) => (
+              <li
+                key={index}
+                className="list-group-item d-flex justify-content-between"
+              >
+                <div>
+                  <strong>{item.name}</strong> x{item.quantity}
+                  <br />
+                  Opciones: {item.selectedOptions?.join(", ") || "Ninguna"}
+                </div>
+                <span>${item.price * item.quantity}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </>
   );

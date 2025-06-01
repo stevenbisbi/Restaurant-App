@@ -1,4 +1,5 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar, Button } from "react-bootstrap";
+import React, { useState } from "react";
 import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
 import { OffCanvas } from "./OffCanvas";
@@ -6,12 +7,14 @@ import fondo from "../../../assets/img/fondo-comida.avif";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-export function Navigation() {
+export function Navigation({ cart }) {
   const token = useSelector((state) => state.auth.token);
-  const name =
-    localStorage.getItem("firstName") ||
-    sessionStorage.getItem("firstName") ||
-    "Usuario";
+  const name = useSelector((state) => state.auth.firstName); // Obtén del estado
+
+  const [showCart, setShowCart] = useState(false);
+
+  const handleClose = () => setShowCart(false);
+  const handleShow = () => setShowCart(true);
 
   return (
     <>
@@ -49,15 +52,18 @@ export function Navigation() {
 
         {token ? (
           <div className="user-info d-flex align-items-center px-5">
-            <button
-              className="btn btn-light d-flex align-items-center"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasScrolling"
-              aria-controls="offcanvasScrolling"
+            {/* Botón para abrir Offcanvas, controlado por React */}
+            <Button
+              variant="light"
+              onClick={handleShow}
+              className="d-flex align-items-center"
             >
-              <Avatar name={name} />
-            </button>
+              <Avatar name={name || "Usuario"} />
+              {/* Puedes mostrar un badge con cantidad de items */}
+              {cart.length > 0 && (
+                <span className="badge bg-danger ms-2">{cart.length}</span>
+              )}
+            </Button>
           </div>
         ) : (
           <Link
@@ -70,7 +76,14 @@ export function Navigation() {
       </Navbar>
 
       {/* Renderiza el OffCanvas solo si hay token */}
-      {token && <OffCanvas name={name} />}
+      {token && (
+        <OffCanvas
+          show={showCart}
+          handleClose={handleClose}
+          cart={cart}
+          name={name}
+        />
+      )}
 
       <img
         src={fondo}

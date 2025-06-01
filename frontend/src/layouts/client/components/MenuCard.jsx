@@ -32,11 +32,16 @@ export function MenuCard({ item, onSelect }) {
           </span>
         )
       )}
-      <Card.Img alt={item.image} variant="top" src={item.image} />
+      <Card.Img
+        alt={item.image}
+        variant="top"
+        src={item.image}
+        style={{ width: "100%", height: "200px", objectFit: "cover" }}
+      />
       <Card.Body>
         <Card.Title>{item.name}</Card.Title>
         <Card.Text>
-          <strong>Precio:</strong> $ {item.price}
+          <strong>Precio:</strong> $ {item.price.toLocaleString("es-CO")}
           <br />
         </Card.Text>
       </Card.Body>
