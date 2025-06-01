@@ -27,9 +27,16 @@ export function Navigation() {
           
           <Link
             to="/"
-            className="text-danger text-decoration-none fs-5 me-4"
+            className="text-danger text-decoration-none fs-5 mx-5"
           >
             Home
+          </Link>
+          
+          <Link
+            to={token ? "/reservar" : "/login"}
+            className="text-danger text-decoration-none fs-5 mx-5"
+          >
+            Reservar
           </Link>
 
           <Navbar.Collapse id="basic-navbar-nav">
