@@ -111,10 +111,18 @@ class LoginView(APIView):
     token, _ = Token.objects.get_or_create(user=user)
     user_serializer = UserSerializer(user)
 
+    # 🔽 NUEVO: buscamos el customer (si existe)
+    customer_data = None
+    if hasattr(user, 'customer'):
+      customer = user.customer
+      customer_data = {"id": str(customer.id)}
+
     return Response({
       "token": token.key,
       "user": user_serializer.data,
+      "customer": CustomerSerializer(user.customer).data if hasattr(user, "customer") else None
     })
+
 
 class StaffViewSet(viewsets.ModelViewSet):
   queryset = Staff.objects.all()

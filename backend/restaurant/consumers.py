@@ -1,5 +1,5 @@
 # restaurant/consumers.py
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer # type: ignore
 import json
 from .tasks import procesar_pedido_async  # Tarea Celery
 

@@ -34,6 +34,22 @@ export function Navigation() {
         className="shadow-sm"
       >
         <Container>
+
+          
+          <Link
+            to="/"
+            className="text-danger text-decoration-none fs-5 mx-5"
+          >
+            Home
+          </Link>
+          
+          <Link
+            to={token ? "/reservar" : "/login"}
+            className="text-danger text-decoration-none fs-5 mx-5"
+          >
+            Reservar
+          </Link>
+
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto d-flex justify-content-center align-items-center">
               <Nav.Link
@@ -42,16 +58,16 @@ export function Navigation() {
               >
                 Salchipapa
               </Nav.Link>
-              <Nav.Link href="#" className="px-5 navigation-link fs-5">
-                Hamburgesa
+              <Nav.Link href="hamburguesa" className="px-5 navigation-link fs-5">
+                Hamburguesa
               </Nav.Link>
-              <Nav.Link href="#" className="px-5 navigation-link fs-5">
+              <Nav.Link href="emparedados" className="px-5 navigation-link fs-5">
                 Emparedado
               </Nav.Link>
-              <Nav.Link href="#" className="px-5 navigation-link fs-5">
+              <Nav.Link href="perros" className="px-5 navigation-link fs-5">
                 Perros
               </Nav.Link>
-              <Nav.Link href="#" className="px-5 navigation-link fs-5">
+              <Nav.Link href="bebidas" className="px-5 navigation-link fs-5">
                 Bebidas
               </Nav.Link>
             </Nav>

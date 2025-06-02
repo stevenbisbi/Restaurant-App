@@ -33,14 +33,16 @@ export const LoginFormPage = () => {
 
     try {
       const response = await loginUser({ email, password });
+      console.log("respuesta completa del login:", response.data);
       if (response.status === 200) {
-        const { token, user } = response.data;
+        const { token, user, customer } = response.data;
 
         // Guardar token y nombre en Redux
         dispatch(
           setCredentials({
             token,
             firstName: user.first_name,
+            customer,
             rememberMe: data.rememberMe,
           })
         );
