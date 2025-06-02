@@ -18,18 +18,23 @@ class MenuSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_fields = ['restaurant_details']  # Campo adicional para la respuesta
 
+class MenuItemOptionSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = MenuItemOption
+    fields = '__all__'
 
 class MenuItemSerializer(serializers.ModelSerializer):
+  options = MenuItemOptionSerializer(many=True, read_only=True)
   class Meta:
     model = MenuItem
-    fields = '__all__'
+    fields = [
+            'id', 'category', 'name', 'description', 'price', 'image',
+            'is_vegetarian', 'is_featured', 'is_promotion', 'is_available',
+            'created_at', 'updated_at', 'options'
+        ]
 
 class MenuItemVariantSerializer(serializers.ModelSerializer):
   class Meta:
     model = MenuItemVariant
     fields = '__all__'
 
-class MenuItemOptionSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = MenuItemOption
-    fields = '__all__'

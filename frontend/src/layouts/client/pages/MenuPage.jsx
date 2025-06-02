@@ -7,6 +7,12 @@ import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuPage() {
   const [selectedItem, setSelectedItem] = useState(null);
+  const [cart, setCart] = useState([]);
+  console.log("MenuPage cart:", cart);
+
+  const addToCart = (item) => {
+    setCart((prevCart) => [...prevCart, item]);
+  };
 
   const { data, loading, error } = useFetch(getAllMenuItems);
   if (loading) {
@@ -40,11 +46,7 @@ export function MenuPage() {
           {data.map((item) => {
             if (!item.is_available) return null;
             return (
-              <MenuCard
-                key={item.iditem}
-                item={item}
-                onSelect={setSelectedItem}
-              />
+              <MenuCard key={item.id} item={item} onSelect={setSelectedItem} />
             );
           })}
         </div>
@@ -53,6 +55,7 @@ export function MenuPage() {
           item={selectedItem}
           show={!!selectedItem}
           onHide={() => setSelectedItem(null)}
+          onAddToCart={addToCart}
         />
       </div>
     </>

@@ -1,17 +1,28 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar, Button } from "react-bootstrap";
+import { useState } from "react";
 import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
 import { OffCanvas } from "./OffCanvas";
 import fondo from "../../../assets/img/fondo-comida.avif";
 import { useSelector } from "react-redux";
+import { selectCartItems } from "../../../redux/cartSlice";
+import { useDispatch } from "react-redux";
+import { removeItemFromCart } from "../../../redux/cartSlice";
 import { Link } from "react-router-dom";
 
 export function Navigation() {
+  const dispatch = useDispatch();
+
   const token = useSelector((state) => state.auth.token);
-  const name =
-    localStorage.getItem("firstName") ||
-    sessionStorage.getItem("firstName") ||
-    "Usuario";
+  const name = useSelector((state) => state.auth.firstName); // Obtén del estado
+  const cart = useSelector(selectCartItems);
+  const [showCart, setShowCart] = useState(false);
+
+  const handleClose = () => setShowCart(false);
+  const handleShow = () => setShowCart(true);
+  const removeFromCart = (item) => {
+    dispatch(removeItemFromCart({ itemId: item.id })); // Pasa el ID del item
+  };
 
   return (
     <>
@@ -65,15 +76,14 @@ export function Navigation() {
 
         {token ? (
           <div className="user-info d-flex align-items-center px-5">
-            <button
-              className="btn btn-light d-flex align-items-center"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#offcanvasScrolling"
-              aria-controls="offcanvasScrolling"
+            {/* Botón para abrir Offcanvas, controlado por React */}
+            <Button
+              variant="light"
+              onClick={handleShow}
+              className="d-flex align-items-center"
             >
-              <Avatar name={name} />
-            </button>
+              <Avatar name={name || "Usuario"} />
+            </Button>
           </div>
         ) : (
           <Link
@@ -86,7 +96,15 @@ export function Navigation() {
       </Navbar>
 
       {/* Renderiza el OffCanvas solo si hay token */}
-      {token && <OffCanvas name={name} />}
+      {token && (
+        <OffCanvas
+          show={showCart}
+          handleClose={handleClose}
+          cart={cart}
+          name={name}
+          removeFromCart={removeFromCart}
+        />
+      )}
 
       <img
         src={fondo}

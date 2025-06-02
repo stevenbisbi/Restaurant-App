@@ -132,9 +132,9 @@ export function TableAdminForm() {
                 onChange={handleChange}
                 required
               >
-                <option value="🟢 Available">Disponible</option>
-                <option value="🔴 Occupied">Ocupada</option>
-                <option value="🟠 Reserved">Reservada</option>
+                <option value="Available">Disponible</option>
+                <option value="Occupied">Ocupada</option>
+                <option value="Reserved">Reservada</option>
               </select>
             </div>
 
