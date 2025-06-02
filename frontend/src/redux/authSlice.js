@@ -1,39 +1,57 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-const tokenFromStorage = localStorage.getItem('token') || sessionStorage.getItem('token') || null;
+// 🔽 Recuperar datos del almacenamiento
+const tokenFromStorage =
+  localStorage.getItem("token") || sessionStorage.getItem("token") || null;
 
+const firstNameFromStorage =
+  localStorage.getItem("firstName") || sessionStorage.getItem("firstName") || null;
+
+const customerFromStorage =
+  localStorage.getItem("customer") || sessionStorage.getItem("customer") || null;
+
+// 🔽 Estado inicial corregido
 const initialState = {
   token: tokenFromStorage,
-  firstName: localStorage.getItem('firstName') || sessionStorage.getItem('firstName') || null,
+  firstName: firstNameFromStorage,
+  customer: customerFromStorage ? JSON.parse(customerFromStorage) : null,
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { token, firstName, rememberMe } = action.payload;
+      const { token, firstName, customer, rememberMe } = action.payload;
       state.token = token;
       state.firstName = firstName;
-      if (rememberMe) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('firstName', firstName);
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('firstName');
-      } else {
-        sessionStorage.setItem('token', token);
-        sessionStorage.setItem('firstName', firstName);
-        localStorage.removeItem('token');
-        localStorage.removeItem('firstName');
-      }
+      state.customer = customer;
+
+      const storage = rememberMe ? localStorage : sessionStorage;
+      const other = rememberMe ? sessionStorage : localStorage;
+
+      storage.setItem("token", token);
+      storage.setItem("firstName", firstName);
+      storage.setItem("customer", JSON.stringify(customer));
+
+      // Limpieza del otro storage
+      other.removeItem("token");
+      other.removeItem("firstName");
+      other.removeItem("customer");
     },
+
     logout: (state) => {
       state.token = null;
       state.firstName = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('firstName');
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('firstName');
+      state.customer = null;
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("firstName");
+      localStorage.removeItem("customer");
+
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("firstName");
+      sessionStorage.removeItem("customer");
     },
   },
 });

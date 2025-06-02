@@ -1,13 +1,24 @@
 import axiosClient from "./axiosClient";
 
-export const getAllReservations = () => reservationApi.get("/");
+// Base para endpoints relacionados con reservas
+const reservationApi = axiosClient;
 
-export const getReservation = (id) => reservationApi.get(`/${id}/`);
+// ✅ RESERVATIONS CRUD
+export const getAllReservations = () =>
+  reservationApi.get("/reservations/reservation/");
+
+export const getReservation = (id) =>
+  reservationApi.get(`/reservations/reservation/${id}/`);
 
 export const createReservation = (reservation) =>
-  reservationApi.post("/", reservation);
+  reservationApi.post("/reservations/reservation/", reservation);
 
-export const deleteReservation = (id) => reservationApi.delete(`/${id}/`);
+export const deleteReservation = (id) =>
+  reservationApi.delete(`/reservations/reservation/${id}/`);
 
 export const updateReservation = (id, reservation) =>
-  reservationApi.put(`/${id}/`, reservation);
+  reservationApi.put(`/reservations/reservation/${id}/`, reservation);
+
+
+export const getAllTables = () => axiosClient.get("/tables/");
+export const getRestaurantHours = () => axiosClient.get("/restaurants/");
