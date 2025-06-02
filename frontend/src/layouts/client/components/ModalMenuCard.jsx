@@ -16,6 +16,7 @@ export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
 
   const handleClose = () => {
     setSelectedOptions([]);
+    setQuantity(1);
   };
 
   const toggleOption = (option) => {

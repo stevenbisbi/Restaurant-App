@@ -2,7 +2,7 @@ import { Offcanvas, Button, ListGroup } from "react-bootstrap";
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
 
-export function OffCanvas({ show, handleClose, cart, name }) {
+export function OffCanvas({ show, handleClose, cart, name, removeFromCart }) {
   return (
     <Offcanvas
       show={show}
@@ -15,7 +15,7 @@ export function OffCanvas({ show, handleClose, cart, name }) {
         <div className="d-flex align-items-center gap-3">
           <Avatar name={name} />
           <div>
-            <h4 className="mb-0 fw-normal">{name || "Usuario"}</h4>
+            <h4 className="mb-0 fw-normal fs-3">{name || "Usuario"}</h4>
             <small className="text-muted">Cliente</small>
           </div>
         </div>
@@ -35,8 +35,14 @@ export function OffCanvas({ show, handleClose, cart, name }) {
                     style={{ width: "50px", height: "50px" }}
                   />
                 )}
-                {item.name} x {item.quantity || 1} - $
-                {item.price * (item.quantity || 1)} <br />
+                <span className="fs-5">{item.quantity}</span> {item.name || 1}
+                <span className="text-success fw-semibold fs-6">
+                  {" "}
+                  ${(item.price * (item.quantity || 1)).toLocaleString(
+                    "es-CO"
+                  )}{" "}
+                </span>
+                <br />
                 {item.selectedOptions?.length > 0 && (
                   <span className="text-muted">
                     {" "}
@@ -44,19 +50,44 @@ export function OffCanvas({ show, handleClose, cart, name }) {
                     {item.selectedOptions.map((opt) => opt.name).join(", ")})
                   </span>
                 )}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="float-end"
+                  onClick={() => removeFromCart(item)}
+                >
+                  Quitar
+                </Button>
+                <div className="clearfix"> </div>
               </ListGroup.Item>
             ))}
           </ListGroup>
         )}
-        <Button
-          variant="primary"
-          className="mt-3"
-          onClick={() => alert("Proceder al pago")}
-        >
-          Ir a pagar
-        </Button>
+        {cart.length > 0 && (
+          <div>
+            <div className="d-flex justify-content-between align-items-center mt-3">
+              <strong>Total:</strong>
+              <h3 className="text-danger fw-bold">
+                $
+                {cart
+                  .reduce(
+                    (total, item) => total + item.price * (item.quantity || 1),
+                    0
+                  )
+                  .toLocaleString("es-CO")}
+              </h3>
+            </div>
+            <Button
+              variant="warning"
+              className="mt-3"
+              onClick={() => alert("Proceder al pago")}
+            >
+              Ir a pagar
+            </Button>
+            <hr />
+          </div>
+        )}
 
-        <hr />
         <LogoutButton />
       </Offcanvas.Body>
     </Offcanvas>

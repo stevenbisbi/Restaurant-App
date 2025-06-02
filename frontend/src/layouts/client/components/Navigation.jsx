@@ -6,9 +6,13 @@ import { OffCanvas } from "./OffCanvas";
 import fondo from "../../../assets/img/fondo-comida.avif";
 import { useSelector } from "react-redux";
 import { selectCartItems } from "../../../redux/cartSlice";
+import { useDispatch } from "react-redux";
+import { removeItemFromCart } from "../../../redux/cartSlice";
 import { Link } from "react-router-dom";
 
 export function Navigation() {
+  const dispatch = useDispatch();
+
   const token = useSelector((state) => state.auth.token);
   const name = useSelector((state) => state.auth.firstName); // Obtén del estado
   const cart = useSelector(selectCartItems);
@@ -16,6 +20,9 @@ export function Navigation() {
 
   const handleClose = () => setShowCart(false);
   const handleShow = () => setShowCart(true);
+  const removeFromCart = (item) => {
+    dispatch(removeItemFromCart({ itemId: item.id })); // Pasa el ID del item
+  };
 
   return (
     <>
@@ -79,6 +86,7 @@ export function Navigation() {
           handleClose={handleClose}
           cart={cart}
           name={name}
+          removeFromCart={removeFromCart}
         />
       )}
 
