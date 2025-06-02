@@ -2,23 +2,20 @@ import { useEffect, useState } from "react";
 import { Navigation } from "../components/Navigation";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { ReservaModal } from "../components/ReservaModal"; // 👈 nuevo
 import "../../../styles/Reservar.css";
-import {
-  getAllTables,
-  getRestaurantHours,
-  createReservation,
-} from "../../../api/reservationApi";
+import { getAllTables, getRestaurantHours, createReservation, } from "../../../api/reservationApi";
 import toast from "react-hot-toast";
+import { deleteReservation, updateReservation } from "../../../api/reservationApi";
 
 export function ReservarPage() {
   const token = useSelector((state) => state.auth.token);
   const customerId = useSelector((state) => state.auth.customer?.id);
   const [mesas, setMesas] = useState([]);
-  const [selectedMesaId, setSelectedMesaId] = useState(null);
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [people, setPeople] = useState("");
   const [horarios, setHorarios] = useState({ open: "", close: "" });
+
+  const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     getAllTables().then((res) => setMesas(res.data || res));
@@ -32,47 +29,98 @@ export function ReservarPage() {
 
   if (!token) return <Navigate to="/login" />;
 
-  // 🔽 CAMBIO COMIENZA AQUÍ: handleReserva corregido
-  const handleReserva = async () => {
-    if (!selectedMesaId || !date || !time || !people) {
-      toast.error("Completa todos los campos");
-      return;
-    }
-
-    const reservation_date = `${date}T${time}:00`;
-
-    try {
-
-      console.log("Customer ID usado en reserva:", customerId);
-
-      await createReservation({
-        customer: customerId, // UUID del modelo Customer
-        table: selectedMesaId,
-        reservation_date,
-        duration: 60, // minutos
-        group_size: parseInt(people),
-        special_requests: "",
-        status: "33c7bd16-ff5b-467b-a548-bdd0397b1caa" // 👈 DEBES REEMPLAZAR CON EL UUID REAL
-      });
-
-      toast.success("Mesa reservada exitosamente");
-      setMesas((prev) =>
-        prev.map((mesa) =>
-          mesa.id === selectedMesaId ? { ...mesa, is_reserved: true } : mesa
-        )
-      );
-      setSelectedMesaId(null);
-    } catch (error) {
-      console.error("Error al reservar:", {
-        data: error.response?.data,
-        status: error.response?.status,
-        request: error.request,
-        message: error.message,
-      });
-      toast.error("Error al reservar mesa");
+  const handleMesaClick = (mesa) => {
+    if (!mesa.is_reserved) {
+      setMesaSeleccionada(mesa);
+      setShowModal(true);
     }
   };
-  // 🔼 CAMBIO TERMINA AQUÍ
+
+const realizarReserva = async (peopleCount) => {
+  if (!peopleCount || !mesaSeleccionada || !customerId) {
+    toast.error("Faltan datos para la reserva");
+    return;
+  }
+
+  // Validar capacidad máxima
+  if (peopleCount > mesaSeleccionada.capacity) {
+    toast.error(`Esta mesa solo tiene capacidad para ${mesaSeleccionada.capacity} personas`);
+    return;
+  }
+
+  const now = new Date();
+  const dateStr = now.toISOString().split("T")[0];
+  const timeStr = now.toTimeString().split(":").slice(0, 2).join(":");
+  const reservation_date = `${dateStr}T${timeStr}:00`;
+
+  try {
+    // 1. Actualización optimista
+    setMesas(prev => prev.map(m => 
+      m.id === mesaSeleccionada.id ? { 
+        ...m, 
+        is_reserved: true, 
+        status: "Reserved" 
+      } : m
+    ));
+
+    // 2. Crear reserva en backend
+    const response = await createReservation({
+      customer: customerId,
+      table: mesaSeleccionada.id,
+      reservation_date,
+      duration: 60,
+      group_size: parseInt(peopleCount),
+      special_requests: "",
+      status: "33c7bd16-ff5b-467b-a548-bdd0397b1caa",
+    });
+
+    toast.success("Mesa reservada exitosamente");
+    setShowModal(false);
+    setMesaSeleccionada(null);
+
+    // 3. Actualizar solo la mesa afectada en lugar de todas
+    setMesas(prev => prev.map(m => 
+      m.id === mesaSeleccionada.id ? { 
+        ...m, 
+        is_reserved: true,
+        status: "Reserved",
+        // Añade cualquier otro campo que devuelva el backend
+        ...(response.data?.table || {})
+      } : m
+    ));
+
+  } catch (error) {
+    // Revertir en caso de error
+    setMesas(prev => prev.map(m => 
+      m.id === mesaSeleccionada.id ? { 
+        ...m, 
+        is_reserved: false, 
+        status: "Available" 
+      } : m
+    ));
+    toast.error("Error al reservar mesa");
+    console.error("Error detallado:", {
+      message: error.message,
+      response: error.response?.data,
+      stack: error.stack
+    });
+  }
+};
+
+
+  const cancelarReserva = async (reservationId, mesaId) => {
+    try {
+      await deleteReservation(reservationId);
+      toast.success("Reserva cancelada");
+
+      setMesas((prev) =>
+        prev.map((m) => (m.id === mesaId ? { ...m, is_reserved: false } : m))
+      );
+    } catch (error) {
+      toast.error("Error al cancelar la reserva");
+      console.error(error.response?.data || error.message);
+    }
+  };
 
   return (
     <>
@@ -80,63 +128,28 @@ export function ReservarPage() {
       <div className="container mt-5">
         <h2 className="text-center mb-4">Selecciona tu mesa</h2>
         <div className="mesas-container">
-          {mesas.map((mesa) => {
-            const isSelected = mesa.id === selectedMesaId;
-            return (
-              <div
-                key={mesa.id}
-                className={`mesa-cuadro ${
-                  mesa.is_reserved || isSelected ? "mesa-reservada" : "mesa-libre"
-                }`}
-                onClick={() =>
-                  !mesa.is_reserved ? setSelectedMesaId(mesa.id) : null
-                }
-              >
-                Mesa {mesa.number}
+          {mesas.map((mesa) => (
+            <div
+              key={mesa.id}
+              className={`mesa-cuadro ${mesa.is_reserved ? "mesa-reservada" : "mesa-libre"}`}
+              onClick={() => handleMesaClick(mesa)}
+            >
+              <div>T-{mesa.number}</div>
+              <div style={{ fontSize: "0.75rem" }}>
+                {mesa.is_reserved ? "Reservada" : "Disponible"}
               </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-5">
-          <h4 className="text-center mb-3">Detalles de la reserva</h4>
-          <div className="row justify-content-center">
-            <div className="col-md-3 mb-3">
-              <input
-                type="date"
-                className="form-control"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
             </div>
-            <div className="col-md-3 mb-3">
-              <input
-                type="time"
-                className="form-control"
-                min={horarios.open}
-                max={horarios.close}
-                value={time}
-                onChange={(e) => setTime(e.target.value)}
-              />
-            </div>
-            <div className="col-md-3 mb-3">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Número de personas"
-                min="1"
-                value={people}
-                onChange={(e) => setPeople(e.target.value)}
-              />
-            </div>
-            <div className="col-md-3 mb-3">
-              <button className="btn btn-success w-100" onClick={handleReserva}>
-                Reservar Mesa
-              </button>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
+
+      {showModal && (
+        <ReservaModal
+          mesa={mesaSeleccionada}
+          onClose={() => setShowModal(false)}
+          onReservar={realizarReserva}
+        />
+      )}
     </>
   );
 }
