@@ -52,7 +52,7 @@ export function ItemAdminForm() {
     data.append("is_vegetarian", formData.is_vegetarian);
     data.append("is_available", formData.is_available);
 
-    if (formData.image) {
+    if (formData.image && formData.image instanceof File) {
       data.append("image", formData.image); // Archivo image
     }
 
@@ -163,7 +163,7 @@ export function ItemAdminForm() {
                 className="form-control"
                 type="file"
                 name="image"
-                accept="image/*"
+                accept=".jpg,.jpeg,.png,.gif,.bmp,.webp"
                 onChange={(e) => {
                   setFormData({
                     ...formData,

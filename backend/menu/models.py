@@ -18,11 +18,11 @@ class Menu(models.Model):
 
 class MenuItem(models.Model):
   CATEGORY_CHOICES = [
-    ("entradas", "Entradas"),
-    ("plato_fuerte", "Plato Fuerte"),
-    ("postres", "Postres"),
-    ("bebidas", "Bebidas"),
-    ("combo", "Combo"),
+    ("Entradas", "Entradas"),
+    ("Plato Fuerte", "Plato Fuerte"),
+    ("Postres", "Postres"),
+    ("Bebidas", "Bebidas"),
+    ("Combo", "Combo"),
     ("Salchipapas", "Salchipapas"),   
     ("Hamburguesas", "Hamburguesas"),   
     ("Emparedados", "Emparedados"),   

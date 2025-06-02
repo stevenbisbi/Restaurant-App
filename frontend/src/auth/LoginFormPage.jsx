@@ -55,7 +55,20 @@ export const LoginFormPage = () => {
           sessionStorage.setItem("token", token);
         }
 
-        navigate("/home");
+        switch (user.role) {
+          case "admin":
+            navigate("/admin/");
+            break;
+          case "staff":
+            navigate("/staff/dashboard");
+            break;
+          case "customer":
+            navigate("/home");
+            break;
+          default:
+            navigate("/home"); // por si no hay rol asignado
+            break;
+        }
       } else {
         toast.error("Error en el inicio de sesión");
       }

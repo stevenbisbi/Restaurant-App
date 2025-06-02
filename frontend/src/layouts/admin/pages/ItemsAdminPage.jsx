@@ -27,10 +27,6 @@ export function ItemsAdminPage() {
       </div>
     );
 
-  const handleDeleteClick = (id) => {
-    setSelectedItemId(id);
-  };
-
   const handleConfirmDelete = async () => {
     if (selectedItemId) {
       await deleteMenuItem(selectedItemId);
@@ -61,9 +57,13 @@ export function ItemsAdminPage() {
                 />
               )}
               <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
+                <Card.Title>
+                  {" "}
+                  <h3>{item.name}</h3>
+                </Card.Title>
                 <Card.Text>
                   <strong>Categoría:</strong> {item.category} <br />
+                  <strong>Descripcion:</strong> {item.description} <br />
                   <strong>Precio:</strong> ${item.price} <br />
                   {item.is_vegetarian && (
                     <span>
@@ -83,6 +83,10 @@ export function ItemsAdminPage() {
                       <br />
                     </span>
                   )}
+                  <strong>Activo:</strong>{" "}
+                  {item.is_available ? "Activo" : "Inactivo"} <br />
+                  <strong>Actualizado:</strong>{" "}
+                  {new Date(item.updated_at).toLocaleDateString()} <br />
                 </Card.Text>
                 <div className="d-flex justify-content-between">
                   <Button
