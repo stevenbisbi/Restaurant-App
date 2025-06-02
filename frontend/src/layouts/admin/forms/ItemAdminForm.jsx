@@ -26,8 +26,6 @@ export function ItemAdminForm() {
   });
 
   useEffect(() => {
-    console.log("Categorías:", categories);
-
     if (isEdit) {
       getMenuItem(id).then((res) => setFormData(res.data));
     }

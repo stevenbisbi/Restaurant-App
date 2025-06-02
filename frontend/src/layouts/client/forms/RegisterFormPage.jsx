@@ -108,7 +108,7 @@ export function RegisterFormPage() {
           setValue("last_name", res.data.last_name);
           setValue("phone_number", res.data.phone_number || "");
         } catch (error) {
-          toast.error("Error cargando datos del usuario");
+          toast.error("Error cargando datos del usuario", error);
         } finally {
           setLoading(false);
         }
