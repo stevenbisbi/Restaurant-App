@@ -48,7 +48,7 @@ export function MenuCard({ item, onSelect }) {
           {item.is_promotion ? (
             <div>
               <s>
-                <h5>$ {item.price.toLocaleString("es-CO")}</h5>
+                <p>$ {item.price.toLocaleString("es-CO")}</p>
               </s>
               <br />
               <div className="text-danger fs-5">

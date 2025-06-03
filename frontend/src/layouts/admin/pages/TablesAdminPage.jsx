@@ -1,17 +1,28 @@
-import { useState } from "react";
-import { Spinner, Alert } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Spinner, Alert, Button } from "react-bootstrap";
 import { deleteTable } from "../../../api/tablesApi";
 import { HeaderAdmin } from "./HeaderAdmin";
 import { useFetch } from "../../../hooks/useFetch";
 import { useNavigate, Link } from "react-router-dom";
 import { ModalDelete } from "../components/ModalDelete";
 import { getAllTables } from "../../../api/tablesApi";
+import { getAllRestaurants } from "../../../api/restaurantsApi";
 
 export function TablesAdminPage() {
   const { data, loading, error, triggerReload } = useFetch(getAllTables);
   const navigate = useNavigate();
   const [selectedTableId, setSelectedTableId] = useState(null);
-  console.log("TablesAdminPage data:", data);
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    getAllTables().then(triggerReload);
+    getAllRestaurants().then((res) => setRestaurants(res.data));
+  }, []);
+
+  const getRestaurantName = (id) => {
+    const found = restaurants.find((r) => r.id === id);
+    return found ? found.name : "Sin asignar";
+  };
 
   if (loading)
     return (
@@ -27,10 +38,6 @@ export function TablesAdminPage() {
         <Alert variant="danger">{error}</Alert>
       </div>
     );
-
-  const handleDeleteClick = (id) => {
-    setSelectedTableId(id);
-  };
 
   const handleConfirmDelete = async () => {
     if (selectedTableId) {
@@ -53,7 +60,7 @@ export function TablesAdminPage() {
       <div className="table-responsive">
         <table className="table table-bordered table-striped">
           <thead className="table-dark">
-            <tr>
+            <tr className="text-center">
               <th>Numero</th>
               <th>Capacidad</th>
               <th>Ubicacion</th>
@@ -76,30 +83,33 @@ export function TablesAdminPage() {
                     ? "🟢"
                     : "🔴"}
                 </td>
-                <td>{table.restaurant || "Sin asignar"}</td>
+                <td>{getRestaurantName(table.restaurant) || "Sin asignar"}</td>
                 <td>{new Date(table.created_at).toLocaleDateString()}</td>
                 <td>
-                  <Link
-                    to={`/admin/tables/edit/${table.id}`}
-                    className="btn btn-sm btn-outline-secondary mx-1"
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => navigate(`/admin/tables/edit/${table.id}`)}
+                    className="mx-2"
                   >
                     Editar
-                  </Link>
-                  <button
-                    className="btn btn-sm btn-outline-danger mx-1"
-                    data-bs-toggle="modal"
-                    data-bs-target="#DeleteModal"
-                    onClick={() => handleDeleteClick(table.id)}
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    onClick={() => setSelectedTableId(table.id)}
                   >
                     Eliminar
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <ModalDelete onConfirm={handleConfirmDelete} />
+      <ModalDelete
+        show={selectedTableId !== null}
+        onHide={() => setSelectedTableId(null)}
+        onConfirm={handleConfirmDelete}
+      />
     </>
   );
 }

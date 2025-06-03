@@ -56,12 +56,12 @@ export function ItemsAdminPage() {
                   style={{ height: "200px", objectFit: "cover" }}
                 />
               )}
-              <Card.Body>
+              <Card.Body className="d-flex flex-column">
                 <Card.Title>
                   {" "}
                   <h3>{item.name}</h3>
                 </Card.Title>
-                <Card.Text>
+                <Card.Text className="flex-grow-1">
                   <strong>Categoría:</strong> {item.category} <br />
                   <strong>Descripcion:</strong> {item.description} <br />
                   <strong>Precio:</strong> ${" "}
@@ -79,13 +79,13 @@ export function ItemsAdminPage() {
                 </Card.Text>
                 <div className="d-flex justify-content-between">
                   <Button
-                    variant="outline-secondary"
+                    variant="secondary"
                     onClick={() => navigate(`/admin/items/edit/${item.id}`)}
                   >
                     Editar
                   </Button>
                   <Button
-                    variant="danger"
+                    variant="outline-danger"
                     onClick={() => setSelectedItemId(item.id)}
                   >
                     Eliminar

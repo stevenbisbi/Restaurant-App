@@ -191,58 +191,61 @@ export function ItemAdminForm() {
               onChange={handleChange}
               placeholder="Descripción"
             />
-
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_available"
-                id="is_available"
-                checked={formData.is_available}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_available">
-                Activo
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_featured"
-                id="is_featured"
-                checked={formData.is_featured}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_featured">
-                Destacado
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_promotion"
-                id="is_promotion"
-                checked={formData.is_promotion}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_promotion">
-                Promocionado
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_vegetarian"
-                id="is_vegetarian"
-                checked={formData.is_vegetarian}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_vegetarian">
-                Vegetariano
-              </label>
+            <div className="d-flex justify-content-between m-3">
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_available"
+                  id="is_available"
+                  checked={formData.is_available}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="is_available">
+                  Activo
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_vegetarian"
+                  id="is_vegetarian"
+                  checked={formData.is_vegetarian}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="is_vegetarian">
+                  Vegetariano
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_featured"
+                  id="is_featured"
+                  checked={formData.is_featured}
+                  onChange={handleChange}
+                  disabled={!formData.is_available}
+                />
+                <label className="form-check-label" htmlFor="is_featured">
+                  Destacado
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_promotion"
+                  id="is_promotion"
+                  checked={formData.is_promotion}
+                  onChange={handleChange}
+                  disabled={!formData.is_available}
+                />
+                <label className="form-check-label" htmlFor="is_promotion">
+                  Promocionado
+                </label>
+              </div>
             </div>
 
             <div className="text-center">
