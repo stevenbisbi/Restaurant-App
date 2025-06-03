@@ -3,13 +3,13 @@ import { useFetch } from "../../../hooks/useFetch";
 import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuCard({ item, onSelect }) {
-  const { data, loading, error } = useFetch(getAllMenuItems);
+  const { loading, error } = useFetch(getAllMenuItems);
 
-  if (loading) return <p>Cargando menús...</p>;
-  if (error) return <p>Error cargando menús 😢</p>;
+  if (loading) return <p>Cargando platos...</p>;
+  if (error) return <p>Error cargando Platos 😢</p>;
   return (
     <Card
-      className="p-2 mx-2 position-relative"
+      className="p-1 position-relative h-100"
       style={{ cursor: "pointer", width: "16rem" }}
       onClick={() => onSelect(item)}
     >
@@ -39,11 +39,26 @@ export function MenuCard({ item, onSelect }) {
         style={{ width: "100%", height: "200px", objectFit: "cover" }}
       />
       <Card.Body>
-        <Card.Title>{item.name}</Card.Title>
-        <Card.Text>
-          <strong>Precio:</strong> $ {item.price.toLocaleString("es-CO")}
-          <br />
+        <Card.Title className="w-100 text-center">{item.name}</Card.Title>
+        <Card.Text className="text-center">
+          <span className="text-secondary">{item.description}</span>
         </Card.Text>
+        <br />
+        <div className="d-flex justify-content-center align-items-center">
+          {item.is_promotion ? (
+            <div>
+              <s>$ {item.price.toLocaleString("es-CO")}</s>
+              <br />
+              <span className="text-danger fs-5">
+                $ {(item.price * 0.75).toLocaleString("es-CO")}
+              </span>
+            </div>
+          ) : (
+            <span>${item.price.toLocaleString("es-CO")}</span>
+          )}
+        </div>
+
+        <br />
       </Card.Body>
     </Card>
   );

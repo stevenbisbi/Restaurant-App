@@ -42,13 +42,17 @@ export function MenuPage() {
         <h1 className="text-center mb-4">
           <i>Lo Mejor Aquí</i>
         </h1>
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-          {data.map((item) => {
-            if (!item.is_available) return null;
-            return (
-              <MenuCard key={item.id} item={item} onSelect={setSelectedItem} />
-            );
-          })}
+        <div className="d-flex justify-content-center">
+          <div className="row g-3">
+            {data.map((item) => {
+              if (!item.is_available) return null;
+              return (
+                <div className="col-auto mx-auto" key={item.id}>
+                  <MenuCard item={item} onSelect={setSelectedItem} />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <ModalMenuCard

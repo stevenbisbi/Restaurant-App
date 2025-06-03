@@ -64,26 +64,15 @@ export function ItemsAdminPage() {
                 <Card.Text>
                   <strong>Categoría:</strong> {item.category} <br />
                   <strong>Descripcion:</strong> {item.description} <br />
-                  <strong>Precio:</strong> ${item.price} <br />
-                  {item.is_vegetarian && (
-                    <span>
-                      🥦 Vegetariano
-                      <br />
-                    </span>
-                  )}
-                  {item.is_promotion && (
-                    <span>
-                      🔥 En Promoción
-                      <br />
-                    </span>
-                  )}
-                  {item.is_featured && (
-                    <span>
-                      ⭐ Destacado
-                      <br />
-                    </span>
-                  )}
-                  <strong>Activo:</strong>{" "}
+                  <strong>Precio:</strong> ${" "}
+                  {item.price.toLocaleString("es-CO")} <br />
+                  <strong>Destacado:</strong> {item.is_featured ? "SÍ" : "NO"}{" "}
+                  <br />
+                  <strong>En Promoción:</strong>{" "}
+                  {item.is_promotion ? "SÍ" : "NO"} <br />
+                  <strong>Vegetariano:</strong>{" "}
+                  {item.is_vegetarian ? "SÍ" : "NO"} <br />
+                  <strong>Estado:</strong>{" "}
                   {item.is_available ? "Activo" : "Inactivo"} <br />
                   <strong>Actualizado:</strong>{" "}
                   {new Date(item.updated_at).toLocaleDateString()} <br />

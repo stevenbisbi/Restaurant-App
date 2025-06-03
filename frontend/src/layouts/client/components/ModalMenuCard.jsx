@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../../redux/cartSlice";
 
-export function ModalMenuCard({ item, show, onHide, onAddToCart }) {
+export function ModalMenuCard({ item, show, onHide }) {
   console.log("item", item);
   const dispatch = useDispatch();
 
