@@ -1,6 +1,6 @@
 import { Spinner, Alert } from "react-bootstrap";
 import { MenuCard } from "../components/MenuCard";
-import { ModalMenuCard } from "../components/ModalMenuCard";
+import { ModalMenuCard } from "../components/modal/ModalMenuCard";
 import { useState } from "react";
 import { useFetch } from "../../../hooks/useFetch";
 import { getAllMenuItems } from "../../../api/menu/menuItemApi";

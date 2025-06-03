@@ -11,12 +11,18 @@ const persistConfig = {
 };
 
 const persistedCartReducer = persistReducer(persistConfig, cartReducer);
+const serializableCheck = {
+  ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+  ignoredPaths: ["register", "rehydrate"],
+};
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     cart: persistedCartReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck }),
 });
 
 export const persistor = persistStore(store);

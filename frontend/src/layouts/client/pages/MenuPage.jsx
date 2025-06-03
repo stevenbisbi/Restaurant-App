@@ -1,6 +1,6 @@
 import { Spinner, Alert } from "react-bootstrap";
 import { MenuCard } from "../components/MenuCard";
-import { ModalMenuCard } from "../components/ModalMenuCard";
+import { ModalMenuCard } from "../components/modal/ModalMenuCard";
 import { useState } from "react";
 import { useFetch } from "../../../hooks/useFetch";
 import { getAllMenuItems } from "../../../api/menu/menuItemApi";
@@ -8,7 +8,6 @@ import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 export function MenuPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [cart, setCart] = useState([]);
-  console.log("MenuPage cart:", cart);
 
   const addToCart = (item) => {
     setCart((prevCart) => [...prevCart, item]);

@@ -1,10 +1,9 @@
 import { Modal, Button, Row } from "react-bootstrap";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addItemToCart } from "../../../redux/cartSlice";
+import { addItemToCart } from "../../../../redux/cartSlice";
 
 export function ModalMenuCard({ item, show, onHide }) {
-  console.log("item", item);
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
