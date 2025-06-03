@@ -42,11 +42,11 @@ export function MenuPage() {
           <i>Lo Mejor Aquí</i>
         </h1>
         <div className="d-flex justify-content-center">
-          <div className="row g-3">
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {data.map((item) => {
               if (!item.is_available) return null;
               return (
-                <div className="col-auto mx-auto" key={item.id}>
+                <div className="col" key={item.id}>
                   <MenuCard item={item} onSelect={setSelectedItem} />
                 </div>
               );

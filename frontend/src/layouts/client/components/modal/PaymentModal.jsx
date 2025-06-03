@@ -1,15 +1,26 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 export function PaymentModal({ show, handleClose }) {
   const [selectedMethod, setSelectedMethod] = useState("");
 
   const handlePay = () => {
     if (!selectedMethod) {
-      alert("Por favor selecciona un método de pago.");
+      toast.error("Por favor selecciona un método de pago.");
       return;
     }
-    alert(`Procesando pago con ${selectedMethod}`);
+    const id = toast.loading(`Procesando pago con ${selectedMethod}`);
+    // Simula una respuesta luego de 2 segundos
+    setTimeout(() => {
+      const exito = true; // cambia a false para simular error
+
+      if (exito) {
+        toast.success("Pago realizado con éxito", { id });
+      } else {
+        toast.error("Error al procesar el pago", { id });
+      }
+    }, 6000);
     handleClose();
   };
 
@@ -56,7 +67,12 @@ export function PaymentModal({ show, handleClose }) {
       <Modal.Footer className="d-flex justify-content-between">
         <Button
           variant="secondary"
-          onClick={() => alert("Se generará un recibo para pago físico.")}
+          onClick={() => {
+            toast.success("Se generará un recibo para pago físico.", {
+              autoClose: 6000,
+            });
+            handleClose();
+          }}
         >
           Pagar con recibo
         </Button>

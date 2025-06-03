@@ -1,11 +1,17 @@
 import { Offcanvas, Button, ListGroup } from "react-bootstrap";
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PaymentModal } from "./modal/PaymentModal";
 
 export function OffCanvas({ show, handleClose, cart, name, removeFromCart }) {
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (!show) {
+      setShowModal(false); // Resetea cuando se cierra el OffCanvas
+    }
+  }, [show]);
   return (
     <Offcanvas
       show={show}
@@ -98,7 +104,7 @@ export function OffCanvas({ show, handleClose, cart, name, removeFromCart }) {
           <LogoutButton />
         </div>
       </Offcanvas.Body>
-      <PaymentModal show={showModal} handleClose={() => setShowModal(false)} />
+      <PaymentModal show={showModal} handleClose={handleClose} />
     </Offcanvas>
   );
 }

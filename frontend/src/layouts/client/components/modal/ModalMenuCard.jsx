@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../../../redux/cartSlice";
 
 export function ModalMenuCard({ item, show, onHide }) {
+  console.log("ModalMenuCard rendered with item:", item);
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
@@ -108,9 +109,19 @@ export function ModalMenuCard({ item, show, onHide }) {
         </div>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-between align-items-center">
-        <div className="alert alert-info text-dark">
-          $ {(item?.price * quantity).toLocaleString("es-CO")}
-        </div>
+        {item?.is_promotion ? (
+          <div className="d-flex align-items-center gap-3">
+            <s className="alert alert-info text-dark my-auto">
+              $ {item?.price * quantity}
+            </s>
+            <p className="alert alert-info text-danger fs-5 my-auto">
+              $ {(item?.price * 0.75 * quantity).toLocaleString("es-CO")}
+            </p>
+          </div>
+        ) : (
+          <p>$ {(item?.price * quantity).toLocaleString("es-CO")}</p>
+        )}
+
         <div>
           <Button
             onClick={handleDecrement}

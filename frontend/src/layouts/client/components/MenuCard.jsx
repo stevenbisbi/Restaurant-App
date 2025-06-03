@@ -9,26 +9,26 @@ export function MenuCard({ item, onSelect }) {
   if (error) return <p>Error cargando Platos 😢</p>;
   return (
     <Card
-      className="p-1 position-relative h-100"
-      style={{ cursor: "pointer", width: "16rem" }}
+      className="h-100 shadow-sm "
+      style={{ cursor: "pointer" }}
       onClick={() => onSelect(item)}
     >
       {item.is_promotion ? (
         <span
-          style={{ height: "2rem" }}
+          style={{ height: "3rem" }}
           className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-danger d-flex align-items-center"
         >
-          <span className="bg-light rounded-circle py-1 me-1">💯 </span>
-          ¡Promoción!
+          <span className="bg-light rounded-circle py-1 me-1 fs-5">💯 </span>
+          <span className="fs-5">¡Promoción!</span>
         </span>
       ) : (
         item.is_featured && (
           <span
-            style={{ height: "2rem" }}
+            style={{ height: "3rem" }}
             className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-warning text-dark d-flex align-items-center"
           >
-            <span className="bg-light rounded-circle py-1 me-1">⭐ </span>{" "}
-            ¡Destacado!
+            <span className="bg-light rounded-circle py-1 me-1 fs-5">⭐ </span>{" "}
+            <span className="fs-5">¡Destacado!</span>
           </span>
         )
       )}
@@ -47,14 +47,16 @@ export function MenuCard({ item, onSelect }) {
         <div className="d-flex justify-content-center align-items-center">
           {item.is_promotion ? (
             <div>
-              <s>$ {item.price.toLocaleString("es-CO")}</s>
+              <s>
+                <h5>$ {item.price.toLocaleString("es-CO")}</h5>
+              </s>
               <br />
-              <span className="text-danger fs-5">
-                $ {(item.price * 0.75).toLocaleString("es-CO")}
-              </span>
+              <div className="text-danger fs-5">
+                <h3>$ {(item.price * 0.75).toLocaleString("es-CO")}</h3>
+              </div>
             </div>
           ) : (
-            <span>${item.price.toLocaleString("es-CO")}</span>
+            <h3>${item.price.toLocaleString("es-CO")}</h3>
           )}
         </div>
 
