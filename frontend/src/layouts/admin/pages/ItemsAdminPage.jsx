@@ -7,17 +7,10 @@ import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 import { useFetch } from "../../../hooks/useFetch";
 
 export function ItemsAdminPage() {
-  const {
-    data,
-    loading,
-    error,
-    triggerReload,
-    selectedDataId,
-    setSelectedDataId,
-  } = useFetch(getAllMenuItems);
+  const itemFetch = useFetch(getAllMenuItems);
   const navigate = useNavigate();
 
-  if (loading)
+  if (itemFetch.loading)
     return (
       <div className="text-center m-5">
         <Spinner animation="border" role="status">
@@ -25,18 +18,18 @@ export function ItemsAdminPage() {
         </Spinner>
       </div>
     );
-  if (error)
+  if (itemFetch.error)
     return (
       <div className="text-center m-5">
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger">{itemFetch.error}</Alert>
       </div>
     );
 
   const handleConfirmDelete = async () => {
-    if (selectedDataId) {
-      await deleteMenuItem(selectedDataId);
-      setSelectedDataId(null);
-      triggerReload();
+    if (itemFetch.selectedDataId) {
+      await deleteMenuItem(itemFetch.selectedDataId);
+      itemFetch.setSelectedDataId(null);
+      itemFetch.triggerReload();
       navigate("/admin/items");
     }
   };
@@ -50,7 +43,7 @@ export function ItemsAdminPage() {
       />
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {data.map((item) => (
+        {itemFetch.data.map((item) => (
           <div className="col" key={item.id}>
             <Card className="h-100 shadow-sm">
               {item.image && (
@@ -91,7 +84,7 @@ export function ItemsAdminPage() {
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => setSelectedDataId(item.id)}
+                    onClick={() => itemFetch.setSelectedDataId(item.id)}
                   >
                     Eliminar
                   </Button>
@@ -102,8 +95,8 @@ export function ItemsAdminPage() {
         ))}
       </div>
       <ModalDelete
-        show={selectedDataId !== null}
-        onHide={() => setSelectedDataId(null)}
+        show={itemFetch.selectedDataId !== null}
+        onHide={() => itemFetch.setSelectedDataId(null)}
         onConfirm={handleConfirmDelete}
       />
     </div>

@@ -1,31 +1,23 @@
 import { useFetch } from "../../../hooks/useFetch";
 import { Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HeaderAdmin } from "./HeaderAdmin";
 import { deleteMenu } from "../../../api/menu/menuApi";
 import { ModalDelete } from "../components/ModalDelete";
 import { getAllMenus } from "../../../api/menu/menuApi";
 
 export function MenuAdminPage() {
-  const {
-    data,
-    loading,
-    error,
-    triggerReload,
-    selectedDataId,
-    setSelectedDataId,
-  } = useFetch(getAllMenus);
+  const menuFetch = useFetch(getAllMenus);
   const navigate = useNavigate();
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>Error al cargar los menús</p>;
+  if (menuFetch.loading) return <p>Cargando...</p>;
+  if (menuFetch.error) return <p>Error al cargar los menús</p>;
 
   const handleConfirmDelete = async () => {
-    if (selectedDataId) {
-      await deleteMenu(selectedDataId);
-      setSelectedDataId(null);
-      triggerReload();
+    if (menuFetch.selectedDataId) {
+      await deleteMenu(menuFetch.selectedDataId);
+      menuFetch.setSelectedDataId(null);
+      menuFetch.triggerReload();
       navigate("/admin/menu");
     }
   };
@@ -50,7 +42,7 @@ export function MenuAdminPage() {
             </tr>
           </thead>
           <tbody className="text-center">
-            {data.map((menu) => (
+            {menuFetch.data.map((menu) => (
               <tr key={menu.id}>
                 <td className="text-center">{menu.is_active ? "✅" : "❌"}</td>
                 <td>{menu.name}</td>
@@ -66,7 +58,7 @@ export function MenuAdminPage() {
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => setSelectedDataId(menu.id)}
+                    onClick={() => menuFetch.setSelectedDataId(menu.id)}
                   >
                     Eliminar
                   </Button>
@@ -77,8 +69,8 @@ export function MenuAdminPage() {
         </table>
       </div>
       <ModalDelete
-        show={selectedDataId !== null}
-        onHide={() => setSelectedDataId(null)}
+        show={menuFetch.selectedDataId !== null}
+        onHide={() => menuFetch.setSelectedDataId(null)}
         onConfirm={handleConfirmDelete}
       />
     </div>

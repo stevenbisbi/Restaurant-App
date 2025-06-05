@@ -9,19 +9,12 @@ import { getAllTables } from "../../../api/tablesApi";
 import { getAllRestaurants } from "../../../api/restaurantsApi";
 
 export function TablesAdminPage() {
-  const {
-    data,
-    loading,
-    error,
-    triggerReload,
-    selectedDataId,
-    setSelectedDataId,
-  } = useFetch(getAllTables);
+  const tableFetch = useFetch(getAllTables);
   const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    getAllTables().then(triggerReload);
+    getAllTables().then(tableFetch.triggerReload);
     getAllRestaurants().then((res) => setRestaurants(res.data));
   }, []);
 
@@ -30,7 +23,7 @@ export function TablesAdminPage() {
     return found ? found.name : "Sin asignar";
   };
 
-  if (loading)
+  if (tableFetch.loading)
     return (
       <div className="text-center m-5">
         <Spinner animation="border" role="status">
@@ -38,18 +31,18 @@ export function TablesAdminPage() {
         </Spinner>
       </div>
     );
-  if (error)
+  if (tableFetch.error)
     return (
       <div className="text-center m-5">
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger">{tableFetch.error}</Alert>
       </div>
     );
 
   const handleConfirmDelete = async () => {
-    if (selectedDataId) {
-      await deleteTable(selectedDataId);
-      setSelectedDataId(null);
-      triggerReload();
+    if (tableFetch.selectedDataId) {
+      await deleteTable(tableFetch.selectedDataId);
+      tableFetch.setSelectedDataId(null);
+      tableFetch.triggerReload();
       navigate("/admin/tables");
     }
   };
@@ -77,7 +70,7 @@ export function TablesAdminPage() {
             </tr>
           </thead>
           <tbody className="text-center">
-            {data.map((table) => (
+            {tableFetch.data.map((table) => (
               <tr key={table.id}>
                 <td>{table.number}</td>
                 <td>{table.capacity}</td>
@@ -101,7 +94,7 @@ export function TablesAdminPage() {
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => setSelectedDataId(table.id)}
+                    onClick={() => tableFetch.setSelectedDataId(table.id)}
                   >
                     Eliminar
                   </Button>
@@ -112,8 +105,8 @@ export function TablesAdminPage() {
         </table>
       </div>
       <ModalDelete
-        show={selectedDataId !== null}
-        onHide={() => setSelectedDataId(null)}
+        show={tableFetch.selectedDataId !== null}
+        onHide={() => tableFetch.setSelectedDataId(null)}
         onConfirm={handleConfirmDelete}
       />
     </>
