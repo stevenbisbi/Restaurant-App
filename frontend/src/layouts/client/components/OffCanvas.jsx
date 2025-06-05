@@ -104,7 +104,7 @@ export function OffCanvas({ show, handleClose, cart, name, removeFromCart }) {
           <LogoutButton />
         </div>
       </Offcanvas.Body>
-      <PaymentModal show={showModal} handleClose={handleClose} />
+      <PaymentModal show={showModal} handleClose={() => setShowModal(false)} />
     </Offcanvas>
   );
 }

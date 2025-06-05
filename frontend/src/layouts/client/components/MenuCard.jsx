@@ -1,12 +1,6 @@
 import { Card } from "react-bootstrap";
-import { useFetch } from "../../../hooks/useFetch";
-import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuCard({ item, onSelect }) {
-  const { loading, error } = useFetch(getAllMenuItems);
-
-  if (loading) return <p>Cargando platos...</p>;
-  if (error) return <p>Error cargando Platos 😢</p>;
   return (
     <Card
       className="h-100 shadow-sm "
@@ -27,7 +21,7 @@ export function MenuCard({ item, onSelect }) {
             style={{ height: "3rem" }}
             className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-warning text-dark d-flex align-items-center"
           >
-            <span className="bg-light rounded-circle py-1 me-1 fs-5">⭐ </span>{" "}
+            <span className="rounded-circle py-1 me-1 fs-5">⭐ </span>{" "}
             <span className="fs-5">¡Destacado!</span>
           </span>
         )
@@ -46,7 +40,7 @@ export function MenuCard({ item, onSelect }) {
         <br />
         <div className="d-flex justify-content-center align-items-center">
           {item.is_promotion ? (
-            <div>
+            <div className="d-flex align-items-center gap-2">
               <s>
                 <p>$ {item.price.toLocaleString("es-CO")}</p>
               </s>

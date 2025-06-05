@@ -8,17 +8,23 @@ import { ModalDelete } from "../components/ModalDelete";
 import { getAllMenus } from "../../../api/menu/menuApi";
 
 export function MenuAdminPage() {
-  const { data, loading, error, triggerReload } = useFetch(getAllMenus);
+  const {
+    data,
+    loading,
+    error,
+    triggerReload,
+    selectedDataId,
+    setSelectedDataId,
+  } = useFetch(getAllMenus);
   const navigate = useNavigate();
-  const [selectedMenuId, setSelectedMenuId] = useState(null);
 
   if (loading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar los menús</p>;
 
   const handleConfirmDelete = async () => {
-    if (selectedMenuId) {
-      await deleteMenu(selectedMenuId);
-      setSelectedMenuId(null);
+    if (selectedDataId) {
+      await deleteMenu(selectedDataId);
+      setSelectedDataId(null);
       triggerReload();
       navigate("/admin/menu");
     }
@@ -60,7 +66,7 @@ export function MenuAdminPage() {
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => setSelectedMenuId(menu.id)}
+                    onClick={() => setSelectedDataId(menu.id)}
                   >
                     Eliminar
                   </Button>
@@ -71,8 +77,8 @@ export function MenuAdminPage() {
         </table>
       </div>
       <ModalDelete
-        show={selectedMenuId !== null}
-        onHide={() => setSelectedMenuId(null)}
+        show={selectedDataId !== null}
+        onHide={() => setSelectedDataId(null)}
         onConfirm={handleConfirmDelete}
       />
     </div>

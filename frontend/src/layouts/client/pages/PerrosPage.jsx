@@ -33,7 +33,6 @@ export function PerrosPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>¡El clásico que nunca falla! 🌭💥</i>

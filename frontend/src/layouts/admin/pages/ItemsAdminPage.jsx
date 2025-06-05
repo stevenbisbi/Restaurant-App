@@ -1,16 +1,21 @@
-import { useState } from "react";
 import { Card, Button, Spinner, Alert } from "react-bootstrap";
 import { HeaderAdmin } from "./HeaderAdmin";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ModalDelete } from "../components/ModalDelete";
 import { deleteMenuItem } from "../../../api/menu/menuItemApi";
 import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 import { useFetch } from "../../../hooks/useFetch";
 
 export function ItemsAdminPage() {
-  const { data, loading, error, triggerReload } = useFetch(getAllMenuItems);
+  const {
+    data,
+    loading,
+    error,
+    triggerReload,
+    selectedDataId,
+    setSelectedDataId,
+  } = useFetch(getAllMenuItems);
   const navigate = useNavigate();
-  const [selectedItemId, setSelectedItemId] = useState(null);
 
   if (loading)
     return (
@@ -28,9 +33,9 @@ export function ItemsAdminPage() {
     );
 
   const handleConfirmDelete = async () => {
-    if (selectedItemId) {
-      await deleteMenuItem(selectedItemId);
-      setSelectedItemId(null);
+    if (selectedDataId) {
+      await deleteMenuItem(selectedDataId);
+      setSelectedDataId(null);
       triggerReload();
       navigate("/admin/items");
     }
@@ -86,7 +91,7 @@ export function ItemsAdminPage() {
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => setSelectedItemId(item.id)}
+                    onClick={() => setSelectedDataId(item.id)}
                   >
                     Eliminar
                   </Button>
@@ -97,8 +102,8 @@ export function ItemsAdminPage() {
         ))}
       </div>
       <ModalDelete
-        show={selectedItemId !== null}
-        onHide={() => setSelectedItemId(null)}
+        show={selectedDataId !== null}
+        onHide={() => setSelectedDataId(null)}
         onConfirm={handleConfirmDelete}
       />
     </div>

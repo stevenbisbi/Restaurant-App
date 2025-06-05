@@ -33,7 +33,6 @@ export function EmparedadosPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>¡Un bocado y te enamoras! 🥪❤️</i>

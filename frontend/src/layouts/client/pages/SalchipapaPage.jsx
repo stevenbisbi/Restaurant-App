@@ -33,7 +33,6 @@ export function SalchipapaPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>¡Pura sabrosura con papas! 🥔🔥</i>

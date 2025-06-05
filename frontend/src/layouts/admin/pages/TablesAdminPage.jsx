@@ -9,9 +9,15 @@ import { getAllTables } from "../../../api/tablesApi";
 import { getAllRestaurants } from "../../../api/restaurantsApi";
 
 export function TablesAdminPage() {
-  const { data, loading, error, triggerReload } = useFetch(getAllTables);
+  const {
+    data,
+    loading,
+    error,
+    triggerReload,
+    selectedDataId,
+    setSelectedDataId,
+  } = useFetch(getAllTables);
   const navigate = useNavigate();
-  const [selectedTableId, setSelectedTableId] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
@@ -40,9 +46,9 @@ export function TablesAdminPage() {
     );
 
   const handleConfirmDelete = async () => {
-    if (selectedTableId) {
-      await deleteTable(selectedTableId);
-      setSelectedTableId(null);
+    if (selectedDataId) {
+      await deleteTable(selectedDataId);
+      setSelectedDataId(null);
       triggerReload();
       navigate("/admin/tables");
     }
@@ -95,7 +101,7 @@ export function TablesAdminPage() {
                   </Button>
                   <Button
                     variant="outline-danger"
-                    onClick={() => setSelectedTableId(table.id)}
+                    onClick={() => setSelectedDataId(table.id)}
                   >
                     Eliminar
                   </Button>
@@ -106,8 +112,8 @@ export function TablesAdminPage() {
         </table>
       </div>
       <ModalDelete
-        show={selectedTableId !== null}
-        onHide={() => setSelectedTableId(null)}
+        show={selectedDataId !== null}
+        onHide={() => setSelectedDataId(null)}
         onConfirm={handleConfirmDelete}
       />
     </>

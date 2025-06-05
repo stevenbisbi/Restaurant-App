@@ -42,7 +42,6 @@ export function ReservarPage() {
     const reservation_date = `${date}T${time}:00`;
 
     try {
-
       console.log("Customer ID usado en reserva:", customerId);
 
       await createReservation({
@@ -52,7 +51,7 @@ export function ReservarPage() {
         duration: 60, // minutos
         group_size: parseInt(people),
         special_requests: "",
-        status: "33c7bd16-ff5b-467b-a548-bdd0397b1caa" // 👈 DEBES REEMPLAZAR CON EL UUID REAL
+        status: "33c7bd16-ff5b-467b-a548-bdd0397b1caa", // 👈 DEBES REEMPLAZAR CON EL UUID REAL
       });
 
       toast.success("Mesa reservada exitosamente");
@@ -76,7 +75,6 @@ export function ReservarPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-5">
         <h2 className="text-center mb-4">Selecciona tu mesa</h2>
         <div className="mesas-container">
@@ -86,7 +84,9 @@ export function ReservarPage() {
               <div
                 key={mesa.id}
                 className={`mesa-cuadro ${
-                  mesa.is_reserved || isSelected ? "mesa-reservada" : "mesa-libre"
+                  mesa.is_reserved || isSelected
+                    ? "mesa-reservada"
+                    : "mesa-libre"
                 }`}
                 onClick={() =>
                   !mesa.is_reserved ? setSelectedMesaId(mesa.id) : null

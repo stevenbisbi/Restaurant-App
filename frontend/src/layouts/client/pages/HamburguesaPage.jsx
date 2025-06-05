@@ -33,7 +33,6 @@ export function HamburguesaPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>¡Jugosas y listas para devorar! 🍔😋</i>

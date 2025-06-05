@@ -1,9 +1,31 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../../../redux/cartSlice";
 
 export function PaymentModal({ show, handleClose }) {
+  const dispatch = useDispatch();
   const [selectedMethod, setSelectedMethod] = useState("");
+
+  const handlePayFizical = () => {
+    const id = toast.loading("Generando recibo para pago físico...");
+    // Simula una respuesta luego de 2 segundos
+    setTimeout(() => {
+      const exito = true; // cambia a false para simular error
+      if (exito) {
+        toast.success("Recibo generado con éxito", { id });
+        toast.success(
+          "Por favor, acércate a nuestra sede para completar el pago.",
+          { id }
+        );
+        dispatch(clearCart());
+      } else {
+        toast.error("Error al generar el recibo", { id });
+      }
+    }, 3000);
+    handleClose();
+  };
 
   const handlePay = () => {
     if (!selectedMethod) {
@@ -17,10 +39,16 @@ export function PaymentModal({ show, handleClose }) {
 
       if (exito) {
         toast.success("Pago realizado con éxito", { id });
+        toast.success(
+          `Recibirás un correo de confirmación y tu pedido será enviado pronto.`,
+          { id }
+        );
+
+        dispatch(clearCart());
       } else {
         toast.error("Error al procesar el pago", { id });
       }
-    }, 6000);
+    }, 5000);
     handleClose();
   };
 
@@ -68,10 +96,7 @@ export function PaymentModal({ show, handleClose }) {
         <Button
           variant="secondary"
           onClick={() => {
-            toast.success("Se generará un recibo para pago físico.", {
-              autoClose: 6000,
-            });
-            handleClose();
+            handlePayFizical();
           }}
         >
           Pagar con recibo

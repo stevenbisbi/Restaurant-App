@@ -7,13 +7,20 @@ import { deleteOrder } from "../../../api/orderApi";
 import { ModalDelete } from "../components/ModalDelete";
 
 export function OrderAdminPage() {
-  const { data, loading, error, triggerReload } = useFetch(getAllOrders);
+  const {
+    data,
+    loading,
+    error,
+    triggerReload,
+    selectedDataId,
+    setSelectedDataId,
+  } = useFetch(getAllOrders);
   console.log("data?", data);
 
   const handleConfirmDelete = async () => {
-    if (selectedItemId) {
-      await deleteOrder(selectedItemId);
-      setSelectedItemId(null);
+    if (selectedDataId) {
+      await deleteOrder(selectedDataId);
+      setSelectedDataId(null);
       triggerReload();
       navigate("/admin/items");
     }

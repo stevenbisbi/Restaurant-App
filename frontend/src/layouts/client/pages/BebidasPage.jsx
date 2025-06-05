@@ -33,7 +33,6 @@ export function BebidasPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>¡Refresca tu momento 🧃❄️</i>
