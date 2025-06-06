@@ -23,11 +23,7 @@ class OrderItemStatusSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-  table = serializers.StringRelatedField()
-  customer = serializers.StringRelatedField()
-  staff = serializers.StringRelatedField()
-  items = OrderItemSerializer(many=True, read_only=True)
-  status = serializers.StringRelatedField()
+  
   class Meta:
     model = Order
     fields = '__all__'

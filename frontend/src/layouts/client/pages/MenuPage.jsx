@@ -8,8 +8,16 @@ import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 export function MenuPage() {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (item) => {
-    setCart((prevCart) => [...prevCart, item]);
+  const addToCart = (item, quantity = 1) => {
+    setCart((prevCart) => {
+      const existing = prevCart.find((i) => i.id === item.id);
+      if (existing) {
+        return prevCart.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i
+        );
+      }
+      return [...prevCart, { ...item, quantity }];
+    });
   };
 
   const menuFetch = useFetch(getAllMenuItems);

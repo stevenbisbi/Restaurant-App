@@ -13,8 +13,8 @@ class Order(models.Model):
         ('Lista','Lista'),
     ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")
-    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name="orders")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders", blank=True, null=True)
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name="orders", blank=True, null=True)
     staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, related_name="orders", blank=True, null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     special_instructions = models.TextField(blank=True, null=True)

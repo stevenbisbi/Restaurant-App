@@ -3,28 +3,57 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../../../../redux/cartSlice";
+import { createOrder } from "../../../../api/orderApi";
 
-export function PaymentModal({ show, handleClose }) {
+export function PaymentModal({
+  show,
+  handleClose,
+  cartItems,
+  onPaymentSuccess,
+}) {
   const dispatch = useDispatch();
   const [selectedMethod, setSelectedMethod] = useState("");
 
+  const handleCreateOrder = async () => {
+    const id = toast.loading("Procesando orden...");
+    try {
+      const orderData = {
+        customer: null, // ⚠️ Reemplazar por el ID real
+        table: null, // ⚠️ Reemplazar por el ID real
+        staff: null, // Si no hay staff asignado
+        special_instructions: "Sin sal",
+        subtotal: cartItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        ),
+        total: cartItems.reduce(
+          (acc, item) => acc + item.price * item.quantity,
+          0
+        ),
+        items: cartItems.map((item) => ({
+          product: item.id, // ⚠️ Asegúrate de que sea el ID del producto, no del OrderItem
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      };
+
+      const response = await createOrder(orderData);
+      const createdOrder = response.data;
+
+      console.log(createdOrder.id);
+
+      toast.success("Orden creada con éxito", { id });
+      dispatch(clearCart());
+      handleClose();
+      // Aquí envías el ID al componente padre
+      onPaymentSuccess?.(createdOrder.id);
+    } catch (error) {
+      toast.error("Error al crear la orden", { id });
+    }
+  };
+
   const handlePayFizical = () => {
-    const id = toast.loading("Generando recibo para pago físico...");
-    // Simula una respuesta luego de 2 segundos
-    setTimeout(() => {
-      const exito = true; // cambia a false para simular error
-      if (exito) {
-        toast.success("Recibo generado con éxito", { id });
-        toast.success(
-          "Por favor, acércate a nuestra sede para completar el pago.",
-          { id }
-        );
-        dispatch(clearCart());
-      } else {
-        toast.error("Error al generar el recibo", { id });
-      }
-    }, 3000);
-    handleClose();
+    handleCreateOrder("Recibo físico");
   };
 
   const handlePay = () => {
@@ -32,24 +61,7 @@ export function PaymentModal({ show, handleClose }) {
       toast.error("Por favor selecciona un método de pago.");
       return;
     }
-    const id = toast.loading(`Procesando pago con ${selectedMethod}`);
-    // Simula una respuesta luego de 2 segundos
-    setTimeout(() => {
-      const exito = true; // cambia a false para simular error
-
-      if (exito) {
-        toast.success("Pago realizado con éxito", { id });
-        toast.success(
-          `Recibirás un correo de confirmación y tu pedido será enviado pronto.`,
-          { id }
-        );
-
-        dispatch(clearCart());
-      } else {
-        toast.error("Error al procesar el pago", { id });
-      }
-    }, 5000);
-    handleClose();
+    handleCreateOrder(selectedMethod);
   };
 
   return (
