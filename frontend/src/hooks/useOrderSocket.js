@@ -1,4 +1,3 @@
-// src/hooks/useOrderSocket.js
 import { useEffect, useRef, useState } from "react";
 
 // Recibe el orderId (string) y un callback que se ejecuta cada vez que llegue un mensaje nuevo.

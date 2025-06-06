@@ -20,7 +20,7 @@ export function DashboardStaff() {
         />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto d-flex justify-content-between align-items-center">
-            <Nav.Link href="/staff/order" className="mx-5 fs-5">
+            <Nav.Link href="/staff/orders" className="mx-5 fs-5">
               Pedidos
             </Nav.Link>
             <Nav.Link href="/staff/payment" className="mx-5 fs-5">

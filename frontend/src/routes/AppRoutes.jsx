@@ -5,7 +5,7 @@ import AdminRoutes from "./AdminRoutes";
 import StaffRoutes from "./StaffRoutes";
 import NotFound from "../common/Nofound";
 import { HomePage } from "../layouts/client/pages/HomePage";
-import { OrderStatusPage } from "../layouts/client/pages/OrderStatusPage";
+import { OrderStatusPage } from "../layouts/staff/pages/OrderStatusPage";
 
 const AppRoutes = () => {
   return (

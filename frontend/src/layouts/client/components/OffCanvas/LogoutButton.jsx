@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { logout } from "../../../redux/authSlice"; // Asegúrate de que esta ruta sea correcta
+import { logout } from "../../../../redux/authSlice"; // Asegúrate de que esta ruta sea correcta
 
 export const LogoutButton = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectCartItems } from "../../../redux/cartSlice";
+import { selectCartItems } from "../../../../redux/cartSlice";
 
 export function Avatar({ name }) {
   // Obtiene los items del carrito desde el estado global

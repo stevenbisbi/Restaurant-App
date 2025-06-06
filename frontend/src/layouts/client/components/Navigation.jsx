@@ -1,8 +1,8 @@
 import { Nav, Navbar, Button } from "react-bootstrap";
 import { useState } from "react";
 import "./../../../styles/Navigation.css";
-import { Avatar } from "../components/Avatar";
-import { OffCanvas } from "./OffCanvas";
+import { Avatar } from "../components/OffCanvas/Avatar";
+import { OffCanvas } from "./OffCanvas/OffCanvas";
 import fondo from "../../../assets/img/fondo-comida.avif";
 import { useSelector } from "react-redux";
 import { selectCartItems } from "../../../redux/cartSlice";

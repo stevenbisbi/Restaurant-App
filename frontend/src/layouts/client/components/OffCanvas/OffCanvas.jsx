@@ -2,10 +2,10 @@ import { Offcanvas, Button, ListGroup } from "react-bootstrap";
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
 import { useState, useEffect } from "react";
-import { PaymentModal } from "./modal/PaymentModal";
+import { PaymentModal } from "./PaymentModal";
 import { OrderCard } from "./OrderCard";
 import { useSelector } from "react-redux";
-import { selectCartItems } from "../../../redux/cartSlice";
+import { selectCartItems } from "../../../../redux/cartSlice";
 
 export function OffCanvas({ show, handleClose, cart, name, removeFromCart }) {
   const [showModal, setShowModal] = useState(false);

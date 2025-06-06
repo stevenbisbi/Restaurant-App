@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useOrderSocket } from "../../../hooks/useOrderSocket";
-import axiosClient from "../../../api/axiosClient"; // tu instancia Axios configurada
+import { useOrderSocket } from "../../../../hooks/useOrderSocket";
+import axiosClient from "../../../../api/axiosClient"; // tu instancia Axios configurada
 
 export function OrderCard({ orderId }) {
   const [order, setOrder] = useState(null); // ← Guardamos toda la orden
