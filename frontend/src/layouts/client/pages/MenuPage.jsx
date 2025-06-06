@@ -46,7 +46,10 @@ export function MenuPage() {
               if (!item.is_available) return null;
               return (
                 <div className="col" key={item.id}>
-                  <MenuCard item={item} onSelect={menuFetch.selectedDataId} />
+                  <MenuCard
+                    item={item}
+                    onSelect={menuFetch.setSelectedDataId}
+                  />
                 </div>
               );
             })}

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Order, OrderItem, OrderItemOption, OrderItemStatus, OrderStatus
-from .serializers import OrderSerializer,OrderItemOptionSerializer, OrderItemSerializer, OrderItemStatusSerializer, OrderStatusSerializer
+from .models import Order, OrderItem, OrderItemOption, OrderItemStatus
+from .serializers import OrderSerializer,OrderItemOptionSerializer, OrderItemSerializer, OrderItemStatusSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
   queryset = Order.objects.all()
@@ -17,7 +17,3 @@ class OrderItemViewSet(viewsets.ModelViewSet):
 class OrderItemStatusViewSet(viewsets.ModelViewSet):
   queryset = OrderItemStatus.objects.all()
   serializer_class = OrderItemStatusSerializer
-
-class OrderStatusViewSet(viewsets.ModelViewSet):
-  queryset = OrderStatus.objects.all()
-  serializer_class = OrderStatusSerializer

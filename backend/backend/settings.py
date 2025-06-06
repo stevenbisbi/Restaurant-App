@@ -214,10 +214,11 @@ AUTH_USER_MODEL = 'users.User'
 # Configura Redis para Channels (requiere "channels-redis")
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],  # Si usas Docker, usa el nombre del servicio
-        },
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        #"BACKEND": "channels_redis.core.RedisChannelLayer",
+       # "CONFIG": {
+#"hosts": [("127.0.0.1", 6379)],  # Si usas Docker, usa el nombre del servicio
+        #},
     },
 }
 

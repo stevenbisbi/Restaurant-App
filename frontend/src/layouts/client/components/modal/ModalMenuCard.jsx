@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../../../redux/cartSlice";
 
 export function ModalMenuCard({ item, show, onHide }) {
-  console.log("ModalMenuCard rendered with item:", item);
   const dispatch = useDispatch();
 
   const [quantity, setQuantity] = useState(1);
