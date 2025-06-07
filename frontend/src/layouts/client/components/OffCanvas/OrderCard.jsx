@@ -93,7 +93,7 @@ export function OrderCard({ orderId }) {
                 viewBox="0 0 48 48"
                 className="mx-3"
               >
-                <g
+                <svg
                   fill="none"
                   stroke="currentColor"
                   stroke-linejoin="round"
@@ -104,7 +104,7 @@ export function OrderCard({ orderId }) {
                     stroke-linecap="round"
                     d="M18 4h12m-6 15v8m8 0h-8m0-23v4"
                   />
-                </g>
+                </svg>
               </svg>
               En espera
             </>

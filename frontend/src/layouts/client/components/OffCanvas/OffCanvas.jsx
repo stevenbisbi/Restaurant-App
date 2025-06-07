@@ -16,8 +16,8 @@ export function OffCanvas({ show, handleClose, cart, name, removeFromCart }) {
   useEffect(() => {
     if (!show) {
       setShowModal(false);
-      //(false);
-      //setOrderId(null);
+      setShowOrderCard(false);
+      setOrderId(null);
     }
   }, [show]);
 

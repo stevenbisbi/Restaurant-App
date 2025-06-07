@@ -1,4 +1,4 @@
-import { Spinner, Alert } from "react-bootstrap";
+import { Spinner, Alert, Col, Row } from "react-bootstrap";
 import { MenuCard } from "../components/menu/MenuCard";
 import { ModalMenuCard } from "../components/menu/ModalMenuCard";
 import { useFetch } from "../../../hooks/useFetch";
@@ -48,21 +48,16 @@ export function MenuPage() {
         <h1 className="text-center mb-4">
           <i>Lo Mejor Aquí</i>
         </h1>
-        <div className="d-flex justify-content-center">
-          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {menuFetch.data.map((item) => {
-              if (!item.is_available) return null;
-              return (
-                <div className="col" key={item.id}>
-                  <MenuCard
-                    item={item}
-                    onSelect={menuFetch.setSelectedDataId}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <Row className="g-4">
+          {menuFetch.data.map((item) => {
+            if (!item.is_available) return null;
+            return (
+              <Col xs={12} sm={6} md={4} key={item.id}>
+                <MenuCard item={item} onSelect={menuFetch.setSelectedDataId} />
+              </Col>
+            );
+          })}
+        </Row>
 
         <ModalMenuCard
           item={menuFetch.selectedDataId}

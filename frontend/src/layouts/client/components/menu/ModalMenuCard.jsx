@@ -40,80 +40,84 @@ export function ModalMenuCard({ item, show, onHide }) {
       <Modal.Header closeButton>
         <Modal.Title className="w-100 text-center">{item?.name}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="d-flex flex-row p-1">
-        <div className="d-flex justify-content-center align-items-center">
-          <img
-            src={item?.image}
-            className="img-fluid rounded-start"
-            style={{ maxWidth: "300px", maxHeight: "300px" }}
-            alt={item?.name}
-          />
-        </div>
-        <div
-          className="col-md-6 p-4 overflow-y-auto text-center"
-          style={{ maxHeight: "70vh" }}
-        >
-          <p>
-            <strong>Descripción:</strong>
-          </p>
-          <p className="text-muted">{item?.description}</p>
+      <Modal.Body className="container-fluid p-2">
+        <div className="row">
+          <div className=" col-md-12 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+            <img
+              src={item?.image}
+              className="img-fluid rounded"
+              style={{ width: "100%", height: "200px", objectFit: "cover" }}
+              alt={item?.name}
+            />
+          </div>
+          <div
+            className="col-12 p-3 text-center overflow-y-auto"
+            style={{ maxHeight: "70vh" }}
+          >
+            <p>
+              <strong>Descripción:</strong>
+            </p>
+            <p className="text-muted">{item?.description}</p>
 
-          {Array.isArray(item?.options) && item.options.length > 0 ? (
-            <div>
-              <p>
-                <strong>Adiciones</strong>
-              </p>
-              {item.options.map((opt) => (
-                <Button
-                  key={opt.id}
-                  onClick={() => toggleOption(opt)}
-                  variant={
-                    selectedOptions.some((o) => o.id === opt.id)
-                      ? "primary"
-                      : "outline-secondary"
-                  }
-                  className="m-1"
-                >
-                  {opt.image_url && (
-                    <img
-                      src={opt.image_url}
-                      alt={opt.name}
-                      style={{ width: "30px" }}
-                    />
-                  )}
-                  {opt.name}
-                </Button>
-              ))}
-            </div>
-          ) : (
-            <p className="text-muted">Sin opciones</p>
-          )}
+            {Array.isArray(item?.options) && item.options.length > 0 ? (
+              <>
+                <p>
+                  <strong>Adiciones</strong>
+                </p>
+                <div className="d-flex flex-wrap justify-content-center">
+                  {item.options.map((opt) => (
+                    <Button
+                      key={opt.id}
+                      onClick={() => toggleOption(opt)}
+                      variant={
+                        selectedOptions.some((o) => o.id === opt.id)
+                          ? "primary"
+                          : "outline-secondary"
+                      }
+                      className="m-1 d-flex align-items-center"
+                    >
+                      {opt.image_url && (
+                        <img
+                          src={opt.image_url}
+                          alt={opt.name}
+                          className="me-2"
+                          style={{ width: "30px" }}
+                        />
+                      )}
+                      {opt.name}
+                    </Button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="text-muted">Sin opciones</p>
+            )}
 
-          <Row className="d-flex justify-content-center">
-            <Button variant="danger" className="col-5 m-1">
-              $1000 Personal
-            </Button>
-            <Button variant="danger" className="col-5 m-1">
-              $1000 Pareja
-            </Button>
-          </Row>
-          <Row className="d-flex justify-content-center">
-            <Button variant="danger" className="col-5 m-1">
-              $1000 Mediana
-            </Button>
-            <Button variant="danger" className="col-5 m-1">
-              $1000 Familiar
-            </Button>
-          </Row>
+            <Row className="d-flex justify-content-center">
+              <Button variant="danger" className="col-5 m-1">
+                $1000 Personal
+              </Button>
+              <Button variant="danger" className="col-5 m-1">
+                $1000 Pareja
+              </Button>
+            </Row>
+            <Row className="d-flex justify-content-center">
+              <Button variant="danger" className="col-5 m-1">
+                $1000 Mediana
+              </Button>
+              <Button variant="danger" className="col-5 m-1">
+                $1000 Familiar
+              </Button>
+            </Row>
+          </div>
         </div>
       </Modal.Body>
+
       <Modal.Footer className="d-flex justify-content-between align-items-center">
         {item?.is_promotion ? (
           <div className="d-flex align-items-center gap-3">
-            <s className="alert alert-info text-dark my-auto">
-              $ {item?.price * quantity}
-            </s>
-            <p className="alert alert-info text-danger fs-5 my-auto">
+            <s className="text-dark my-auto">$ {item?.price * quantity}</s>
+            <p className="text-danger fs-5 my-auto">
               $ {(item?.price * 0.75 * quantity).toLocaleString("es-CO")}
             </p>
           </div>

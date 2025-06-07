@@ -1,11 +1,15 @@
 .footer {
   background-color: #a6adb4;
+  padding: 1rem 2rem;
 }
 
 .footer-container {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  padding: 0.5rem 3rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
 }
 
 .footer-title {
@@ -19,4 +23,19 @@
 
 .footer-text {
   margin: 0 0.5rem;
+}
+
+/* MEDIA QUERY: para pantallas pequeñas */
+@media (max-width: 576px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .info-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
 }
