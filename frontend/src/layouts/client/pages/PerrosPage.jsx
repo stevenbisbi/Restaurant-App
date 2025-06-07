@@ -1,6 +1,6 @@
 import { Spinner, Alert } from "react-bootstrap";
 import { MenuCard } from "../components/MenuCard";
-import { ModalMenuCard } from "../components/ModalMenuCard";
+import { ModalMenuCard } from "../components/modal/ModalMenuCard";
 import { useState } from "react";
 import { useFetch } from "../../../hooks/useFetch";
 import { getAllMenuItems } from "../../../api/menu/menuItemApi";
@@ -33,7 +33,6 @@ export function PerrosPage() {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-4">
         <h1 className="text-center mb-4">
           <i>¡El clásico que nunca falla! 🌭💥</i>

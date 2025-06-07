@@ -21,6 +21,7 @@ export function TableAdminForm() {
 
   useEffect(() => {
     getAllRestaurants().then((res) => setRestaurants(res.data));
+    console.log("Restaurants:", restaurants);
     if (isEdit) {
       getTable(id).then((res) => setFormData(res.data));
     }
@@ -107,17 +108,20 @@ export function TableAdminForm() {
 
             <div className="mb-3">
               <label htmlFor="location" className="form-label">
-                Ubicación (opcional):
+                URL Código QR (opcional):
               </label>
-              <input
+              <select
                 id="location"
-                className="form-control"
-                type="text"
+                className="form-select"
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                placeholder="Ej. Zona terraza"
-              />
+                placeholder="Selecciona una ubicacion"
+              >
+                <option value="Primer piso">Primer piso</option>
+                <option value="Segundo piso">Segundo piso</option>
+                <option value="Terraza">Terraza</option>
+              </select>
             </div>
 
             <div className="mb-3">
@@ -137,22 +141,20 @@ export function TableAdminForm() {
                 <option value="Reserved">Reservada</option>
               </select>
             </div>
-
             <div className="mb-3">
               <label htmlFor="qr_code_url" className="form-label">
-                URL Código QR (opcional):
+                Código QR:
               </label>
               <input
                 id="qr_code_url"
                 className="form-control"
-                type="url"
+                type="text"
                 name="qr_code_url"
                 value={formData.qr_code_url}
                 onChange={handleChange}
-                placeholder="https://"
+                placeholder="Ej. https://example.com/qr-code"
               />
             </div>
-
             <div className="text-center">
               <button type="submit" className="btn btn-success">
                 {isEdit ? "Actualizar" : "Crear"}

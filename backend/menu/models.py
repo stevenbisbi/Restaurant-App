@@ -18,22 +18,21 @@ class Menu(models.Model):
 
 class MenuItem(models.Model):
   CATEGORY_CHOICES = [
-    ("entradas", "Entradas"),
-    ("plato_fuerte", "Plato Fuerte"),
-    ("postres", "Postres"),
-    ("bebidas", "Bebidas"),
-    ("combo", "Combo"),
+    ("Entradas", "Entradas"),
+    ("Plato Fuerte", "Plato Fuerte"),
+    ("Postres", "Postres"),
+    ("Bebidas", "Bebidas"),
+    ("Combo", "Combo"),
     ("Salchipapas", "Salchipapas"),   
     ("Hamburguesas", "Hamburguesas"),   
     ("Emparedados", "Emparedados"),   
-    ("Perros", "Perros"),   
-    ("Bebidas", "Bebidas"),   
+    ("Perros", "Perros"),      
   ]
   
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
   name = models.CharField(max_length=100)
-  description = models.TextField(blank=True, null=True)
+  description = models.CharField(blank=False, null=False, max_length=200, default="Sin descripción")
   price = models.IntegerField()
   image = models.ImageField(upload_to='menu_images/', blank=True, null=True)
   is_vegetarian = models.BooleanField(default=False)

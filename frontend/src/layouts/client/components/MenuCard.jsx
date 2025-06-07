@@ -1,34 +1,28 @@
 import { Card } from "react-bootstrap";
-import { useFetch } from "../../../hooks/useFetch";
-import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuCard({ item, onSelect }) {
-  const { data, loading, error } = useFetch(getAllMenuItems);
-
-  if (loading) return <p>Cargando menús...</p>;
-  if (error) return <p>Error cargando menús 😢</p>;
   return (
     <Card
-      className="p-2 mx-2 position-relative"
-      style={{ cursor: "pointer", width: "16rem" }}
+      className="h-100 shadow-sm "
+      style={{ cursor: "pointer" }}
       onClick={() => onSelect(item)}
     >
       {item.is_promotion ? (
         <span
-          style={{ height: "2rem" }}
+          style={{ height: "3rem" }}
           className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-danger d-flex align-items-center"
         >
-          <span className="bg-light rounded-circle py-1 me-1">💯 </span>
-          ¡Promoción!
+          <span className="bg-light rounded-circle py-1 me-1 fs-5">💯 </span>
+          <span className="fs-5">¡Promoción!</span>
         </span>
       ) : (
         item.is_featured && (
           <span
-            style={{ height: "2rem" }}
+            style={{ height: "3rem" }}
             className="position-absolute top-1 end-0 translate-middle-y badge rounded-pill bg-warning text-dark d-flex align-items-center"
           >
-            <span className="bg-light rounded-circle py-1 me-1">⭐ </span>{" "}
-            ¡Destacado!
+            <span className="rounded-circle py-1 me-1 fs-5">⭐ </span>{" "}
+            <span className="fs-5">¡Destacado!</span>
           </span>
         )
       )}
@@ -39,11 +33,28 @@ export function MenuCard({ item, onSelect }) {
         style={{ width: "100%", height: "200px", objectFit: "cover" }}
       />
       <Card.Body>
-        <Card.Title>{item.name}</Card.Title>
-        <Card.Text>
-          <strong>Precio:</strong> $ {item.price.toLocaleString("es-CO")}
-          <br />
+        <Card.Title className="w-100 text-center">{item.name}</Card.Title>
+        <Card.Text className="text-center">
+          <span className="text-secondary">{item.description}</span>
         </Card.Text>
+        <br />
+        <div className="d-flex justify-content-center align-items-center">
+          {item.is_promotion ? (
+            <div className="d-flex align-items-center gap-2">
+              <s>
+                <p>$ {item.price.toLocaleString("es-CO")}</p>
+              </s>
+              <br />
+              <div className="text-danger fs-5">
+                <h3>$ {(item.price * 0.75).toLocaleString("es-CO")}</h3>
+              </div>
+            </div>
+          ) : (
+            <h3>${item.price.toLocaleString("es-CO")}</h3>
+          )}
+        </div>
+
+        <br />
       </Card.Body>
     </Card>
   );

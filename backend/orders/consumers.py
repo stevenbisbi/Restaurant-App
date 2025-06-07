@@ -10,9 +10,15 @@ class OrderConsumer(AsyncWebsocketConsumer):
     self.order_id = self.scope['url_route']['kwargs']['order_id']
     self.room_group_name = f'order_{self.order_id}'
 
+    try:
+        await self.get_order(self.order_id)
+    except Order.DoesNotExist:
+        await self.close()
+        return
+
     await self.channel_layer.group_add(
-      self.room_group_name,
-      self.channel_name
+        self.room_group_name,
+        self.channel_name
     )
 
     await self.accept()
@@ -28,27 +34,35 @@ class OrderConsumer(AsyncWebsocketConsumer):
     new_status = data.get('status')
 
     if new_status:
-      # Actualizar el estado de la orden
-      await self.update_order_status(self.order_id, new_status)
+        try:
+            await self.update_order_status(self.order_id, new_status)
+        except Exception as e:
+            await self.send(text_data=json.dumps({
+                'error': str(e)
+            }))
+            return
 
-      # Notificar a todos los clientes conectados a este canal
-      await self.channel_layer.group_send(
-        self.room_group_name,
-        {
-          'type': 'send_order_status',
-        }
-      )
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'send_order_status',
+            }
+        )
+
+
+  from asgiref.sync import sync_to_async
 
   async def send_order_status(self, event):
     order = await self.get_order(self.order_id)
-    order_serializer = OrderSerializer(order)
 
-    # Imprimir en consola para verificar
-    print(f"Estado actualizado de la orden {self.order_id}: {order_serializer.data['status']}")
+    # Serializar en un hilo separado para no bloquear async
+    status = await sync_to_async(lambda: OrderSerializer(order).data['status'])()
+
+    print(f"Estado actualizado de la orden {self.order_id}: {status}")
 
     await self.send(text_data=json.dumps({
-      'status': order_serializer.data['status'],
-      'message': 'Order status updated!'
+        'status': status,
+        'message': 'Order status updated!'
     }, cls=DjangoJSONEncoder))
 
   @sync_to_async
@@ -56,14 +70,13 @@ class OrderConsumer(AsyncWebsocketConsumer):
     return Order.objects.get(id=order_id)
 
   @sync_to_async
-  def update_order_status(self, order_id, status_name):
-    from .models import OrderStatus  # Asegúrate de importar el modelo correcto
+  def update_order_status(self, order_id, new_status):
+      order = Order.objects.get(id=order_id)
 
-    order = Order.objects.get(id=order_id)
-    try:
-      status_instance = OrderStatus.objects.get(name=status_name)
-    except OrderStatus.DoesNotExist:
-      raise ValueError(f"No existe un estado con el nombre '{status_name}'")
+      # Validar que el nuevo estado es válido
+      valid_statuses = dict(Order.STATUS_CHOICES).keys()
+      if new_status not in valid_statuses:
+          raise ValueError(f"Estado inválido: '{new_status}'")
 
-    order.status = status_instance
-    order.save()
+      order.status = new_status
+      order.save()

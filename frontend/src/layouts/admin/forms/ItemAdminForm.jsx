@@ -26,8 +26,6 @@ export function ItemAdminForm() {
   });
 
   useEffect(() => {
-    console.log("Categorías:", categories);
-
     if (isEdit) {
       getMenuItem(id).then((res) => setFormData(res.data));
     }
@@ -54,7 +52,7 @@ export function ItemAdminForm() {
     data.append("is_vegetarian", formData.is_vegetarian);
     data.append("is_available", formData.is_available);
 
-    if (formData.image) {
+    if (formData.image && formData.image instanceof File) {
       data.append("image", formData.image); // Archivo image
     }
 
@@ -165,7 +163,7 @@ export function ItemAdminForm() {
                 className="form-control"
                 type="file"
                 name="image"
-                accept="image/*"
+                accept=".jpg,.jpeg,.png,.gif,.bmp,.webp"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -193,58 +191,61 @@ export function ItemAdminForm() {
               onChange={handleChange}
               placeholder="Descripción"
             />
-
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_available"
-                id="is_available"
-                checked={formData.is_available}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_available">
-                Activo
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_featured"
-                id="is_featured"
-                checked={formData.is_featured}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_featured">
-                Destacado
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_promotion"
-                id="is_promotion"
-                checked={formData.is_promotion}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_promotion">
-                Promocionado
-              </label>
-            </div>
-            <div className="form-check mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="is_vegetarian"
-                id="is_vegetarian"
-                checked={formData.is_vegetarian}
-                onChange={handleChange}
-              />
-              <label className="form-check-label" htmlFor="is_vegetarian">
-                Vegetariano
-              </label>
+            <div className="d-flex justify-content-between m-3">
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_available"
+                  id="is_available"
+                  checked={formData.is_available}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="is_available">
+                  Activo
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_vegetarian"
+                  id="is_vegetarian"
+                  checked={formData.is_vegetarian}
+                  onChange={handleChange}
+                />
+                <label className="form-check-label" htmlFor="is_vegetarian">
+                  Vegetariano
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_featured"
+                  id="is_featured"
+                  checked={formData.is_featured}
+                  onChange={handleChange}
+                  disabled={!formData.is_available}
+                />
+                <label className="form-check-label" htmlFor="is_featured">
+                  Destacado
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  name="is_promotion"
+                  id="is_promotion"
+                  checked={formData.is_promotion}
+                  onChange={handleChange}
+                  disabled={!formData.is_available}
+                />
+                <label className="form-check-label" htmlFor="is_promotion">
+                  Promocionado
+                </label>
+              </div>
             </div>
 
             <div className="text-center">

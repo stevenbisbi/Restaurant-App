@@ -15,9 +15,9 @@ const ClientRoutes = () => {
   return (
     <Routes>
       <Route path="/register" element={<RegisterFormPage />} />
+      <Route path="/login" element={<LoginFormPage />} />
+      <Route path="/" element={<HomePage />} />
       <Route element={<ClientLayout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginFormPage />} />
         <Route path="/reservar" element={<ReservarPage />} />
         <Route path="/salchipapa" element={<SalchipapaPage />} />
         <Route path="/hamburguesa" element={<HamburguesaPage />} />

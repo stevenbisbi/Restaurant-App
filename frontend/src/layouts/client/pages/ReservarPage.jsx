@@ -124,7 +124,6 @@ const realizarReserva = async (peopleCount) => {
 
   return (
     <>
-      <Navigation />
       <div className="container mt-5">
         <h2 className="text-center mb-4">Selecciona tu mesa</h2>
         <div className="mesas-container">

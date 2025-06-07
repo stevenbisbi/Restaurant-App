@@ -1,5 +1,5 @@
 import { HeaderAdmin } from "./HeaderAdmin";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Spinner, Alert } from "react-bootstrap";
 import { useFetch } from "../../../hooks/useFetch";
 import { getAllOrders } from "../../../api/orderApi";
@@ -7,19 +7,20 @@ import { deleteOrder } from "../../../api/orderApi";
 import { ModalDelete } from "../components/ModalDelete";
 
 export function OrderAdminPage() {
-  const { data, loading, error, triggerReload } = useFetch(getAllOrders);
-  console.log("data?", data);
+  const orderFetch = useFetch(getAllOrders);
+  console.log("data?", orderFetch.data);
 
+  const navigate = useNavigate();
   const handleConfirmDelete = async () => {
-    if (selectedItemId) {
-      await deleteOrder(selectedItemId);
-      setSelectedItemId(null);
-      triggerReload();
+    if (orderFetch.selectedDataId) {
+      await deleteOrder(orderFetch.selectedDataId);
+      orderFetch.setSelectedDataId(null);
+      orderFetch.triggerReload();
       navigate("/admin/items");
     }
   };
 
-  if (loading)
+  if (orderFetch.loading)
     return (
       <div className="text-center m-5">
         <Spinner animation="border" role="status">
@@ -27,10 +28,10 @@ export function OrderAdminPage() {
         </Spinner>
       </div>
     );
-  if (error)
+  if (orderFetch.error)
     return (
       <div className="text-center m-5">
-        <Alert variant="danger">{error}</Alert>
+        <Alert variant="danger">{orderFetch.error}</Alert>
       </div>
     );
 

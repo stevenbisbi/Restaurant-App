@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, Button } from "react-bootstrap";
+import { Nav, Navbar, Button } from "react-bootstrap";
 import { useState } from "react";
 import "./../../../styles/Navigation.css";
 import { Avatar } from "../components/Avatar";
@@ -17,8 +17,12 @@ export function Navigation() {
   const name = useSelector((state) => state.auth.firstName); // Obtén del estado
   const cart = useSelector(selectCartItems);
   const [showCart, setShowCart] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleClose = () => setShowCart(false);
+  const handleClose = () => {
+    setShowCart(false);
+    setShowModal(false);
+  };
   const handleShow = () => setShowCart(true);
   const removeFromCart = (item) => {
     dispatch(removeItemFromCart({ itemId: item.id })); // Pasa el ID del item
@@ -33,46 +37,39 @@ export function Navigation() {
         fixed="top"
         className="shadow-sm"
       >
-        <Container>
+        <Navbar.Brand as={Link} to="/" className=" fs-5 ms-5">
+          Parcha2
+        </Navbar.Brand>
 
-          
-          <Link
-            to="/"
-            className="text-danger text-decoration-none fs-5 mx-5"
-          >
-            Home
-          </Link>
-          
-          <Link
-            to={token ? "/reservar" : "/login"}
-            className="text-danger text-decoration-none fs-5 mx-5"
-          >
-            Reservar
-          </Link>
-
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mx-auto d-flex justify-content-center align-items-center">
-              <Nav.Link
-                href="/salchipapa"
-                className="px-5 navigation-link fs-5"
-              >
-                Salchipapa
-              </Nav.Link>
-              <Nav.Link href="hamburguesa" className="px-5 navigation-link fs-5">
-                Hamburguesa
-              </Nav.Link>
-              <Nav.Link href="emparedados" className="px-5 navigation-link fs-5">
-                Emparedado
-              </Nav.Link>
-              <Nav.Link href="perros" className="px-5 navigation-link fs-5">
-                Perros
-              </Nav.Link>
-              <Nav.Link href="bebidas" className="px-5 navigation-link fs-5">
-                Bebidas
-              </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
+        <Link
+          to={token ? "/reservar" : "/login"}
+          className="text-warning text-decoration-none fs-5 mx-5"
+        >
+          Reservar
+        </Link>
+        <Navbar.Toggle
+          className="mx-5 w-100"
+          aria-controls="basic-navbar-nav"
+        />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mx-auto">
+            <Nav.Link href="/salchipapa" className="px-5 navigation-link fs-5">
+              Salchipapa
+            </Nav.Link>
+            <Nav.Link href="hamburguesa" className="px-5 navigation-link fs-5">
+              Hamburguesa
+            </Nav.Link>
+            <Nav.Link href="emparedados" className="px-5 navigation-link fs-5">
+              Emparedado
+            </Nav.Link>
+            <Nav.Link href="perros" className="px-5 navigation-link fs-5">
+              Perros
+            </Nav.Link>
+            <Nav.Link href="bebidas" className="px-5 navigation-link fs-5">
+              Bebidas
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
 
         {token ? (
           <div className="user-info d-flex align-items-center px-5">

@@ -5,6 +5,7 @@ export function useFetch(fetchFunction) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reload, setReload] = useState(false); // Nuevo estado para recargas
+  const [selectedDataId, setSelectedDataId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,5 +24,12 @@ export function useFetch(fetchFunction) {
   // Función para forzar recarga
   const triggerReload = () => setReload((prev) => !prev);
 
-  return { data, loading, error, triggerReload };
+  return {
+    data,
+    loading,
+    error,
+    triggerReload,
+    selectedDataId,
+    setSelectedDataId,
+  };
 }

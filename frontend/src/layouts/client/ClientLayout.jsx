@@ -1,11 +1,10 @@
 // src/layouts/client/ClientLayout.jsx
 import { Outlet } from "react-router-dom";
-import { Footer } from "../../common/Footer";
-
+import { Navigation } from "./components/Navigation";
 const ClientLayout = () => (
   <>
+    <Navigation />
     <Outlet />
-    <Footer />
   </>
 );
 
