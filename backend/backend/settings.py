@@ -216,7 +216,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
         #"BACKEND": "channels_redis.core.RedisChannelLayer",
-       # "CONFIG": {
+        # "CONFIG": {
 #"hosts": [("127.0.0.1", 6379)],  # Si usas Docker, usa el nombre del servicio
         #},
     },
