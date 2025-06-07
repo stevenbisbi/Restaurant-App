@@ -1,16 +1,17 @@
-// components/OrderCard.jsx
+import { Card, Button } from "react-bootstrap";
 import { useOrderDetail } from "../../../hooks/useOrderDetail";
 
-export function OrderCard({ orderId }) {
-  const { order, loading, error, changeStatus, socketReady } =
-    useOrderDetail(orderId);
+export function OrderCard({ orderObject }) {
+  const { order, loading, error, changeStatus, socketReady, removeOrder } =
+    useOrderDetail(orderObject.id);
 
-  if (loading) return <p>Cargando orden…</p>;
+  console.log("order", orderObject);
+  if (loading || !order) return <p>Cargando orden…</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="card m-3 p-3">
-      <h5>Orden #{order.id}</h5>
+    <Card className="m-1 p-3 h-100 shadow-sm">
+      <h5>Orden #{orderObject.id}</h5>
       <p>
         <strong>Estado:</strong> {order.status}
       </p>
@@ -26,26 +27,42 @@ export function OrderCard({ orderId }) {
           : "🟡 Conectando vía WebSocket…"}
       </p>
 
-      <div className="btn-group mt-2">
-        <button
-          onClick={() => changeStatus("Preparando")}
-          className="btn btn-primary"
-        >
-          Preparando
-        </button>
-        <button
-          onClick={() => changeStatus("Listo para Entregar")}
-          className="btn btn-success"
-        >
-          Listo para Entregar
-        </button>
-        <button
-          onClick={() => sendStatus("En espera")}
-          className="btn btn-danger"
-        >
-          En espera
-        </button>
+      <div className="col">
+        <div className="d-flex justify-content-between">
+          <Button
+            variant={
+              order.status === "Preparando" ? "primary" : "outline-primary"
+            }
+            onClick={() => changeStatus("Preparando")}
+          >
+            Preparando
+          </Button>
+          <Button
+            variant={order.status === "Lista" ? "success" : "outline-success"}
+            onClick={() => changeStatus("Lista")}
+          >
+            Listo
+          </Button>
+          <Button
+            variant={
+              order.status === "En espera" ? "secondary" : "outline-secondary"
+            }
+            onClick={() => changeStatus("En espera")}
+          >
+            En espera
+          </Button>
+        </div>
+
+        <div className="d-flex justify-content-center">
+          <Button
+            variant="danger"
+            onClick={removeOrder}
+            className="mt-2 text-center"
+          >
+            Finalizar
+          </Button>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 }

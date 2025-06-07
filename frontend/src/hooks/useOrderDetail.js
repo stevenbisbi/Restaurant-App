@@ -1,36 +1,37 @@
-// src/hooks/useOrderDetails.js
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useFetch } from "./useFetch";
+import { getOrder, deleteOrder } from "../api/orderApi";
 import { useOrderSocket } from "./useOrderSocket";
-import axiosClient from "../api/axiosClient";
 
 export function useOrderDetail(orderId) {
   const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  const fetchOrder = useCallback(() => getOrder(orderId), [orderId]);
+
+  const { data, loading, error } = useFetch(fetchOrder); // sin [fetchOrder] en dependencia
 
   const { socketReady, sendStatus } = useOrderSocket(orderId, (newStatus) => {
     setOrder((prev) => ({ ...prev, status: newStatus }));
   });
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosClient.get(`/orders/order/${orderId}/`);
-        setOrder(response.data);
-      } catch (err) {
-        console.error("Error al obtener orden:", err);
-        setError("No se pudo cargar la información de la orden.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOrder();
-  }, [orderId]);
+    if (data) {
+      setOrder(data);
+    }
+  }, [data]);
 
   const changeStatus = (newStatus) => {
     sendStatus(newStatus);
-    setOrder((prev) => ({ ...prev, status: newStatus })); // Optimista
+    setOrder((prev) => ({ ...prev, status: newStatus }));
+  };
+
+  const removeOrder = async () => {
+    try {
+      await deleteOrder(orderId);
+      setOrder(null);
+    } catch (err) {
+      console.error("Error al eliminar la orden:", err);
+    }
   };
 
   return {
@@ -39,5 +40,6 @@ export function useOrderDetail(orderId) {
     error,
     socketReady,
     changeStatus,
+    removeOrder,
   };
 }

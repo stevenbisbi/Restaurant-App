@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export function useFetch(fetchFunction) {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [reload, setReload] = useState(false); // Nuevo estado para recargas
