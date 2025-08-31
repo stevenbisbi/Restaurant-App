@@ -27,8 +27,8 @@ export function Navigation() {
     <>
       <Navbar expand="lg" bg="light" variant="light" className="shadow-sm">
         <Container fluid className="px-3 px-md-5">
-          <Navbar.Brand as={Link} to="/" className="fs-5">
-            Parcha2
+          <Navbar.Brand as={Link} to="/" className="text-danger fs-5">
+            <strong>¡Parcha2!</strong>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -78,9 +78,18 @@ export function Navigation() {
                   <Avatar name={name || "Usuario"} lastName={lastName} />
                 </Button>
               ) : (
-                <Nav.Link as={Link} to="/login" className="text-danger fs-5">
-                  Inicia sesión
-                </Nav.Link>
+                <>
+                  <Nav.Link as={Link} to="/login" className="text-danger fs-5">
+                    Inicia sesión
+                  </Nav.Link>
+                  <Nav.Link
+                    as={Link}
+                    to="/register"
+                    className="text-danger fs-5"
+                  >
+                    Registrate
+                  </Nav.Link>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>

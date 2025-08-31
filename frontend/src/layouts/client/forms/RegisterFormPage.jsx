@@ -52,8 +52,9 @@ export function RegisterFormPage() {
           phone_number,
           password,
         });
-
-        toast.success("Usuario registrado exitosamente");
+        if (response.status === 201) {
+          toast.success("Usuario registrado exitosamente");
+        }
 
         // Login automático después del registro
         try {
