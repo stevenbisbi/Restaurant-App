@@ -29,7 +29,7 @@ export const LoginFormPage = () => {
         const { token } = response.data;
         sessionStorage.setItem("username", username);
         toast.success(`¡Bienvenido ${username}!`);
-        
+
         // Si está marcado el "Recuérdame", guarda en localStorage
         localStorage.setItem("username", username);
         if (data.rememberMe) {

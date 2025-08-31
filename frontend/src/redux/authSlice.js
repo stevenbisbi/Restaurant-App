@@ -5,10 +5,14 @@ const tokenFromStorage =
   localStorage.getItem("token") || sessionStorage.getItem("token") || null;
 
 const firstNameFromStorage =
-  localStorage.getItem("firstName") || sessionStorage.getItem("firstName") || null;
+  localStorage.getItem("firstName") ||
+  sessionStorage.getItem("firstName") ||
+  null;
 
 const customerFromStorage =
-  localStorage.getItem("customer") || sessionStorage.getItem("customer") || null;
+  localStorage.getItem("customer") ||
+  sessionStorage.getItem("customer") ||
+  null;
 
 // 🔽 Estado inicial corregido
 const initialState = {

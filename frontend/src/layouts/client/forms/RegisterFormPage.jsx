@@ -59,23 +59,15 @@ export function RegisterFormPage() {
         try {
           const loginResponse = await loginUser({ email, password });
           if (loginResponse.status === 200) {
-            const { token, user } = loginResponse.data;
+            const { token, user, customer } = loginResponse.data;
 
             dispatch(
               setCredentials({
                 token,
-                user: {
-                  id: user.id,
-                  firstName: user.first_name,
-                  lastName: user.last_name,
-                  email: user.email,
-                  role: user.role,
-                },
+                firstName: user.first_name,
+                customer,
               })
             );
-
-            sessionStorage.setItem("token", token);
-            sessionStorage.setItem("username", user.first_name);
 
             navigate("/home");
           } else {

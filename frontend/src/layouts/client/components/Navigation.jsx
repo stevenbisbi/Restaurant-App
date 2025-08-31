@@ -13,6 +13,7 @@ export function Navigation() {
 
   const token = useSelector((state) => state.auth.token);
   const name = useSelector((state) => state.auth.firstName);
+  const lastName = useSelector((state) => state.auth.lastName);
   const cart = useSelector(selectCartItems);
   const [showCart, setShowCart] = useState(false);
 
@@ -74,7 +75,7 @@ export function Navigation() {
               </Nav.Link>
               {token ? (
                 <Button variant="light" onClick={handleShow}>
-                  <Avatar name={name || "Usuario"} />
+                  <Avatar name={name || "Usuario"} lastName={lastName} />
                 </Button>
               ) : (
                 <Nav.Link as={Link} to="/login" className="text-danger fs-5">
