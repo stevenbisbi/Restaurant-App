@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { ReservaModal } from "../components/ReservaModal"; // 👈 nuevo
+import { ReservaModal } from "../components/ReservaModal";
 import "../../../styles/Reservar.css";
 import {
   getAllTables,
@@ -13,11 +13,18 @@ import {
   deleteReservation,
   updateReservation,
 } from "../../../api/reservationApi";
+import { TableIcon } from "./TableIcon";
 
 export function ReservarPage() {
   const token = useSelector((state) => state.auth.token);
   const customerId = useSelector((state) => state.auth.customer?.id);
   const [mesas, setMesas] = useState([]);
+  const [location, setLocation] = useState("Primer piso");
+
+  const tablesFilteres = mesas.filter((table) =>
+    location ? table.location === location : true
+  );
+
   const [horarios, setHorarios] = useState({ open: "", close: "" });
 
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
@@ -35,9 +42,9 @@ export function ReservarPage() {
 
   if (!token) return <Navigate to="/login" />;
 
-  const handleMesaClick = (mesa) => {
-    if (!mesa.is_reserved) {
-      setMesaSeleccionada(mesa);
+  const handleMesaClick = (table) => {
+    if (!table.is_reserved) {
+      setMesaSeleccionada(table);
       setShowModal(true);
     }
   };
@@ -51,7 +58,7 @@ export function ReservarPage() {
     // Validar capacidad máxima
     if (peopleCount > mesaSeleccionada.capacity) {
       toast.error(
-        `Esta mesa solo tiene capacidad para ${mesaSeleccionada.capacity} personas`
+        `Esta table solo tiene capacidad para ${mesaSeleccionada.capacity} personas`
       );
       return;
     }
@@ -90,7 +97,7 @@ export function ReservarPage() {
       setShowModal(false);
       setMesaSeleccionada(null);
 
-      // 3. Actualizar solo la mesa afectada en lugar de todas
+      // 3. Actualizar solo la table afectada en lugar de todas
       setMesas((prev) =>
         prev.map((m) =>
           m.id === mesaSeleccionada.id
@@ -117,7 +124,7 @@ export function ReservarPage() {
             : m
         )
       );
-      toast.error("Error al reservar mesa");
+      toast.error("Error al reservar table");
       console.error("Error detallado:", {
         message: error.message,
         response: error.response?.data,
@@ -142,21 +149,38 @@ export function ReservarPage() {
 
   return (
     <>
-      <div className="container mt-5">
-        <h2 className="text-center mb-4">Selecciona tu mesa</h2>
-        <div className="mesas-container">
-          {mesas.map((mesa) => (
-            <div
-              key={mesa.id}
-              className={`mesa-cuadro ${
-                mesa.is_reserved ? "mesa-reservada" : "mesa-libre"
-              }`}
-              onClick={() => handleMesaClick(mesa)}
-            >
-              <div>T-{mesa.number}</div>
-              <div style={{ fontSize: "0.75rem" }}>
-                {mesa.is_reserved ? "Reservada" : "Disponible"}
+      <div className="container mt-5 bg-light p-4 rounded">
+        <h2 className="text-center mb-4">Selecciona tu table</h2>
+        <div className="text-center mb-3">
+          <label htmlFor="location" className="form-label">
+            Ubicacion:
+          </label>
+          <select
+            id="location"
+            className="form-select w-auto mx-auto"
+            name="location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Selecciona una ubicacion"
+          >
+            <option value="">--</option>
+            <option value="Primer piso">Primer piso</option>
+            <option value="Segundo piso">Segundo piso</option>
+            <option value="Terraza">Terraza</option>
+          </select>
+        </div>
+        <div className="d-flex justify-content-center">
+          {tablesFilteres.map((table) => (
+            <div key={table.id} className="table-wrapper">
+              <div
+                className={`table-cuadro ${
+                  table.status === "Reserved" ? "reserved-table" : "free-table"
+                }`}
+                onClick={() => handleMesaClick(table)}
+              >
+                <TableIcon />
               </div>
+              <h4 className="table-numero">T-{table.number}</h4>
             </div>
           ))}
         </div>
@@ -164,7 +188,7 @@ export function ReservarPage() {
 
       {showModal && (
         <ReservaModal
-          mesa={mesaSeleccionada}
+          table={mesaSeleccionada}
           onClose={() => setShowModal(false)}
           onReservar={realizarReserva}
         />

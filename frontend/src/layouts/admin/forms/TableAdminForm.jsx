@@ -118,6 +118,7 @@ export function TableAdminForm() {
                 onChange={handleChange}
                 placeholder="Selecciona una ubicacion"
               >
+                <option value="">---</option>
                 <option value="Primer piso">Primer piso</option>
                 <option value="Segundo piso">Segundo piso</option>
                 <option value="Terraza">Terraza</option>
