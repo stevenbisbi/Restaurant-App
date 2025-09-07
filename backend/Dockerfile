@@ -22,6 +22,13 @@ RUN poetry install --no-interaction --no-ansi
 # Copiar el resto del código
 COPY . .
 
+# Archivos estáticos
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
 CMD ["poetry", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+# Iniciar el servidor en producción con Daphne
+#CMD ["sh", "-c", "poetry run python manage.py migrate && python manage.py shell < create_super_user.py && daphne -b 0.0.0.0 -p 8000 backend.asgi:application"]
