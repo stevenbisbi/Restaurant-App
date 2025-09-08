@@ -7,6 +7,7 @@ import {
   getAllTables,
   getRestaurantHours,
   createReservation,
+  getStatus,
 } from "../../../api/reservationApi";
 import toast from "react-hot-toast";
 import {
@@ -18,20 +19,20 @@ import { TableIcon } from "./TableIcon";
 export function ReservarPage() {
   const token = useSelector((state) => state.auth.token);
   const customerId = useSelector((state) => state.auth.customer?.id);
-  const [mesas, setMesas] = useState([]);
+  const [tables, setTables] = useState([]);
   const [location, setLocation] = useState("Primer piso");
 
-  const tablesFilteres = mesas.filter((table) =>
+  const tablesFiltered = tables.filter((table) =>
     location ? table.location === location : true
   );
 
   const [horarios, setHorarios] = useState({ open: "", close: "" });
-
+  const [defaultStatus, setDefaultStatus] = useState(null);
   const [mesaSeleccionada, setMesaSeleccionada] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    getAllTables().then((res) => setMesas(res.data || res));
+    getAllTables().then((res) => setTables(res.data || res));
     getRestaurantHours().then((res) =>
       setHorarios({
         open: res.data?.open_time || res.open_time,
@@ -40,10 +41,17 @@ export function ReservarPage() {
     );
   }, []);
 
+  useEffect(() => {
+    getStatus().then((res) => {
+      const reserved = res.data.find((s) => s.name === "Reserved");
+      setDefaultStatus(reserved?.id);
+    });
+  }, []);
+
   if (!token) return <Navigate to="/login" />;
 
-  const handleMesaClick = (table) => {
-    if (!table.is_reserved) {
+  const handleClick = (table) => {
+    if (table.status !== "Reserved") {
       setMesaSeleccionada(table);
       setShowModal(true);
     }
@@ -70,7 +78,7 @@ export function ReservarPage() {
 
     try {
       // 1. Actualización optimista
-      setMesas((prev) =>
+      setTables((prev) =>
         prev.map((m) =>
           m.id === mesaSeleccionada.id
             ? {
@@ -90,7 +98,7 @@ export function ReservarPage() {
         duration: 60,
         group_size: parseInt(peopleCount),
         special_requests: "",
-        status: "33c7bd16-ff5b-467b-a548-bdd0397b1caa",
+        status: defaultStatus, // Estado "Reserved"
       });
 
       toast.success("Mesa reservada exitosamente");
@@ -98,7 +106,7 @@ export function ReservarPage() {
       setMesaSeleccionada(null);
 
       // 3. Actualizar solo la table afectada en lugar de todas
-      setMesas((prev) =>
+      setTables((prev) =>
         prev.map((m) =>
           m.id === mesaSeleccionada.id
             ? {
@@ -113,7 +121,7 @@ export function ReservarPage() {
       );
     } catch (error) {
       // Revertir en caso de error
-      setMesas((prev) =>
+      setTables((prev) =>
         prev.map((m) =>
           m.id === mesaSeleccionada.id
             ? {
@@ -133,12 +141,12 @@ export function ReservarPage() {
     }
   };
 
-  const cancelarReserva = async (reservationId, mesaId) => {
+  const cancelReservation = async (reservationId, mesaId) => {
     try {
       await deleteReservation(reservationId);
       toast.success("Reserva cancelada");
 
-      setMesas((prev) =>
+      setTables((prev) =>
         prev.map((m) => (m.id === mesaId ? { ...m, is_reserved: false } : m))
       );
     } catch (error) {
@@ -170,13 +178,13 @@ export function ReservarPage() {
           </select>
         </div>
         <div className="d-flex justify-content-center">
-          {tablesFilteres.map((table) => (
+          {tablesFiltered.map((table) => (
             <div key={table.id} className="table-wrapper">
               <div
                 className={`table-cuadro ${
                   table.status === "Reserved" ? "reserved-table" : "free-table"
                 }`}
-                onClick={() => handleMesaClick(table)}
+                onClick={() => handleClick(table)}
               >
                 <TableIcon />
               </div>

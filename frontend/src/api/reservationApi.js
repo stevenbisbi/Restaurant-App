@@ -19,6 +19,8 @@ export const deleteReservation = (id) =>
 export const updateReservation = (id, reservation) =>
   reservationApi.put(`/reservations/reservation/${id}/`, reservation);
 
+export const getStatus = (id, status) =>
+  reservationApi.put(`/reservations/status/${id}/`, status);
 
 export const getAllTables = () => axiosClient.get("/tables/");
 export const getRestaurantHours = () => axiosClient.get("/restaurants/");

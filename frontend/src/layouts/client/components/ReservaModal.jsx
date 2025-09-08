@@ -3,14 +3,14 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export function ReservaModal({ mesa, onClose, onReservar }) {
+export function ReservaModal({ table, onClose, onReservar }) {
   const [people, setPeople] = useState(1);
   const [reservationDate, setReservationDate] = useState(new Date());
-  
-  // Capacidad por defecto 2 (según tu requerimiento) o la capacidad de la mesa
-  const maxCapacity = mesa?.capacity || 2;
 
-  if (!mesa) return null;
+  // Capacidad por defecto 2 (según tu requerimiento) o la capacidad de la table
+  const maxCapacity = table?.capacity || 2;
+
+  if (!table) return null;
 
   const handleReservar = () => {
     if (people > maxCapacity) {
@@ -27,7 +27,7 @@ export function ReservaModal({ mesa, onClose, onReservar }) {
       buttons.push(
         <button
           key={i}
-          className={`people-btn ${people === i ? 'active' : ''}`}
+          className={`people-btn ${people === i ? "active" : ""}`}
           onClick={() => setPeople(i)}
         >
           {i}
@@ -42,19 +42,19 @@ export function ReservaModal({ mesa, onClose, onReservar }) {
       <div className="modal-content">
         <h2 className="modal-title">Nueva Reserva</h2>
         <p className="modal-subtitle">
-          Mesa: T-{mesa.number} (Capacidad: {maxCapacity} personas)
+          Mesa: T-{table.number} (Capacidad: {maxCapacity} personas)
         </p>
 
         <div className="datetime-section">
           <h3 className="section-title">Fecha y Hora:</h3>
           <div className="datetime-display">
-            {reservationDate.toLocaleString('es-CO', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true
+            {reservationDate.toLocaleString("es-CO", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
             })}
           </div>
         </div>
@@ -73,10 +73,10 @@ export function ReservaModal({ mesa, onClose, onReservar }) {
         </div>
 
         <div className="people-section">
-          <h3 className="section-title">Total de Personas (Máx: {maxCapacity})</h3>
-          <div className="people-buttons">
-            {renderPeopleButtons()}
-          </div>
+          <h3 className="section-title">
+            Total de Personas (Máx: {maxCapacity})
+          </h3>
+          <div className="people-buttons">{renderPeopleButtons()}</div>
         </div>
 
         <div className="modal-actions">
