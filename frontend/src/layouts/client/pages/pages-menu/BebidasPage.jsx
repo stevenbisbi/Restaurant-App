@@ -1,10 +1,13 @@
-import { Spinner, Alert } from "react-bootstrap";
-import { MenuCard } from "../components/menu/MenuCard";
-import { ModalMenuCard } from "../components/menu/ModalMenuCard";
 import { useState } from "react";
-import { useFetch } from "../../../hooks/useFetch";
-import { getAllMenuItems } from "../../../api/menu/menuItemApi";
-import { Navigation } from "../components/Navigation";
+
+import { Spinner, Alert } from "react-bootstrap";
+
+import { getAllMenuItems } from "../../../../api/menu/menuItemApi";
+import { useFetch } from "../../../../hooks/useFetch";
+
+import { MenuCard } from "../../components/menu/MenuCard";
+import { ModalMenuCard } from "../../components/menu/ModalMenuCard";
+import { Navigation } from "../../components/Navigation";
 
 export function BebidasPage() {
   const [selectedItem, setSelectedItem] = useState(null);

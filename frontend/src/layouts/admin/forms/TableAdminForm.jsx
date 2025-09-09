@@ -167,3 +167,5 @@ export function TableAdminForm() {
     </div>
   );
 }
+
+export default TableAdminForm;

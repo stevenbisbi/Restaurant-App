@@ -1,12 +1,15 @@
-import { Spinner, Alert } from "react-bootstrap";
-import { MenuCard } from "../components/menu/MenuCard";
-import { ModalMenuCard } from "../components/menu/ModalMenuCard";
 import { useState } from "react";
-import { useFetch } from "../../../hooks/useFetch";
-import { getAllMenuItems } from "../../../api/menu/menuItemApi";
-import { Navigation } from "../components/Navigation";
 
-export function SalchipapaPage() {
+import { Spinner, Alert } from "react-bootstrap";
+
+import { getAllMenuItems } from "../../../../api/menu/menuItemApi";
+import { useFetch } from "../../../../hooks/useFetch";
+
+import { MenuCard } from "../../components/menu/MenuCard";
+import { ModalMenuCard } from "../../components/menu/ModalMenuCard";
+import { Navigation } from "../../components/Navigation";
+
+export function PerrosPage() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   const { data, loading, error } = useFetch(getAllMenuItems);
@@ -35,12 +38,12 @@ export function SalchipapaPage() {
     <>
       <div className="container mt-4">
         <h1 className="text-center mb-4">
-          <i>¡Pura sabrosura con papas! 🥔🔥</i>
+          <i>¡El clásico que nunca falla! 🌭💥</i>
         </h1>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           {data.map((item) => {
             if (!item.is_available) return null;
-            if (item.category !== "Salchipapas") return null; // Filter for Salchipapa category
+            if (item.category !== "Perros") return null; // Filter for Salchipapa category
             return (
               <MenuCard
                 key={item.iditem}

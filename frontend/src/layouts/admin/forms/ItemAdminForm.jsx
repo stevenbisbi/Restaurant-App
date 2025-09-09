@@ -259,3 +259,5 @@ export function ItemAdminForm() {
     </div>
   );
 }
+
+export default ItemAdminForm;

@@ -2,19 +2,24 @@
 import { Routes, Route } from "react-router-dom";
 import { SignUpAdmin } from "../layouts/admin/forms/SignUpAdmin";
 import { Aside } from "../layouts/admin/components/Aside";
-import { DashboardPage } from "../layouts/admin/pages/DashboardPage";
-import { TablesAdminPage } from "../layouts/admin/pages/TablesAdminPage";
-import { MenuAdminPage } from "../layouts/admin/pages/MenuAdminPage";
-import { ItemsAdminPage } from "../layouts/admin/pages/ItemsAdminPage";
-import { OrderAdminPage } from "../layouts/admin/pages/OrderAdminPage";
-import { UserAdminPage } from "../layouts/admin/pages/UserAdminPage";
-import { HistoryPayments } from "../layouts/admin/pages/HistoryPayments";
+import {
+  DashboardPage,
+  HistoryPayments,
+  ItemsAdminPage,
+  MenuAdminPage,
+  OrderAdminPage,
+  ReservationsAdminPage,
+  TablesAdminPage,
+  UserAdminPage,
+} from "../layouts/admin/pages";
 
-import { MenuAdminForm } from "../layouts/admin/forms/MenuAdminForm";
-import { ItemAdminForm } from "../layouts/admin/forms/ItemAdminForm";
-import { TableAdminForm } from "../layouts/admin/forms/TableAdminForm";
-import { OrderAdminForm } from "../layouts/admin/forms/OrderAdminForm";
-import { UserAdminForm } from "../layouts/admin/forms/UserAdminForm";
+import {
+  MenuAdminForm,
+  ItemAdminForm,
+  TableAdminForm,
+  OrderAdminForm,
+  UserAdminForm,
+} from "../layouts/admin/forms";
 
 import AdminLayout from "../layouts/admin/AdminLayout";
 import NotFound from "../common/Nofound";

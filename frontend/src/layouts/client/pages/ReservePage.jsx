@@ -1,22 +1,16 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { ReservaModal } from "../components/ReservaModal";
-import "../../../styles/Reservar.css";
-import {
-  getAllTables,
-  getRestaurantHours,
-  createReservation,
-  getStatus,
-} from "../../../api/reservationApi";
 import toast from "react-hot-toast";
-import {
-  deleteReservation,
-  updateReservation,
-} from "../../../api/reservationApi";
-import { TableIcon } from "./TableIcon";
 
-export function ReservarPage() {
+import "../../../styles/Reservar.css";
+
+import reservationApi from "../../../api/reservationApi";
+
+import { ModalReserva } from "../components/ModalReserve";
+import { TableIcon } from "../components/TableIcon";
+
+export function ReservePage() {
   const token = useSelector((state) => state.auth.token);
   const customerId = useSelector((state) => state.auth.customer?.id);
   const [tables, setTables] = useState([]);
@@ -32,8 +26,8 @@ export function ReservarPage() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    getAllTables().then((res) => setTables(res.data || res));
-    getRestaurantHours().then((res) =>
+    reservationApi.getAllTables().then((res) => setTables(res.data || res));
+    reservationApi.getRestaurantHours().then((res) =>
       setHorarios({
         open: res.data?.open_time || res.open_time,
         close: res.data?.close_time || res.close_time,
@@ -42,7 +36,7 @@ export function ReservarPage() {
   }, []);
 
   useEffect(() => {
-    getStatus().then((res) => {
+    reservationApi.getStatus().then((res) => {
       const reserved = res.data.find((s) => s.name === "Reserved");
       setDefaultStatus(reserved?.id);
     });
@@ -91,7 +85,7 @@ export function ReservarPage() {
       );
 
       // 2. Crear reserva en backend
-      const response = await createReservation({
+      const response = await reservationApi.createReservation({
         customer: customerId,
         table: mesaSeleccionada.id,
         reservation_date,
@@ -143,7 +137,7 @@ export function ReservarPage() {
 
   const cancelReservation = async (reservationId, mesaId) => {
     try {
-      await deleteReservation(reservationId);
+      await reservationApi.deleteReservation(reservationId);
       toast.success("Reserva cancelada");
 
       setTables((prev) =>
@@ -195,7 +189,7 @@ export function ReservarPage() {
       </div>
 
       {showModal && (
-        <ReservaModal
+        <ModalReserva
           table={mesaSeleccionada}
           onClose={() => setShowModal(false)}
           onReservar={realizarReserva}

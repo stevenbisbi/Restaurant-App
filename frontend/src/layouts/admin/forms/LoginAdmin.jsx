@@ -7,7 +7,7 @@ import { loginUser } from "../../../api/users/user.api";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const fondo = ("/src/assets/img/loginAdmin.jpg");
+const fondo = "/src/assets/img/loginAdmin.jpg";
 
 export const LoginAdmin = () => {
   const {
@@ -157,3 +157,5 @@ export const LoginAdmin = () => {
     </Container>
   );
 };
+
+export default LoginAdmin;

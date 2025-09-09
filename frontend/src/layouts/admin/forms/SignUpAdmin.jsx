@@ -181,7 +181,6 @@ export function SignUpAdmin() {
               >
                 Registrarse
               </Button>
-
             </Form>
           </div>
         </Col>
@@ -189,3 +188,5 @@ export function SignUpAdmin() {
     </Container>
   );
 }
+
+export default SignUpAdmin;

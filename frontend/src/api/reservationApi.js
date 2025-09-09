@@ -22,5 +22,18 @@ export const updateReservation = (id, reservation) =>
 export const getStatus = (id, status) =>
   reservationApi.put(`/reservations/status/${id}/`, status);
 
-export const getAllTables = () => axiosClient.get("/tables/");
+const getAllTables = () => axiosClient.get("/tables/");
 export const getRestaurantHours = () => axiosClient.get("/restaurants/");
+
+export const reservationApiObject = {
+  getAllReservations,
+  getReservation,
+  createReservation,
+  deleteReservation,
+  updateReservation,
+  getStatus,
+  getAllTables,
+  getRestaurantHours,
+};
+
+export default reservationApiObject;

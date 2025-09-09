@@ -1,9 +1,12 @@
+import { useState } from "react";
+
 import { Spinner, Alert, Col, Row } from "react-bootstrap";
+
+import { useFetch } from "../../../hooks/useFetch";
+import { getAllMenuItems } from "../../../api/menu/menuItemApi";
+
 import { MenuCard } from "../components/menu/MenuCard";
 import { ModalMenuCard } from "../components/menu/ModalMenuCard";
-import { useFetch } from "../../../hooks/useFetch";
-import { useState } from "react";
-import { getAllMenuItems } from "../../../api/menu/menuItemApi";
 
 export function MenuPage() {
   const [cart, setCart] = useState([]);

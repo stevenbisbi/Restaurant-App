@@ -3,7 +3,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export function ReservaModal({ table, onClose, onReservar }) {
+export function ModalReserva({ table, onClose, onReservar }) {
   const [people, setPeople] = useState(1);
   const [reservationDate, setReservationDate] = useState(new Date());
 

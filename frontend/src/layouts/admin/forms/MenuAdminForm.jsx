@@ -121,3 +121,5 @@ export function MenuAdminForm() {
     </div>
   );
 }
+
+export default MenuAdminForm;
