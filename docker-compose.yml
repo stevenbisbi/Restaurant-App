@@ -33,7 +33,7 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@postgres:5432/restaurantos
       - ALLOWED_HOSTS=localhost,127.0.0.1
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "python manage.py migrate && python manage.py create_superuser &&
             python manage.py runserver 0.0.0.0:8000"
     networks:
       - restaurantos-network

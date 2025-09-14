@@ -68,7 +68,7 @@ export function Navigation() {
             <Nav className="d-flex flex-wrap">
               <Nav.Link
                 as={Link}
-                to={token ? "/reservar" : "/login"}
+                to={token ? "/reservar" : "/login?next=/reservar"}
                 className="text-warning fs-5"
               >
                 Reservar
@@ -108,7 +108,7 @@ export function Navigation() {
 
       <img
         src={fondo}
-        alt="Logo del restaurante"
+        alt="Fondo del restaurante"
         className="img-fluid w-100"
         style={{ maxHeight: "400px", objectFit: "cover" }}
       />

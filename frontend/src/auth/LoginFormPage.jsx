@@ -1,7 +1,7 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { loginUser } from "../api/users/user.api";
 
@@ -24,6 +24,7 @@ export const LoginFormPage = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loading, setLoading] = useState(false);
 
@@ -55,19 +56,28 @@ export const LoginFormPage = () => {
           sessionStorage.setItem("token", token);
         }
 
-        switch (user.role) {
-          case "admin":
-            navigate("/admin/");
-            break;
-          case "staff":
-            navigate("/staff/dashboard");
-            break;
-          case "customer":
-            navigate("/home");
-            break;
-          default:
-            navigate("/home"); // por si no hay rol asignado
-            break;
+        // 👇 lee "next" de la URL si existe
+        const params = new URLSearchParams(location.search);
+        const next = params.get("next");
+
+        if (next) {
+          navigate(next, { replace: true });
+        } else {
+          // si no hay "next", aplicamos lógica de rol
+          switch (user.role) {
+            case "admin":
+              navigate("/admin/");
+              break;
+            case "staff":
+              navigate("/staff/dashboard");
+              break;
+            case "customer":
+              navigate("/home");
+              break;
+            default:
+              navigate("/home"); // por si no hay rol asignado
+              break;
+          }
         }
       } else {
         toast.error("Error en el inicio de sesión");
